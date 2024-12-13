@@ -1,28 +1,325 @@
-<!DOCTYPE html><html class="han-init" lang="zh-CN"><head><meta name="author" content="John Doe"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Hexo</title><link rel="stylesheet" type="text/css" href="/font/fantasque_sans_mono/stylesheet.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/webicons/2.0.0/webicons.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/Han/3.3.0/han.min.css"><link rel="stylesheet" type="text/css" href="/styles/screen.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/highlight.js/9.9.0/styles/gruvbox-dark.min.css"><meta name="generator" content="Hexo 7.3.0"></head><body><header><a href="/"><img class="logo" src="/images/avatar.jpg" alt="Hexo" title="Hexo"></a><h1><a href="/" alt="Hexo" title="Hexo">Hexo</a></h1><p></p><nav><ul><li><a href="/" alt="首页" title="首页">首页</a></li><li><a href="/pigeonhole" alt="归档" title="归档">归档</a></li><li><a href="/links" alt="链接" title="链接">链接</a></li><li><a href="/about" alt="关于" title="关于">关于</a></li></ul><div class="xnews-icon"><a target="_blank" href="https://github.com/FreemanKevin" style="position: relative; top: -2px;">&#xe735;</a></div></nav><div class="space"></div></header><main><article class="item"><a class="article" href="/2024/12/13/firewalld/"><h2 class="home-title">如何在不同 Linux 系统下开启防火墙</h2></a><span class="post-meta">写于<time> 2024 年 12 月 13 日 11 时 34 分</time></span><p class="post-excerpt">防火墙是保护系统安全的重要组成部分，它可以帮助阻止未授权的访问。在 Linux 系统中，不同的发行版可能使用不同的防火墙工具和命令来管理防火墙。本文将介绍如何在常见的 Linux 发行版中开启防火墙。
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://freemankevin.uk/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-1. Ubuntu&amp;#x2F;Debian 系统Ubuntu 和 Debia</p></article><article class="item"><a class="article" href="/2024/12/13/hello-world/"><h2 class="home-title">Hello World</h2></a><span class="post-meta">写于<time> 2024 年 12 月 13 日 11 时 08 分</time></span><p class="post-excerpt">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the </p></article><div class="pagination"><span class="page-number current">1</span></div><footer><section class="copyright">&copy; 2016 - 2024<a href="/">John Doe</a></section><section class="intro">由<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>驱动&middot;挂载<a target="_blank" rel="noopener" href="https://github.com/xadillax/hexo-xnew">X'new</a>主题</section></footer></main><script src="//cdn.bootcss.com/Han/3.3.0/han.min.js"></script><script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><script src="//cdn.bootcss.com/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script><script src="/scripts/highlight.pack.js"></script><script>$(function() {
-    $("header").backstretch("/images/header.jpeg");
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-    $("figure.highlight").each(function(i, block) {
-        $(block).removeClass("highlight");
-        $(block).find("td.gutter").remove();
-        $("<pre><code class='__tobehl " + ($(block).attr("class") === "plain" ? "" : ("lang-" + $(block).attr("class"))) + "'></code></pre>").insertAfter($(block));
-        $(block).next().find("code").text((block.innerText || block.textContent));
-        $(block).remove();
-    });
-    $(".__tobehl").each(function(i, block) {
-        hljs.highlightBlock(block);
-    });
+  
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
 
-    $("article.full img").each(function() {
-        if($(this).parent().is("article")) {
-            $(this).wrap("<p style='text-align: center;'></p>");
-        } else {
-            $(this).parent().css("text-align", "center");
-        }
-    });
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://freemankevin.uk"></form>
+      </div>
+    </div>
+  </div>
+</header>
 
-    if($(".article-toc").children().length < 2) {
-        $(".article-toc").css("display", "none");
-    }
-});</script></body></html>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-firewalld" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/12/13/firewalld/" class="article-date">
+  <time class="dt-published" datetime="2024-12-13T03:34:15.000Z" itemprop="datePublished">2024-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/12/13/firewalld/">如何在不同 Linux 系统下开启防火墙</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>防火墙是保护系统安全的重要组成部分，它可以帮助阻止未授权的访问。在 Linux 系统中，不同的发行版可能使用不同的防火墙工具和命令来管理防火墙。本文将介绍如何在常见的 Linux 发行版中开启防火墙。</p>
+<hr>
+<h2 id="1-Ubuntu-Debian-系统"><a href="#1-Ubuntu-Debian-系统" class="headerlink" title="1. Ubuntu&#x2F;Debian 系统"></a>1. Ubuntu&#x2F;Debian 系统</h2><p>Ubuntu 和 Debian 系统默认使用 <code>ufw</code>（Uncomplicated Firewall）作为防火墙工具。</p>
+<h3 id="检查防火墙状态"><a href="#检查防火墙状态" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw status</span><br></pre></td></tr></table></figure>
+
+<h3 id="开启防火墙"><a href="#开启防火墙" class="headerlink" title="开启防火墙"></a>开启防火墙</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw <span class="built_in">enable</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="禁用防火墙"><a href="#禁用防火墙" class="headerlink" title="禁用防火墙"></a>禁用防火墙</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw <span class="built_in">disable</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="配置示例"><a href="#配置示例" class="headerlink" title="配置示例"></a>配置示例</h3><p>允许 SSH 连接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw allow ssh</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-CentOS-RHEL-系统"><a href="#2-CentOS-RHEL-系统" class="headerlink" title="2. CentOS&#x2F;RHEL 系统"></a>2. CentOS&#x2F;RHEL 系统</h2><p>CentOS 和 RHEL 系统默认使用 <code>firewalld</code> 作为防火墙工具。</p>
+<h3 id="检查防火墙状态-1"><a href="#检查防火墙状态-1" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status firewalld</span><br></pre></td></tr></table></figure>
+
+<h3 id="开启防火墙-1"><a href="#开启防火墙-1" class="headerlink" title="开启防火墙"></a>开启防火墙</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> firewalld</span><br></pre></td></tr></table></figure>
+
+<h3 id="禁用防火墙-1"><a href="#禁用防火墙-1" class="headerlink" title="禁用防火墙"></a>禁用防火墙</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl stop firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> firewalld</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置示例-1"><a href="#配置示例-1" class="headerlink" title="配置示例"></a>配置示例</h3><p>允许 HTTP 服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> firewall-cmd --permanent --add-service=http</span><br><span class="line"><span class="built_in">sudo</span> firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-openSUSE-系统"><a href="#3-openSUSE-系统" class="headerlink" title="3. openSUSE 系统"></a>3. openSUSE 系统</h2><p>openSUSE 系统默认使用 <code>firewalld</code>，但某些版本可能使用 <code>SuSEfirewall2</code>。</p>
+<h3 id="使用-firewalld"><a href="#使用-firewalld" class="headerlink" title="使用 firewalld"></a>使用 firewalld</h3><h4 id="检查防火墙状态-2"><a href="#检查防火墙状态-2" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status firewalld</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启防火墙-2"><a href="#开启防火墙-2" class="headerlink" title="开启防火墙"></a>开启防火墙</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> firewalld</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置示例-2"><a href="#配置示例-2" class="headerlink" title="配置示例"></a>配置示例</h4><p>允许 HTTPS 服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> firewall-cmd --permanent --add-service=https</span><br><span class="line"><span class="built_in">sudo</span> firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-SuSEfirewall2"><a href="#使用-SuSEfirewall2" class="headerlink" title="使用 SuSEfirewall2"></a>使用 SuSEfirewall2</h3><h4 id="检查防火墙状态-3"><a href="#检查防火墙状态-3" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> SuSEfirewall2 status</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启防火墙-3"><a href="#开启防火墙-3" class="headerlink" title="开启防火墙"></a>开启防火墙</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> SuSEfirewall2 start</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-Arch-Linux"><a href="#4-Arch-Linux" class="headerlink" title="4. Arch Linux"></a>4. Arch Linux</h2><p>Arch Linux 通常使用 <code>iptables</code> 或 <code>nftables</code> 来管理防火墙。</p>
+<h3 id="使用-iptables"><a href="#使用-iptables" class="headerlink" title="使用 iptables"></a>使用 iptables</h3><h4 id="检查防火墙规则"><a href="#检查防火墙规则" class="headerlink" title="检查防火墙规则"></a>检查防火墙规则</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> iptables -L</span><br></pre></td></tr></table></figure>
+
+<h4 id="添加规则并保存"><a href="#添加规则并保存" class="headerlink" title="添加规则并保存"></a>添加规则并保存</h4><p>允许所有来自端口 22 的连接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> iptables -A INPUT -p tcp --dport 22 -j ACCEPT</span><br><span class="line"><span class="built_in">sudo</span> iptables-save &gt; /etc/iptables/iptables.rules</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启防火墙-4"><a href="#开启防火墙-4" class="headerlink" title="开启防火墙"></a>开启防火墙</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start iptables</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> iptables</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-nftables"><a href="#使用-nftables" class="headerlink" title="使用 nftables"></a>使用 nftables</h3><h4 id="检查防火墙状态-4"><a href="#检查防火墙状态-4" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nft list ruleset</span><br></pre></td></tr></table></figure>
+
+<h4 id="添加规则并保存-1"><a href="#添加规则并保存-1" class="headerlink" title="添加规则并保存"></a>添加规则并保存</h4><p>允许 HTTP 流量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nft add rule ip filter input tcp dport 80 accept</span><br><span class="line"><span class="built_in">sudo</span> nft list ruleset &gt; /etc/nftables.conf</span><br></pre></td></tr></table></figure>
+
+<h4 id="启用-nftables-服务"><a href="#启用-nftables-服务" class="headerlink" title="启用 nftables 服务"></a>启用 nftables 服务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start nftables</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> nftables</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-常见问题排查"><a href="#5-常见问题排查" class="headerlink" title="5. 常见问题排查"></a>5. 常见问题排查</h2><ul>
+<li><p><strong>端口未生效</strong>：<br>确保规则已永久保存并重新加载防火墙配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw reload  <span class="comment"># 适用于 ufw</span></span><br><span class="line"><span class="built_in">sudo</span> firewall-cmd --reload  <span class="comment"># 适用于 firewalld</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>服务未运行</strong>：<br>确保防火墙服务已启动并设置为开机自启。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl start firewalld</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<p>通过以上命令，你可以在不同的 Linux 系统中有效地开启防火墙并配置规则，从而增强系统的安全性。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://freemankevin.uk/2024/12/13/firewalld/" data-id="cm4mhf01i0001u3wbhgdv3ok6" data-title="如何在不同 Linux 系统下开启防火墙" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/firewalld-ufw-iptables-linux/" rel="tag">firewalld, ufw, iptables, linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/12/13/hello-world/" class="article-date">
+  <time class="dt-published" datetime="2024-12-13T03:08:10.407Z" itemprop="datePublished">2024-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/12/13/hello-world/">Hello World</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://freemankevin.uk/2024/12/13/hello-world/" data-id="cm4mhf01k0003u3wb754j80lm" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/firewalld-ufw-iptables-linux/" rel="tag">firewalld, ufw, iptables, linux</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/firewalld-ufw-iptables-linux/" style="font-size: 10px;">firewalld, ufw, iptables, linux</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">December 2024</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/12/13/firewalld/">如何在不同 Linux 系统下开启防火墙</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/13/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
