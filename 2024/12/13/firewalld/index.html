@@ -1,100 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>如何在不同 Linux 系统下开启防火墙 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="防火墙是保护系统安全的重要组成部分，它可以帮助阻止未授权的访问。在 Linux 系统中，不同的发行版可能使用不同的防火墙工具和命令来管理防火墙。本文将介绍如何在常见的 Linux 发行版中开启防火墙。  1. Ubuntu&#x2F;Debian 系统Ubuntu 和 Debian 系统默认使用 ufw（Uncomplicated Firewall）作为防火墙工具。 检查防火墙状态1sudo uf">
-<meta property="og:type" content="article">
-<meta property="og:title" content="如何在不同 Linux 系统下开启防火墙">
-<meta property="og:url" content="http://example.com/2024/12/13/firewalld/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="防火墙是保护系统安全的重要组成部分，它可以帮助阻止未授权的访问。在 Linux 系统中，不同的发行版可能使用不同的防火墙工具和命令来管理防火墙。本文将介绍如何在常见的 Linux 发行版中开启防火墙。  1. Ubuntu&#x2F;Debian 系统Ubuntu 和 Debian 系统默认使用 ufw（Uncomplicated Firewall）作为防火墙工具。 检查防火墙状态1sudo uf">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-12-13T03:34:15.000Z">
-<meta property="article:modified_time" content="2024-12-13T03:43:28.184Z">
-<meta property="article:author" content="John Doe">
-<meta property="article:tag" content="firewalld, ufw, iptables, linux">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+<!DOCTYPE html><html class="han-init" lang="zh-CN"><head><meta name="author" content="John Doe"><meta name="description" itemprop="description" content="防火墙是保护系统安全的重要组成部分，它可以帮助阻止未授权的访问。在 Linux 系统中，不同的发行版可能使用不同的防火墙工具和命令来管理防火墙。本文将介绍如何在常见的 Linux 发行版中开启防火墙。
 
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
-  
-  
-<meta name="generator" content="Hexo 7.3.0"></head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-
-      <div class="outer">
-        <section id="main"><article id="post-firewalld" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/12/13/firewalld/" class="article-date">
-  <time class="dt-published" datetime="2024-12-13T03:34:15.000Z" itemprop="datePublished">2024-12-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      如何在不同 Linux 系统下开启防火墙
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>防火墙是保护系统安全的重要组成部分，它可以帮助阻止未授权的访问。在 Linux 系统中，不同的发行版可能使用不同的防火墙工具和命令来管理防火墙。本文将介绍如何在常见的 Linux 发行版中开启防火墙。</p>
+1. Ubuntu&amp;#x2F;Debian 系统Ubuntu 和 Debian 系统默认使用 u"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>如何在不同 Linux 系统下开启防火墙</title><link rel="stylesheet" type="text/css" href="/font/fantasque_sans_mono/stylesheet.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/webicons/2.0.0/webicons.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/Han/3.3.0/han.min.css"><link rel="stylesheet" type="text/css" href="/styles/screen.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/highlight.js/9.9.0/styles/gruvbox-dark.min.css"><meta name="generator" content="Hexo 7.3.0"></head><body><header><a href="/"><img class="logo" src="/images/avatar.jpg" alt="Hexo" title="Hexo"></a><h1><a href="/" alt="Hexo" title="Hexo">Hexo</a></h1><p></p><nav><ul><li><a href="/" alt="首页" title="首页">首页</a></li><li><a href="/pigeonhole" alt="归档" title="归档">归档</a></li><li><a href="/links" alt="链接" title="链接">链接</a></li><li><a href="/about" alt="关于" title="关于">关于</a></li></ul><div class="xnews-icon"><a target="_blank" href="https://github.com/FreemanKevin" style="position: relative; top: -2px;">&#xe735;</a></div></nav><div class="space"></div></header><main><article class="full"><h1>如何在不同 Linux 系统下开启防火墙</h1><span class="post-meta">写于<time> 2024 年 12 月 13 日 11 时 34 分</time><br>更新于<time> 2024 年 12 月 13 日 11 时 43 分</time></span><div class="article-toc"><strong>大纲</strong><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Ubuntu-Debian-%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">1. Ubuntu&#x2F;Debian 系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E9%98%B2%E7%81%AB%E5%A2%99%E7%8A%B6%E6%80%81"><span class="toc-number">1.1.</span> <span class="toc-text">检查防火墙状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-number">1.2.</span> <span class="toc-text">开启防火墙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%81%E7%94%A8%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-number">1.3.</span> <span class="toc-text">禁用防火墙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.</span> <span class="toc-text">配置示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-CentOS-RHEL-%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.</span> <span class="toc-text">2. CentOS&#x2F;RHEL 系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E9%98%B2%E7%81%AB%E5%A2%99%E7%8A%B6%E6%80%81-1"><span class="toc-number">2.1.</span> <span class="toc-text">检查防火墙状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E9%98%B2%E7%81%AB%E5%A2%99-1"><span class="toc-number">2.2.</span> <span class="toc-text">开启防火墙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%81%E7%94%A8%E9%98%B2%E7%81%AB%E5%A2%99-1"><span class="toc-number">2.3.</span> <span class="toc-text">禁用防火墙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B-1"><span class="toc-number">2.4.</span> <span class="toc-text">配置示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-openSUSE-%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.</span> <span class="toc-text">3. openSUSE 系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-firewalld"><span class="toc-number">3.1.</span> <span class="toc-text">使用 firewalld</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E9%98%B2%E7%81%AB%E5%A2%99%E7%8A%B6%E6%80%81-2"><span class="toc-number">3.1.1.</span> <span class="toc-text">检查防火墙状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E9%98%B2%E7%81%AB%E5%A2%99-2"><span class="toc-number">3.1.2.</span> <span class="toc-text">开启防火墙</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B-2"><span class="toc-number">3.1.3.</span> <span class="toc-text">配置示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-SuSEfirewall2"><span class="toc-number">3.2.</span> <span class="toc-text">使用 SuSEfirewall2</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E9%98%B2%E7%81%AB%E5%A2%99%E7%8A%B6%E6%80%81-3"><span class="toc-number">3.2.1.</span> <span class="toc-text">检查防火墙状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E9%98%B2%E7%81%AB%E5%A2%99-3"><span class="toc-number">3.2.2.</span> <span class="toc-text">开启防火墙</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Arch-Linux"><span class="toc-number">4.</span> <span class="toc-text">4. Arch Linux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-iptables"><span class="toc-number">4.1.</span> <span class="toc-text">使用 iptables</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E9%98%B2%E7%81%AB%E5%A2%99%E8%A7%84%E5%88%99"><span class="toc-number">4.1.1.</span> <span class="toc-text">检查防火墙规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E8%A7%84%E5%88%99%E5%B9%B6%E4%BF%9D%E5%AD%98"><span class="toc-number">4.1.2.</span> <span class="toc-text">添加规则并保存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E9%98%B2%E7%81%AB%E5%A2%99-4"><span class="toc-number">4.1.3.</span> <span class="toc-text">开启防火墙</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-nftables"><span class="toc-number">4.2.</span> <span class="toc-text">使用 nftables</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E9%98%B2%E7%81%AB%E5%A2%99%E7%8A%B6%E6%80%81-4"><span class="toc-number">4.2.1.</span> <span class="toc-text">检查防火墙状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E8%A7%84%E5%88%99%E5%B9%B6%E4%BF%9D%E5%AD%98-1"><span class="toc-number">4.2.2.</span> <span class="toc-text">添加规则并保存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E7%94%A8-nftables-%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.2.3.</span> <span class="toc-text">启用 nftables 服务</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"><span class="toc-number">5.</span> <span class="toc-text">5. 常见问题排查</span></a></li></ol></div><p>防火墙是保护系统安全的重要组成部分，它可以帮助阻止未授权的访问。在 Linux 系统中，不同的发行版可能使用不同的防火墙工具和命令来管理防火墙。本文将介绍如何在常见的 Linux 发行版中开启防火墙。</p>
 <hr>
 <h2 id="1-Ubuntu-Debian-系统"><a href="#1-Ubuntu-Debian-系统" class="headerlink" title="1. Ubuntu&#x2F;Debian 系统"></a>1. Ubuntu&#x2F;Debian 系统</h2><p>Ubuntu 和 Debian 系统默认使用 <code>ufw</code>（Uncomplicated Firewall）作为防火墙工具。</p>
 <h3 id="检查防火墙状态"><a href="#检查防火墙状态" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw status</span><br></pre></td></tr></table></figure>
@@ -156,130 +62,39 @@
 </ul>
 <hr>
 <p>通过以上命令，你可以在不同的 Linux 系统中有效地开启防火墙并配置规则，从而增强系统的安全性。</p>
+<hr><section class="comment"><div id="disqus_thread"></div></section><script>var DISQUS_PAGE_URL = "https://freemankevin.uk/2024/12/13/firewalld/";</script><script>var DISQUS_IDENTIFIER = "2024/12/13/firewalld/";</script><script>var DISQUS_SHORT_NAME = "disqus_Ft9K3Nn2Os"</script><script>var disqus_config = function() {
+  this.page.url = DISQUS_PAGE_URL;
+  this.page.identifier = DISQUS_IDENTIFIER;
+};
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2024/12/13/firewalld/" data-id="cm4m7g1ry0000wcwb3ilk63vm" data-title="如何在不同 Linux 系统下开启防火墙" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/firewalld-ufw-iptables-linux/" rel="tag">firewalld, ufw, iptables, linux</a></li></ul>
+(function() {
+  var d = document, s = d.createElement("script");
+  s.src = "https://" + DISQUS_SHORT_NAME + ".disqus.com/embed.js";
+  s.setAttribute("data-timestamp", +new Date());
+  (d.head || d.body).appendChild(s);
+})();</script><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><footer><section class="copyright">&copy; 2016 - 2024<a href="/">John Doe</a></section><section class="intro">由<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>驱动&middot;挂载<a target="_blank" rel="noopener" href="https://github.com/xadillax/hexo-xnew">X'new</a>主题</section></footer></article></main><script src="//cdn.bootcss.com/Han/3.3.0/han.min.js"></script><script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><script src="//cdn.bootcss.com/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script><script src="/scripts/highlight.pack.js"></script><script>$(function() {
+    $("header").backstretch("/images/header.jpeg");
 
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-  
-    <a href="/2024/12/13/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
-    </a>
-  
-</nav>
+    $("figure.highlight").each(function(i, block) {
+        $(block).removeClass("highlight");
+        $(block).find("td.gutter").remove();
+        $("<pre><code class='__tobehl " + ($(block).attr("class") === "plain" ? "" : ("lang-" + $(block).attr("class"))) + "'></code></pre>").insertAfter($(block));
+        $(block).next().find("code").text((block.innerText || block.textContent));
+        $(block).remove();
+    });
+    $(".__tobehl").each(function(i, block) {
+        hljs.highlightBlock(block);
+    });
 
-  
-</article>
+    $("article.full img").each(function() {
+        if($(this).parent().is("article")) {
+            $(this).wrap("<p style='text-align: center;'></p>");
+        } else {
+            $(this).parent().css("text-align", "center");
+        }
+    });
 
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/firewalld-ufw-iptables-linux/" rel="tag">firewalld, ufw, iptables, linux</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/firewalld-ufw-iptables-linux/" style="font-size: 10px;">firewalld, ufw, iptables, linux</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">December 2024</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2024/12/13/firewalld/">如何在不同 Linux 系统下开启防火墙</a>
-          </li>
-        
-          <li>
-            <a href="/2024/12/13/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2024 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+    if($(".article-toc").children().length < 2) {
+        $(".article-toc").css("display", "none");
+    }
+});</script></body></html>
