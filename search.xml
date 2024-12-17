@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>使用 Travis CI 自动更新 GitHub Pages</title>
+    <url>/2024/12/16/ci/</url>
+    <content><![CDATA[<p>每次更改完 NexT 文档 都要手动部署到 GitHub Pages，重复的次数多了就显得很麻烦，出错的几率也会变大。文档源码放置在 master 分支，最终部署文件在 gh-pages 分支。当在 master 分支更改某些内容之后，通过运行 gulp dist 来生成最终部署的 HTML 文件到 dist 目录，随后再进入 dist 目录初始化 git 仓库、添加文件、提交文件，最后将提交强制推送到远程 gh-pages 分支（因当心我会误将最终部署的 HTML 文件提交到 master 分支导致源码丢失，我在 GitHub 上把 master 分支给锁定了）。除此之外还有另外一个问题：如果 master 分支有 Pull Requests，我需要先将更新取回本地，然后编译更新再提交回远程 gh-pages 分支。</p>
+<h2 id="年轻的想法"><a href="#年轻的想法" class="headerlink" title="年轻的想法"></a>年轻的想法</h2><p>于是，我就想这说将这个过程自动化。首先考虑了使用 GitHub Webhooks，这是 Github 提供的一种机制，使应用能与 Github 通讯。这种机制实际上就是 Pub&#x2F;Sub，当 Github 监测到资源（如仓库）有变化就往预先设定的 URL 发送一个 POST 请求（Pub），告知变化情况，而后接收变化的服务器（Sub）即可做一些额外的事情。</p>
+]]></content>
+      <categories>
+        <category>Devops</category>
+      </categories>
+      <tags>
+        <tag>github-pages</tag>
+        <tag>ci</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何在不同 Linux 系统下开启防火墙</title>
+    <url>/2024/12/13/firewalld/</url>
+    <content><![CDATA[<p>防火墙是保护系统安全的重要组成部分，它可以帮助阻止未授权的访问。在 Linux 系统中，不同的发行版可能使用不同的防火墙工具和命令来管理防火墙。本文将介绍如何在常见的 Linux 发行版中开启防火墙。</p>
+<hr>
+<h2 id="1-Ubuntu-Debian-系统"><a href="#1-Ubuntu-Debian-系统" class="headerlink" title="1. Ubuntu&#x2F;Debian 系统"></a>1. Ubuntu&#x2F;Debian 系统</h2><p>Ubuntu 和 Debian 系统默认使用 <code>ufw</code>（Uncomplicated Firewall）作为防火墙工具。</p>
+<h3 id="检查防火墙状态"><a href="#检查防火墙状态" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw status</span><br></pre></td></tr></table></figure>
+
+<h3 id="开启防火墙"><a href="#开启防火墙" class="headerlink" title="开启防火墙"></a>开启防火墙</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw <span class="built_in">enable</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="禁用防火墙"><a href="#禁用防火墙" class="headerlink" title="禁用防火墙"></a>禁用防火墙</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw <span class="built_in">disable</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="配置示例"><a href="#配置示例" class="headerlink" title="配置示例"></a>配置示例</h3><p>允许 SSH 连接：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw allow ssh</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-CentOS-RHEL-系统"><a href="#2-CentOS-RHEL-系统" class="headerlink" title="2. CentOS&#x2F;RHEL 系统"></a>2. CentOS&#x2F;RHEL 系统</h2><p>CentOS 和 RHEL 系统默认使用 <code>firewalld</code> 作为防火墙工具。</p>
+<h3 id="检查防火墙状态-1"><a href="#检查防火墙状态-1" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status firewalld</span><br></pre></td></tr></table></figure>
+
+<h3 id="开启防火墙-1"><a href="#开启防火墙-1" class="headerlink" title="开启防火墙"></a>开启防火墙</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> firewalld</span><br></pre></td></tr></table></figure>
+
+<h3 id="禁用防火墙-1"><a href="#禁用防火墙-1" class="headerlink" title="禁用防火墙"></a>禁用防火墙</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl stop firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> firewalld</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置示例-1"><a href="#配置示例-1" class="headerlink" title="配置示例"></a>配置示例</h3><p>允许 HTTP 服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> firewall-cmd --permanent --add-service=http</span><br><span class="line"><span class="built_in">sudo</span> firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-openSUSE-系统"><a href="#3-openSUSE-系统" class="headerlink" title="3. openSUSE 系统"></a>3. openSUSE 系统</h2><p>openSUSE 系统默认使用 <code>firewalld</code>，但某些版本可能使用 <code>SuSEfirewall2</code>。</p>
+<h3 id="使用-firewalld"><a href="#使用-firewalld" class="headerlink" title="使用 firewalld"></a>使用 firewalld</h3><h4 id="检查防火墙状态-2"><a href="#检查防火墙状态-2" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status firewalld</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启防火墙-2"><a href="#开启防火墙-2" class="headerlink" title="开启防火墙"></a>开启防火墙</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> firewalld</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置示例-2"><a href="#配置示例-2" class="headerlink" title="配置示例"></a>配置示例</h4><p>允许 HTTPS 服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> firewall-cmd --permanent --add-service=https</span><br><span class="line"><span class="built_in">sudo</span> firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-SuSEfirewall2"><a href="#使用-SuSEfirewall2" class="headerlink" title="使用 SuSEfirewall2"></a>使用 SuSEfirewall2</h3><h4 id="检查防火墙状态-3"><a href="#检查防火墙状态-3" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> SuSEfirewall2 status</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启防火墙-3"><a href="#开启防火墙-3" class="headerlink" title="开启防火墙"></a>开启防火墙</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> SuSEfirewall2 start</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-Arch-Linux"><a href="#4-Arch-Linux" class="headerlink" title="4. Arch Linux"></a>4. Arch Linux</h2><p>Arch Linux 通常使用 <code>iptables</code> 或 <code>nftables</code> 来管理防火墙。</p>
+<h3 id="使用-iptables"><a href="#使用-iptables" class="headerlink" title="使用 iptables"></a>使用 iptables</h3><h4 id="检查防火墙规则"><a href="#检查防火墙规则" class="headerlink" title="检查防火墙规则"></a>检查防火墙规则</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> iptables -L</span><br></pre></td></tr></table></figure>
+
+<h4 id="添加规则并保存"><a href="#添加规则并保存" class="headerlink" title="添加规则并保存"></a>添加规则并保存</h4><p>允许所有来自端口 22 的连接：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> iptables -A INPUT -p tcp --dport 22 -j ACCEPT</span><br><span class="line"><span class="built_in">sudo</span> iptables-save &gt; /etc/iptables/iptables.rules</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启防火墙-4"><a href="#开启防火墙-4" class="headerlink" title="开启防火墙"></a>开启防火墙</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start iptables</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> iptables</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-nftables"><a href="#使用-nftables" class="headerlink" title="使用 nftables"></a>使用 nftables</h3><h4 id="检查防火墙状态-4"><a href="#检查防火墙状态-4" class="headerlink" title="检查防火墙状态"></a>检查防火墙状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nft list ruleset</span><br></pre></td></tr></table></figure>
+
+<h4 id="添加规则并保存-1"><a href="#添加规则并保存-1" class="headerlink" title="添加规则并保存"></a>添加规则并保存</h4><p>允许 HTTP 流量：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nft add rule ip filter input tcp dport 80 accept</span><br><span class="line"><span class="built_in">sudo</span> nft list ruleset &gt; /etc/nftables.conf</span><br></pre></td></tr></table></figure>
+
+<h4 id="启用-nftables-服务"><a href="#启用-nftables-服务" class="headerlink" title="启用 nftables 服务"></a>启用 nftables 服务</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start nftables</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> nftables</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-常见问题排查"><a href="#5-常见问题排查" class="headerlink" title="5. 常见问题排查"></a>5. 常见问题排查</h2><ul>
+<li><p><strong>端口未生效</strong>：<br>确保规则已永久保存并重新加载防火墙配置。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw reload  <span class="comment"># 适用于 ufw</span></span><br><span class="line"><span class="built_in">sudo</span> firewall-cmd --reload  <span class="comment"># 适用于 firewalld</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>服务未运行</strong>：<br>确保防火墙服务已启动并设置为开机自启。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl start firewalld</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<p>通过以上命令，你可以在不同的 Linux 系统中有效地开启防火墙并配置规则，从而增强系统的安全性。</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>firewall</tag>
+        <tag>ufw</tag>
+        <tag>iptables</tag>
+      </tags>
+  </entry>
+</search>
