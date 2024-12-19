@@ -1,6 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>如何在不同 Linux 系统下安装 Docker</title>
+    <url>/2024/12/19/docker/</url>
+    <content><![CDATA[<p>Docker 是一种开源的容器化平台，可以简化应用程序的开发、部署和运行。在不同的 Linux 发行版中，安装 Docker 的方法可能略有不同。本文将介绍如何在常见的 Linux 系统中安装 Docker。</p>
+<hr>
+<h2 id="1-Ubuntu-Debian-系统"><a href="#1-Ubuntu-Debian-系统" class="headerlink" title="1. Ubuntu&#x2F;Debian 系统"></a>1. Ubuntu&#x2F;Debian 系统</h2><h3 id="更新系统"><a href="#更新系统" class="headerlink" title="更新系统"></a>更新系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt upgrade -y</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install -y \</span><br><span class="line">    ca-certificates \</span><br><span class="line">    curl \</span><br><span class="line">    gnupg \</span><br><span class="line">    lsb-release</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加-Docker-的官方-GPG-密钥"><a href="#添加-Docker-的官方-GPG-密钥" class="headerlink" title="添加 Docker 的官方 GPG 密钥"></a>添加 Docker 的官方 GPG 密钥</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /etc/apt/keyrings</span><br><span class="line">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | <span class="built_in">sudo</span> gpg --dearmor -o /etc/apt/keyrings/docker.gpg</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置-Docker-软件源"><a href="#设置-Docker-软件源" class="headerlink" title="设置 Docker 软件源"></a>设置 Docker 软件源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> \&quot;deb [<span class="built_in">arch</span>=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \</span><br><span class="line">$(lsb_release -cs) stable\&quot; | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/docker.list &gt; /dev/null</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装-Docker-引擎"><a href="#安装-Docker-引擎" class="headerlink" title="安装 Docker 引擎"></a>安装 Docker 引擎</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure>
+
+<h3 id="验证安装"><a href="#验证安装" class="headerlink" title="验证安装"></a>验证安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker --version</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-CentOS-RHEL-系统"><a href="#2-CentOS-RHEL-系统" class="headerlink" title="2. CentOS&#x2F;RHEL 系统"></a>2. CentOS&#x2F;RHEL 系统</h2><h3 id="更新系统-1"><a href="#更新系统-1" class="headerlink" title="更新系统"></a>更新系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update -y</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装依赖-1"><a href="#安装依赖-1" class="headerlink" title="安装依赖"></a>安装依赖</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y yum-utils</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加-Docker-软件源"><a href="#添加-Docker-软件源" class="headerlink" title="添加 Docker 软件源"></a>添加 Docker 软件源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装-Docker-引擎-1"><a href="#安装-Docker-引擎-1" class="headerlink" title="安装 Docker 引擎"></a>安装 Docker 引擎</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y docker-ce docker-ce-cli containerd.io</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-Docker-服务"><a href="#启动-Docker-服务" class="headerlink" title="启动 Docker 服务"></a>启动 Docker 服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start docker</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="验证安装-1"><a href="#验证安装-1" class="headerlink" title="验证安装"></a>验证安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker --version</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-openSUSE-系统"><a href="#3-openSUSE-系统" class="headerlink" title="3. openSUSE 系统"></a>3. openSUSE 系统</h2><h3 id="更新系统-2"><a href="#更新系统-2" class="headerlink" title="更新系统"></a>更新系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> zypper refresh</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> zypper install -y docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-Docker-服务-1"><a href="#启动-Docker-服务-1" class="headerlink" title="启动 Docker 服务"></a>启动 Docker 服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start docker</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="验证安装-2"><a href="#验证安装-2" class="headerlink" title="验证安装"></a>验证安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker --version</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-Arch-Linux"><a href="#4-Arch-Linux" class="headerlink" title="4. Arch Linux"></a>4. Arch Linux</h2><h3 id="更新系统-3"><a href="#更新系统-3" class="headerlink" title="更新系统"></a>更新系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -Syu</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装-Docker-1"><a href="#安装-Docker-1" class="headerlink" title="安装 Docker"></a>安装 Docker</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-Docker-服务-2"><a href="#启动-Docker-服务-2" class="headerlink" title="启动 Docker 服务"></a>启动 Docker 服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start docker</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="验证安装-3"><a href="#验证安装-3" class="headerlink" title="验证安装"></a>验证安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker --version</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-配置非-root-用户使用-Docker"><a href="#5-配置非-root-用户使用-Docker" class="headerlink" title="5. 配置非 root 用户使用 Docker"></a>5. 配置非 root 用户使用 Docker</h2><p>默认情况下，只有 root 用户或具有 sudo 权限的用户可以运行 Docker。你可以通过以下步骤允许非 root 用户使用 Docker：</p>
+<h3 id="添加用户到-Docker-组"><a href="#添加用户到-Docker-组" class="headerlink" title="添加用户到 Docker 组"></a>添加用户到 Docker 组</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> usermod -aG docker <span class="variable">$USER</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="重新登录"><a href="#重新登录" class="headerlink" title="重新登录"></a>重新登录</h3><p>重新登录后，非 root 用户即可运行 Docker 命令。</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>通过以上步骤，你可以在不同的 Linux 系统中安装和配置 Docker。安装完成后，可以开始体验 Docker 的强大功能，如运行容器、构建镜像等。</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>container</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>如何在不同 Linux 系统下开启防火墙</title>
     <url>/2024/12/13/firewalld/</url>
     <content><![CDATA[<p>防火墙是保护系统安全的重要组成部分，它可以帮助阻止未授权的访问。在 Linux 系统中，不同的发行版可能使用不同的防火墙工具和命令来管理防火墙。本文将介绍如何在常见的 Linux 发行版中开启防火墙。</p>
@@ -87,6 +154,126 @@
       <tags>
         <tag>github-pages</tag>
         <tag>ci</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何在不同 Linux 系统下安装 VNC 服务</title>
+    <url>/2024/12/19/vnc/</url>
+    <content><![CDATA[<hr>
+<p>VNC（Virtual Network Computing）是一个远程桌面访问协议，允许用户通过网络远程访问 Linux 系统的图形化界面。本文将介绍如何在不同的 Linux 发行版中安装和配置 VNC 服务。</p>
+<hr>
+<h2 id="1-Ubuntu-Debian-系统"><a href="#1-Ubuntu-Debian-系统" class="headerlink" title="1. Ubuntu&#x2F;Debian 系统"></a>1. Ubuntu&#x2F;Debian 系统</h2><p>Ubuntu 和 Debian 系统可以通过 APT 包管理器安装常见的 VNC 服务。</p>
+<h3 id="安装-TigerVNC"><a href="#安装-TigerVNC" class="headerlink" title="安装 TigerVNC"></a>安装 TigerVNC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install tigervnc-standalone-server tigervnc-xorg-extension</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-VNC"><a href="#配置-VNC" class="headerlink" title="配置 VNC"></a>配置 VNC</h3><ol>
+<li><p>设置 VNC 密码：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncpasswd</span><br></pre></td></tr></table></figure>
+<p>按提示输入密码。</p>
+</li>
+<li><p>创建配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.vnc</span><br><span class="line">nano ~/.vnc/xstartup</span><br></pre></td></tr></table></figure>
+<p>添加以下内容（以 GNOME 桌面为例）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">exec</span> /usr/bin/gnome-session &amp;</span><br></pre></td></tr></table></figure>
+<p>保存后为脚本添加可执行权限：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x ~/.vnc/xstartup</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动 VNC 服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncserver</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>停止 VNC 服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncserver -<span class="built_in">kill</span> :1</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="2-CentOS-RHEL-系统"><a href="#2-CentOS-RHEL-系统" class="headerlink" title="2. CentOS&#x2F;RHEL 系统"></a>2. CentOS&#x2F;RHEL 系统</h2><p>CentOS 和 RHEL 通常通过 YUM 或 DNF 安装 VNC 服务。</p>
+<h3 id="安装-TigerVNC-1"><a href="#安装-TigerVNC-1" class="headerlink" title="安装 TigerVNC"></a>安装 TigerVNC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install tigervnc-server</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-VNC-1"><a href="#配置-VNC-1" class="headerlink" title="配置 VNC"></a>配置 VNC</h3><ol>
+<li><p>编辑配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/tigervnc/vncserver.users</span><br></pre></td></tr></table></figure>
+<p>添加如下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">:1=username</span><br></pre></td></tr></table></figure>
+<p>替换 <code>username</code> 为实际用户。</p>
+</li>
+<li><p>设置 VNC 密码：<br>切换到指定用户并设置密码：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">su - username</span><br><span class="line">vncpasswd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置桌面环境（以 GNOME 为例）：<br>编辑用户的 <code>~/.vnc/xstartup</code> 文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nano ~/.vnc/xstartup</span><br></pre></td></tr></table></figure>
+<p>添加以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">exec</span> /usr/bin/gnome-session &amp;</span><br></pre></td></tr></table></figure>
+<p>保存后为脚本添加可执行权限：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x ~/.vnc/xstartup</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动 VNC 服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start vncserver@:1</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> vncserver@:1</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="3-openSUSE-系统"><a href="#3-openSUSE-系统" class="headerlink" title="3. openSUSE 系统"></a>3. openSUSE 系统</h2><p>openSUSE 系统也支持安装和配置 VNC 服务。</p>
+<h3 id="安装-TightVNC"><a href="#安装-TightVNC" class="headerlink" title="安装 TightVNC"></a>安装 TightVNC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> zypper install tightvnc</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-VNC-2"><a href="#配置-VNC-2" class="headerlink" title="配置 VNC"></a>配置 VNC</h3><ol>
+<li><p>设置 VNC 密码：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncpasswd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.vnc</span><br><span class="line">nano ~/.vnc/xstartup</span><br></pre></td></tr></table></figure>
+<p>添加以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">exec</span> startkde &amp;</span><br></pre></td></tr></table></figure>
+<p>根据桌面环境选择命令，例如 KDE 使用 <code>startkde</code>，GNOME 使用 <code>gnome-session</code>。</p>
+</li>
+<li><p>启动 VNC 服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncserver</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>停止 VNC 服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncserver -<span class="built_in">kill</span> :1</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="4-Arch-Linux"><a href="#4-Arch-Linux" class="headerlink" title="4. Arch Linux"></a>4. Arch Linux</h2><p>在 Arch Linux 上，可以通过 <code>pacman</code> 包管理器安装 VNC 服务。</p>
+<h3 id="安装-TigerVNC-2"><a href="#安装-TigerVNC-2" class="headerlink" title="安装 TigerVNC"></a>安装 TigerVNC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S tigervnc</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-VNC-3"><a href="#配置-VNC-3" class="headerlink" title="配置 VNC"></a>配置 VNC</h3><ol>
+<li><p>设置 VNC 密码：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncpasswd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置 VNC：<br>编辑 <code>~/.vnc/xstartup</code> 文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nano ~/.vnc/xstartup</span><br></pre></td></tr></table></figure>
+<p>添加以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">exec</span> /usr/bin/xfce4-session &amp;</span><br></pre></td></tr></table></figure>
+<p>根据桌面环境选择启动命令，例如 XFCE 使用 <code>xfce4-session</code>。</p>
+</li>
+<li><p>启动 VNC 服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncserver</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>停止 VNC 服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncserver -<span class="built_in">kill</span> :1</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="5-常见问题排查"><a href="#5-常见问题排查" class="headerlink" title="5. 常见问题排查"></a>5. 常见问题排查</h2><ul>
+<li><p><strong>连接失败</strong>：</p>
+<ul>
+<li>检查防火墙是否允许 VNC 端口（默认 5901）。<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw allow 5901</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>显示空白屏幕</strong>：</p>
+<ul>
+<li>确保 <code>xstartup</code> 文件正确配置并具有可执行权限。</li>
+</ul>
+</li>
+<li><p><strong>服务未启动</strong>：</p>
+<ul>
+<li>检查日志文件 <code>~/.vnc/*.log</code> 获取更多信息。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>通过以上步骤，您可以在不同的 Linux 发行版中安装和配置 VNC 服务，轻松实现远程桌面访问。</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>vnc</tag>
       </tags>
   </entry>
 </search>
