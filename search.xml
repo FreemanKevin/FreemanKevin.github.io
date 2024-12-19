@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>使用 Travis CI 自动更新 GitHub Pages</title>
+    <url>/2024/12/16/ci/</url>
+    <content><![CDATA[<p>每次更改完 NexT 文档 都要手动部署到 GitHub Pages，重复的次数多了就显得很麻烦，出错的几率也会变大。文档源码放置在 master 分支，最终部署文件在 gh-pages 分支。当在 master 分支更改某些内容之后，通过运行 gulp dist 来生成最终部署的 HTML 文件到 dist 目录，随后再进入 dist 目录初始化 git 仓库、添加文件、提交文件，最后将提交强制推送到远程 gh-pages 分支（因当心我会误将最终部署的 HTML 文件提交到 master 分支导致源码丢失，我在 GitHub 上把 master 分支给锁定了）。除此之外还有另外一个问题：如果 master 分支有 Pull Requests，我需要先将更新取回本地，然后编译更新再提交回远程 gh-pages 分支。</p>
+<h2 id="年轻的想法"><a href="#年轻的想法" class="headerlink" title="年轻的想法"></a>年轻的想法</h2><p>于是，我就想这说将这个过程自动化。首先考虑了使用 GitHub Webhooks，这是 Github 提供的一种机制，使应用能与 Github 通讯。这种机制实际上就是 Pub&#x2F;Sub，当 Github 监测到资源（如仓库）有变化就往预先设定的 URL 发送一个 POST 请求（Pub），告知变化情况，而后接收变化的服务器（Sub）即可做一些额外的事情。</p>
+]]></content>
+      <categories>
+        <category>Devops</category>
+      </categories>
+      <tags>
+        <tag>github-pages</tag>
+        <tag>ci</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>如何在不同 Linux 系统下安装 Docker</title>
     <url>/2024/12/19/docker/</url>
     <content><![CDATA[<p>Docker 是一种开源的容器化平台，可以简化应用程序的开发、部署和运行。在不同的 Linux 发行版中，安装 Docker 的方法可能略有不同。本文将介绍如何在常见的 Linux 系统中安装 Docker。</p>
@@ -140,20 +154,6 @@
         <tag>firewall</tag>
         <tag>ufw</tag>
         <tag>iptables</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用 Travis CI 自动更新 GitHub Pages</title>
-    <url>/2024/12/16/ci/</url>
-    <content><![CDATA[<p>每次更改完 NexT 文档 都要手动部署到 GitHub Pages，重复的次数多了就显得很麻烦，出错的几率也会变大。文档源码放置在 master 分支，最终部署文件在 gh-pages 分支。当在 master 分支更改某些内容之后，通过运行 gulp dist 来生成最终部署的 HTML 文件到 dist 目录，随后再进入 dist 目录初始化 git 仓库、添加文件、提交文件，最后将提交强制推送到远程 gh-pages 分支（因当心我会误将最终部署的 HTML 文件提交到 master 分支导致源码丢失，我在 GitHub 上把 master 分支给锁定了）。除此之外还有另外一个问题：如果 master 分支有 Pull Requests，我需要先将更新取回本地，然后编译更新再提交回远程 gh-pages 分支。</p>
-<h2 id="年轻的想法"><a href="#年轻的想法" class="headerlink" title="年轻的想法"></a>年轻的想法</h2><p>于是，我就想这说将这个过程自动化。首先考虑了使用 GitHub Webhooks，这是 Github 提供的一种机制，使应用能与 Github 通讯。这种机制实际上就是 Pub&#x2F;Sub，当 Github 监测到资源（如仓库）有变化就往预先设定的 URL 发送一个 POST 请求（Pub），告知变化情况，而后接收变化的服务器（Sub）即可做一些额外的事情。</p>
-]]></content>
-      <categories>
-        <category>Devops</category>
-      </categories>
-      <tags>
-        <tag>github-pages</tag>
-        <tag>ci</tag>
       </tags>
   </entry>
   <entry>
