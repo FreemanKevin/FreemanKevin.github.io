@@ -203,7 +203,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-12-22 12:17:25 / 修改时间：12:28:00" itemprop="dateCreated datePublished" datetime="2024-12-22T12:17:25+08:00">2024-12-22</time>
+              <time title="创建时间：2024-12-22 12:17:25 / 修改时间：14:53:03" itemprop="dateCreated datePublished" datetime="2024-12-22T12:17:25+08:00">2024-12-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -318,6 +318,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/20/Debian-offline-package/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Freeman Kevin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kevin's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/20/Debian-offline-package/" class="post-title-link" itemprop="url">Debian 系统下制作离线安装包</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-12-20 12:17:25" itemprop="dateCreated datePublished" datetime="2024-12-20T12:17:25+08:00">2024-12-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>离线安装在Linux系统中是一个常见的需求。以下是在Debian系列操作系统（如Debian, Ubuntu）上创建和使用离线安装包的完整步骤。</p>
+<hr>
+<h2 id="在联网的环境下"><a href="#在联网的环境下" class="headerlink" title="在联网的环境下"></a>在联网的环境下</h2><h3 id="1-下载软件包及其依赖"><a href="#1-下载软件包及其依赖" class="headerlink" title="1. 下载软件包及其依赖"></a>1. 下载软件包及其依赖</h3><p>首先，确定你需要的软件包和版本。使用APT的下载功能来获取软件包和它的所有依赖，但不安装它们。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install --download-only &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这会将软件包及其依赖下载到 <code>/var/cache/apt/archives/</code> 目录。</p>
+<h3 id="2-复制下载的包"><a href="#2-复制下载的包" class="headerlink" title="2. 复制下载的包"></a>2. 复制下载的包</h3><p>将下载的 <code>.deb</code> 包复制到一个移动存储设备上。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /var/cache/apt/archives/*.deb /path/to/your/usb-drive/debian-offline-packages</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-创建本地APT仓库"><a href="#3-创建本地APT仓库" class="headerlink" title="3. 创建本地APT仓库"></a>3. 创建本地APT仓库</h3><p>在移动存储设备的相同目录下，使用 <code>dpkg-scanpackages</code> 工具来创建 <code>Packages.gz</code> 索引文件。如果没有安装 <code>dpkg-dev</code>，需要先安装它。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install dpkg-dev</span><br><span class="line"><span class="built_in">cd</span> /path/to/your/usb-drive/debian-offline-packages</span><br><span class="line">dpkg-scanpackages . /dev/null | gzip -9c &gt; Packages.gz</span><br></pre></td></tr></table></figure>
+
+<h2 id="在离线的环境下"><a href="#在离线的环境下" class="headerlink" title="在离线的环境下"></a>在离线的环境下</h2><h3 id="4-准备本地APT仓库"><a href="#4-准备本地APT仓库" class="headerlink" title="4. 准备本地APT仓库"></a>4. 准备本地APT仓库</h3><p>将移动存储设备连接到离线的Debian系统。复制 <code>.deb</code> 包到本地文件系统，并保留目录结构。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /path/to/local/repo</span><br><span class="line"><span class="built_in">cp</span> /path/to/your/usb-drive/debian-offline-packages/* /path/to/local/repo</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-添加本地仓库到APT源"><a href="#5-添加本地仓库到APT源" class="headerlink" title="5. 添加本地仓库到APT源"></a>5. 添加本地仓库到APT源</h3><p>创建一个APT源列表文件，以便APT可以使用本地仓库。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;deb [trusted=yes] file:///path/to/local/repo ./&#x27;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/local-offline-repo.list</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-更新软件包列表"><a href="#6-更新软件包列表" class="headerlink" title="6. 更新软件包列表"></a>6. 更新软件包列表</h3><p>更新本地包数据库，使APT能够识别新的本地仓库。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-安装软件"><a href="#7-安装软件" class="headerlink" title="7. 安装软件"></a>7. 安装软件</h3><p>现在，使用 <code>apt-get install</code> 命令安装软件包，APT将解决所有本地依赖。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>这个过程假定你已经有了移动存储设备，如USB驱动器，并且它已经被挂载到了你的系统上。</li>
+<li><code>&lt;package-name&gt;</code> 是你想要下载并安装的软件包名称。</li>
+<li><code>/path/to/your/usb-drive</code> 是你USB驱动器的挂载点。</li>
+<li><code>/path/to/local/repo</code> 是你在离线机器上创建的本地仓库目录的路径。</li>
+</ul>
+<p>按照这些步骤，你应该能够在Debian系列系统上进行离线软件安装。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/20/centos-offline-package/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -349,7 +453,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 12:28:25" itemprop="dateModified" datetime="2024-12-22T12:28:25+08:00">2024-12-22</time>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -429,219 +533,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/20/yum/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Freeman Kevin">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kevin's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/20/yum/" class="post-title-link" itemprop="url">使用镜像ISO 文件制做本地Yum 源</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-12-20 12:17:25" itemprop="dateCreated datePublished" datetime="2024-12-20T12:17:25+08:00">2024-12-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 12:29:40" itemprop="dateModified" datetime="2024-12-22T12:29:40+08:00">2024-12-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这里以Centos7 环境为例，其他系统也是类似。</p>
-<hr>
-<p>阿里云ISO 镜像下载地址：<a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/">https://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/</a></p>
-<p>要将CentOS 7.9的ISO映像文件挂载到CentOS 7.4系统上，并配置为本地YUM源，你可以按照以下步骤操作：</p>
-<ol>
-<li><p><strong>上传ISO文件</strong>:<br>将CentOS 7.9的ISO文件上传到你的CentOS 7.4服务器上。假设ISO文件位于<code>/path/to/CentOS-7.9.iso</code>。</p>
-</li>
-<li><p><strong>创建挂载点</strong>:<br>创建一个目录来作为ISO文件的挂载点。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /mnt/cdrom</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>挂载ISO文件</strong>:<br>使用<code>mount</code>命令将ISO文件挂载到刚创建的挂载点。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount -o loop /path/to/CentOS-7.9.iso /mnt/cdrom</span><br></pre></td></tr></table></figure>
-
-<p><code>loop</code>选项用于将文件作为块设备挂载。</p>
-</li>
-<li><p><strong>创建YUM仓库配置文件</strong>:<br>在<code>/etc/yum.repos.d/</code>目录下创建一个新的<code>.repo</code>文件。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vi /etc/yum.repos.d/CentOS-Base.repo</span><br></pre></td></tr></table></figure>
-
-<p>在该文件中添加以下内容：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[local-cdrom]</span><br><span class="line">name=CentOS-7.9 Local Repository</span><br><span class="line">baseurl=file:///mnt/cdrom</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0 # 跳过检查</span><br><span class="line">gpgkey=file:///mnt/cdrom/RPM-GPG-KEY-CentOS-7</span><br></pre></td></tr></table></figure>
-
-<p>按<code>ESC</code>，然后输入<code>:wq</code>保存并退出vi编辑器。</p>
-</li>
-<li><p><strong>清理YUM缓存</strong>:<br>清理YUM缓存，确保YUM识别新的仓库。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo yum clean all</span><br><span class="line">sudo yum makecache</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>测试新的YUM仓库</strong>:<br>使用YUM repolist命令检查仓库列表，确保本地仓库已经被添加。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum repolist</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>设置开机自动挂载</strong>:<br>如果你希望每次开机自动挂载ISO文件，可以编辑<code>/etc/fstab</code>文件。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vi /etc/fstab</span><br></pre></td></tr></table></figure>
-
-<p>在文件末尾添加以下行：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/path/to/CentOS-7.9.iso /mnt/cdrom iso9660 loop,ro 0 0</span><br></pre></td></tr></table></figure>
-
-<p>再次按<code>ESC</code>，然后输入<code>:wq</code>保存并退出vi编辑器。</p>
-</li>
-</ol>
-<p>现在你可以使用本地YUM源来安装、更新或删除软件包了。例如：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
-
-<p>确保在执行这些步骤之前，你有足够的权限，以防需要root权限执行某些命令。此外，ISO文件的路径应该是静态的；如果ISO文件移动到其他位置，你需要更新<code>/etc/fstab</code>和<code>/etc/yum.repos.d/CentOS-Base.repo</code>文件中的路径。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/20/Debian-offline-package/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Freeman Kevin">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kevin's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/20/Debian-offline-package/" class="post-title-link" itemprop="url">Debian 系统下制作离线安装包</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-12-20 12:17:25 / 修改时间：11:09:40" itemprop="dateCreated datePublished" datetime="2024-12-20T12:17:25+08:00">2024-12-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>离线安装在Linux系统中是一个常见的需求。以下是在Debian系列操作系统（如Debian, Ubuntu）上创建和使用离线安装包的完整步骤。</p>
-<hr>
-<h2 id="在联网的环境下"><a href="#在联网的环境下" class="headerlink" title="在联网的环境下"></a>在联网的环境下</h2><h3 id="1-下载软件包及其依赖"><a href="#1-下载软件包及其依赖" class="headerlink" title="1. 下载软件包及其依赖"></a>1. 下载软件包及其依赖</h3><p>首先，确定你需要的软件包和版本。使用APT的下载功能来获取软件包和它的所有依赖，但不安装它们。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install --download-only &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
-
-<p>这会将软件包及其依赖下载到 <code>/var/cache/apt/archives/</code> 目录。</p>
-<h3 id="2-复制下载的包"><a href="#2-复制下载的包" class="headerlink" title="2. 复制下载的包"></a>2. 复制下载的包</h3><p>将下载的 <code>.deb</code> 包复制到一个移动存储设备上。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /var/cache/apt/archives/*.deb /path/to/your/usb-drive/debian-offline-packages</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-创建本地APT仓库"><a href="#3-创建本地APT仓库" class="headerlink" title="3. 创建本地APT仓库"></a>3. 创建本地APT仓库</h3><p>在移动存储设备的相同目录下，使用 <code>dpkg-scanpackages</code> 工具来创建 <code>Packages.gz</code> 索引文件。如果没有安装 <code>dpkg-dev</code>，需要先安装它。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install dpkg-dev</span><br><span class="line"><span class="built_in">cd</span> /path/to/your/usb-drive/debian-offline-packages</span><br><span class="line">dpkg-scanpackages . /dev/null | gzip -9c &gt; Packages.gz</span><br></pre></td></tr></table></figure>
-
-<h2 id="在离线的环境下"><a href="#在离线的环境下" class="headerlink" title="在离线的环境下"></a>在离线的环境下</h2><h3 id="4-准备本地APT仓库"><a href="#4-准备本地APT仓库" class="headerlink" title="4. 准备本地APT仓库"></a>4. 准备本地APT仓库</h3><p>将移动存储设备连接到离线的Debian系统。复制 <code>.deb</code> 包到本地文件系统，并保留目录结构。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /path/to/local/repo</span><br><span class="line"><span class="built_in">cp</span> /path/to/your/usb-drive/debian-offline-packages/* /path/to/local/repo</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-添加本地仓库到APT源"><a href="#5-添加本地仓库到APT源" class="headerlink" title="5. 添加本地仓库到APT源"></a>5. 添加本地仓库到APT源</h3><p>创建一个APT源列表文件，以便APT可以使用本地仓库。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;deb [trusted=yes] file:///path/to/local/repo ./&#x27;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/local-offline-repo.list</span><br></pre></td></tr></table></figure>
-
-<h3 id="6-更新软件包列表"><a href="#6-更新软件包列表" class="headerlink" title="6. 更新软件包列表"></a>6. 更新软件包列表</h3><p>更新本地包数据库，使APT能够识别新的本地仓库。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></table></figure>
-
-<h3 id="7-安装软件"><a href="#7-安装软件" class="headerlink" title="7. 安装软件"></a>7. 安装软件</h3><p>现在，使用 <code>apt-get install</code> 命令安装软件包，APT将解决所有本地依赖。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
-<li>这个过程假定你已经有了移动存储设备，如USB驱动器，并且它已经被挂载到了你的系统上。</li>
-<li><code>&lt;package-name&gt;</code> 是你想要下载并安装的软件包名称。</li>
-<li><code>/path/to/your/usb-drive</code> 是你USB驱动器的挂载点。</li>
-<li><code>/path/to/local/repo</code> 是你在离线机器上创建的本地仓库目录的路径。</li>
-</ul>
-<p>按照这些步骤，你应该能够在Debian系列系统上进行离线软件安装。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/20/rufus/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -665,10 +556,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-12-20 12:17:25 / 修改时间：11:15:32" itemprop="dateCreated datePublished" datetime="2024-12-20T12:17:25+08:00">2024-12-20</time>
+              <time title="创建时间：2024-12-20 12:17:25" itemprop="dateCreated datePublished" datetime="2024-12-20T12:17:25+08:00">2024-12-20</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -756,6 +653,121 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/20/yum/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Freeman Kevin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kevin's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/20/yum/" class="post-title-link" itemprop="url">使用镜像ISO 文件制做本地Yum 源</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-12-20 12:17:25" itemprop="dateCreated datePublished" datetime="2024-12-20T12:17:25+08:00">2024-12-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>这里以Centos7 环境为例，其他系统也是类似。</p>
+<hr>
+<p>阿里云ISO 镜像下载地址：<a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/">https://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/</a></p>
+<p>要将CentOS 7.9的ISO映像文件挂载到CentOS 7.4系统上，并配置为本地YUM源，你可以按照以下步骤操作：</p>
+<ol>
+<li><p><strong>上传ISO文件</strong>:<br>将CentOS 7.9的ISO文件上传到你的CentOS 7.4服务器上。假设ISO文件位于<code>/path/to/CentOS-7.9.iso</code>。</p>
+</li>
+<li><p><strong>创建挂载点</strong>:<br>创建一个目录来作为ISO文件的挂载点。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /mnt/cdrom</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>挂载ISO文件</strong>:<br>使用<code>mount</code>命令将ISO文件挂载到刚创建的挂载点。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount -o loop /path/to/CentOS-7.9.iso /mnt/cdrom</span><br></pre></td></tr></table></figure>
+
+<p><code>loop</code>选项用于将文件作为块设备挂载。</p>
+</li>
+<li><p><strong>创建YUM仓库配置文件</strong>:<br>在<code>/etc/yum.repos.d/</code>目录下创建一个新的<code>.repo</code>文件。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vi /etc/yum.repos.d/CentOS-Base.repo</span><br></pre></td></tr></table></figure>
+
+<p>在该文件中添加以下内容：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[local-cdrom]</span><br><span class="line">name=CentOS-7.9 Local Repository</span><br><span class="line">baseurl=file:///mnt/cdrom</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0 # 跳过检查</span><br><span class="line">gpgkey=file:///mnt/cdrom/RPM-GPG-KEY-CentOS-7</span><br></pre></td></tr></table></figure>
+
+<p>按<code>ESC</code>，然后输入<code>:wq</code>保存并退出vi编辑器。</p>
+</li>
+<li><p><strong>清理YUM缓存</strong>:<br>清理YUM缓存，确保YUM识别新的仓库。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo yum clean all</span><br><span class="line">sudo yum makecache</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>测试新的YUM仓库</strong>:<br>使用YUM repolist命令检查仓库列表，确保本地仓库已经被添加。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum repolist</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>设置开机自动挂载</strong>:<br>如果你希望每次开机自动挂载ISO文件，可以编辑<code>/etc/fstab</code>文件。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vi /etc/fstab</span><br></pre></td></tr></table></figure>
+
+<p>在文件末尾添加以下行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/path/to/CentOS-7.9.iso /mnt/cdrom iso9660 loop,ro 0 0</span><br></pre></td></tr></table></figure>
+
+<p>再次按<code>ESC</code>，然后输入<code>:wq</code>保存并退出vi编辑器。</p>
+</li>
+</ol>
+<p>现在你可以使用本地YUM源来安装、更新或删除软件包了。例如：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>确保在执行这些步骤之前，你有足够的权限，以防需要root权限执行某些命令。此外，ISO文件的路径应该是静态的；如果ISO文件移动到其他位置，你需要更新<code>/etc/fstab</code>和<code>/etc/yum.repos.d/CentOS-Base.repo</code>文件中的路径。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/19/vnc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -787,7 +799,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 12:29:24" itemprop="dateModified" datetime="2024-12-22T12:29:24+08:00">2024-12-22</time>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -967,7 +979,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 12:28:33" itemprop="dateModified" datetime="2024-12-22T12:28:33+08:00">2024-12-22</time>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1094,7 +1106,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 11:52:57" itemprop="dateModified" datetime="2024-12-22T11:52:57+08:00">2024-12-22</time>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1229,7 +1241,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 12:28:49" itemprop="dateModified" datetime="2024-12-22T12:28:49+08:00">2024-12-22</time>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1284,7 +1296,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/11/swap/">
+    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/11/mount-hd-lvm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -1298,7 +1310,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2024/12/11/swap/" class="post-title-link" itemprop="url">在没有 Swap 的服务器上创建 Swap</a>
+            <a href="/2024/12/11/mount-hd-lvm/" class="post-title-link" itemprop="url">数据盘挂载与LVM 创建</a>
         </h2>
 
         <div class="post-meta">
@@ -1315,7 +1327,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 11:53:55" itemprop="dateModified" datetime="2024-12-22T11:53:55+08:00">2024-12-22</time>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1338,44 +1350,85 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在服务器上创建 Swap 文件是缓解内存不足的一种有效方法。在一些没有 Swap 分区的服务器中，通过创建 Swap 文件可以为系统提供额外的虚拟内存，从而保证系统的稳定性和性能特别是在高负载情况下。本文将详细介绍如何在一台没有 Swap 的服务器上创建 Swap 分区，这里以16核、32GB内存、300GB数据盘的服务器进行举例。</p>
-<h4 id="1-检查当前系统是否有-Swap"><a href="#1-检查当前系统是否有-Swap" class="headerlink" title="1. 检查当前系统是否有 Swap"></a>1. 检查当前系统是否有 Swap</h4><p>首先，我们需要检查当前系统是否有 Swap 分区。执行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">swapon --show</span><br></pre></td></tr></table></figure>
-
-<p>如果没有输出，说明当前系统没有 Swap 分区。</p>
-<h4 id="2-创建-Swap-文件"><a href="#2-创建-Swap-文件" class="headerlink" title="2. 创建 Swap 文件"></a>2. 创建 Swap 文件</h4><p>为了在没有 Swap 分区的服务器上创建 Swap，我们可以使用文件来模拟 Swap。以下是创建 Swap 文件的详细步骤：</p>
-<ol>
-<li><p><strong>创建 Swap 文件</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=/data/swapfile bs=1M count=20480</span><br></pre></td></tr></table></figure>
-<p>解释：</p>
-<ul>
-<li><code>if=/dev/zero</code>：从零设备读取数据，用于创建文件。</li>
-<li><code>of=/data/swapfile</code>：指定目标文件名为 <code>/data/swapfile</code>，挂载在数据盘 <code>/data</code> 下。</li>
-<li><code>bs=1M</code>：设置块大小为1MB。</li>
-<li><code>count=20480</code>：指定文件大小为20GB（32GB内存 &#x2F; 1.6 &#x3D; 20GB）。</li>
-</ul>
-</li>
-<li><p><strong>更改 Swap 文件权限</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> 600 /data/swapfile</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>设置文件为Swap</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkswap /data/swapfile</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>激活Swap文件</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> swapon /data/swapfile</span><br></pre></td></tr></table></figure></li>
+          <p>在服务器环境中，使用逻辑卷管理器（LVM）配置和挂载数据盘是一种灵活高效的方式。以下指南将介绍如何在 <strong>CentOS</strong> 和其他常见 Linux 系统中，使用 LVM 将新数据盘（以 <code>vdb</code> 为例）挂载到 <code>/data</code> 目录。</p>
+<h3 id="前置检查"><a href="#前置检查" class="headerlink" title="前置检查"></a><strong>前置检查</strong></h3><ol>
+<li>确保目标硬盘（<code>vdb</code>）是新磁盘或非关键数据盘。</li>
+<li>验证系统是否检测到硬盘：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
+找到 <code>vdb</code>，确认其未分区或挂载。</li>
 </ol>
-<h4 id="3-配置开机自启"><a href="#3-配置开机自启" class="headerlink" title="3. 配置开机自启"></a>3. 配置开机自启</h4><p>为了确保每次系统启动时自动启用 Swap 文件，我们需要在 <code>/etc/fstab</code> 文件中添加一行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/data/swapfile   none    swap    sw    0   0</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="安装-LVM-工具"><a href="#安装-LVM-工具" class="headerlink" title="安装 LVM 工具"></a><strong>安装 LVM 工具</strong></h3><ul>
+<li><p><strong>CentOS&#x2F;Red Hat 系统</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y lvm2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Debian&#x2F;Ubuntu 系统</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install -y lvm2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>OpenSUSE 系统</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> zypper install -y lvm2</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="LVM-配置步骤"><a href="#LVM-配置步骤" class="headerlink" title="LVM 配置步骤"></a><strong>LVM 配置步骤</strong></h3><h4 id="1-初始化物理卷-PV"><a href="#1-初始化物理卷-PV" class="headerlink" title="1. 初始化物理卷 (PV)"></a>1. 初始化物理卷 (PV)</h4><p>将 <code>vdb</code> 初始化为 LVM 的物理卷：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pvcreate /dev/vdb</span><br></pre></td></tr></table></figure>
 
-<p>使用以下命令将其添加：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/fstab</span><br></pre></td></tr></table></figure>
+<p>验证创建是否成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pvdisplay</span><br></pre></td></tr></table></figure>
 
-<p>在文件末尾添加上面的一行，并保存退出。</p>
-<h4 id="4-验证-Swap-文件创建成功"><a href="#4-验证-Swap-文件创建成功" class="headerlink" title="4. 验证 Swap 文件创建成功"></a>4. 验证 Swap 文件创建成功</h4><p>最后，我们可以验证 Swap 文件是否创建并成功启用：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">swapon --show</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="2-创建卷组-VG"><a href="#2-创建卷组-VG" class="headerlink" title="2. 创建卷组 (VG)"></a>2. 创建卷组 (VG)</h4><p>创建一个新的卷组 <code>vg_data</code>，并将 <code>vdb</code> 添加到该卷组：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgcreate vg_data /dev/vdb</span><br></pre></td></tr></table></figure>
 
-<p>如果输出中出现 <code>/data/swapfile</code>，则说明创建成功。</p>
-<h4 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h4><p>通过本文中的步骤，你可以在没有 Swap 分区的服务器上创建一个Swap文件，从而有效缓解内存不足的情况。这种方法适用于内存充足但没有预配置Swap分区的服务器，确保系统稳定运行。</p>
+<p>检查卷组信息：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgdisplay</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="3-创建逻辑卷-LV"><a href="#3-创建逻辑卷-LV" class="headerlink" title="3. 创建逻辑卷 (LV)"></a>3. 创建逻辑卷 (LV)</h4><p>在卷组 <code>vg_data</code> 中创建逻辑卷 <code>lv_data</code>：</p>
+<ul>
+<li>使用所有剩余空间：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvcreate -l +100%FREE -n lv_data vg_data</span><br></pre></td></tr></table></figure></li>
+<li>或者指定大小（如 100GB）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvcreate -L 100G -n lv_data vg_data</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>验证逻辑卷：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvdisplay</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="4-创建文件系统"><a href="#4-创建文件系统" class="headerlink" title="4. 创建文件系统"></a>4. 创建文件系统</h4><p>为逻辑卷 <code>lv_data</code> 创建 EXT4 文件系统：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.ext4 /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="5-挂载逻辑卷"><a href="#5-挂载逻辑卷" class="headerlink" title="5. 挂载逻辑卷"></a>5. 挂载逻辑卷</h4><ol>
+<li><p>创建挂载点：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /data</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>挂载逻辑卷到 <code>/data</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount /dev/vg_data/lv_data /data</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>确认挂载成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -h | grep /data</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h4 id="6-设置开机自动挂载"><a href="#6-设置开机自动挂载" class="headerlink" title="6. 设置开机自动挂载"></a>6. 设置开机自动挂载</h4><p>编辑 <code>/etc/fstab</code> 文件，使逻辑卷在开机时自动挂载：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/fstab</span><br></pre></td></tr></table></figure>
+
+<p>在文件末尾添加以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/dev/vg_data/lv_data /data ext4 defaults 0 0</span><br></pre></td></tr></table></figure>
+
+<p>测试 <code>fstab</code> 配置是否正确：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> umount /data</span><br><span class="line"><span class="built_in">sudo</span> mount -a</span><br></pre></td></tr></table></figure>
+<p>如果没有错误，挂载设置无误。</p>
+<hr>
+<h3 id="其他-Linux-系统的注意事项"><a href="#其他-Linux-系统的注意事项" class="headerlink" title="其他 Linux 系统的注意事项"></a><strong>其他 Linux 系统的注意事项</strong></h3><ol>
+<li><p><strong>文件系统支持</strong>:<br>不同发行版可能默认支持不同文件系统（如 <code>XFS</code> 或 <code>Btrfs</code>）。可以根据需求替换 <code>mkfs.ext4</code> 为适合的文件系统命令，例如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.xfs /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>卷组管理</strong>:<br>如果有多个硬盘，可将多个物理卷（如 <code>/dev/vdb</code> 和 <code>/dev/vdc</code>）加入同一卷组：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgextend vg_data /dev/vdc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>调整逻辑卷大小</strong>:<br>如果需要扩展逻辑卷：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvextend -L +50G /dev/vg_data/lv_data</span><br><span class="line"><span class="built_in">sudo</span> resize2fs /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>通过以上步骤，我们成功配置了数据盘并挂载到 <code>/data</code>。这种使用 LVM 的方式不仅提供了灵活的卷管理能力，还能在未来需要时动态扩展存储，避免繁琐的重新分区操作。</p>
+<p>确保在生产环境操作前备份重要数据，执行步骤时严格按照实际需求调整命令。</p>
 
       
     </div>

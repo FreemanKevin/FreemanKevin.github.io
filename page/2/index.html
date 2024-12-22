@@ -178,7 +178,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/11/mount-hd-lvm/">
+    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/11/swap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -192,7 +192,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2024/12/11/mount-hd-lvm/" class="post-title-link" itemprop="url">数据盘挂载与LVM 创建</a>
+            <a href="/2024/12/11/swap/" class="post-title-link" itemprop="url">在没有 Swap 的服务器上创建 Swap</a>
         </h2>
 
         <div class="post-meta">
@@ -209,7 +209,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-20 16:27:24" itemprop="dateModified" datetime="2024-12-20T16:27:24+08:00">2024-12-20</time>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,85 +232,44 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在服务器环境中，使用逻辑卷管理器（LVM）配置和挂载数据盘是一种灵活高效的方式。以下指南将介绍如何在 <strong>CentOS</strong> 和其他常见 Linux 系统中，使用 LVM 将新数据盘（以 <code>vdb</code> 为例）挂载到 <code>/data</code> 目录。</p>
-<h3 id="前置检查"><a href="#前置检查" class="headerlink" title="前置检查"></a><strong>前置检查</strong></h3><ol>
-<li>确保目标硬盘（<code>vdb</code>）是新磁盘或非关键数据盘。</li>
-<li>验证系统是否检测到硬盘：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
-找到 <code>vdb</code>，确认其未分区或挂载。</li>
-</ol>
-<hr>
-<h3 id="安装-LVM-工具"><a href="#安装-LVM-工具" class="headerlink" title="安装 LVM 工具"></a><strong>安装 LVM 工具</strong></h3><ul>
-<li><p><strong>CentOS&#x2F;Red Hat 系统</strong>:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y lvm2</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>Debian&#x2F;Ubuntu 系统</strong>:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install -y lvm2</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>OpenSUSE 系统</strong>:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> zypper install -y lvm2</span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h3 id="LVM-配置步骤"><a href="#LVM-配置步骤" class="headerlink" title="LVM 配置步骤"></a><strong>LVM 配置步骤</strong></h3><h4 id="1-初始化物理卷-PV"><a href="#1-初始化物理卷-PV" class="headerlink" title="1. 初始化物理卷 (PV)"></a>1. 初始化物理卷 (PV)</h4><p>将 <code>vdb</code> 初始化为 LVM 的物理卷：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pvcreate /dev/vdb</span><br></pre></td></tr></table></figure>
+          <p>在服务器上创建 Swap 文件是缓解内存不足的一种有效方法。在一些没有 Swap 分区的服务器中，通过创建 Swap 文件可以为系统提供额外的虚拟内存，从而保证系统的稳定性和性能特别是在高负载情况下。本文将详细介绍如何在一台没有 Swap 的服务器上创建 Swap 分区，这里以16核、32GB内存、300GB数据盘的服务器进行举例。</p>
+<h4 id="1-检查当前系统是否有-Swap"><a href="#1-检查当前系统是否有-Swap" class="headerlink" title="1. 检查当前系统是否有 Swap"></a>1. 检查当前系统是否有 Swap</h4><p>首先，我们需要检查当前系统是否有 Swap 分区。执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">swapon --show</span><br></pre></td></tr></table></figure>
 
-<p>验证创建是否成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pvdisplay</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="2-创建卷组-VG"><a href="#2-创建卷组-VG" class="headerlink" title="2. 创建卷组 (VG)"></a>2. 创建卷组 (VG)</h4><p>创建一个新的卷组 <code>vg_data</code>，并将 <code>vdb</code> 添加到该卷组：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgcreate vg_data /dev/vdb</span><br></pre></td></tr></table></figure>
-
-<p>检查卷组信息：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgdisplay</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="3-创建逻辑卷-LV"><a href="#3-创建逻辑卷-LV" class="headerlink" title="3. 创建逻辑卷 (LV)"></a>3. 创建逻辑卷 (LV)</h4><p>在卷组 <code>vg_data</code> 中创建逻辑卷 <code>lv_data</code>：</p>
+<p>如果没有输出，说明当前系统没有 Swap 分区。</p>
+<h4 id="2-创建-Swap-文件"><a href="#2-创建-Swap-文件" class="headerlink" title="2. 创建 Swap 文件"></a>2. 创建 Swap 文件</h4><p>为了在没有 Swap 分区的服务器上创建 Swap，我们可以使用文件来模拟 Swap。以下是创建 Swap 文件的详细步骤：</p>
+<ol>
+<li><p><strong>创建 Swap 文件</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=/data/swapfile bs=1M count=20480</span><br></pre></td></tr></table></figure>
+<p>解释：</p>
 <ul>
-<li>使用所有剩余空间：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvcreate -l +100%FREE -n lv_data vg_data</span><br></pre></td></tr></table></figure></li>
-<li>或者指定大小（如 100GB）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvcreate -L 100G -n lv_data vg_data</span><br></pre></td></tr></table></figure></li>
+<li><code>if=/dev/zero</code>：从零设备读取数据，用于创建文件。</li>
+<li><code>of=/data/swapfile</code>：指定目标文件名为 <code>/data/swapfile</code>，挂载在数据盘 <code>/data</code> 下。</li>
+<li><code>bs=1M</code>：设置块大小为1MB。</li>
+<li><code>count=20480</code>：指定文件大小为20GB（32GB内存 &#x2F; 1.6 &#x3D; 20GB）。</li>
 </ul>
-<p>验证逻辑卷：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvdisplay</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="4-创建文件系统"><a href="#4-创建文件系统" class="headerlink" title="4. 创建文件系统"></a>4. 创建文件系统</h4><p>为逻辑卷 <code>lv_data</code> 创建 EXT4 文件系统：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.ext4 /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="5-挂载逻辑卷"><a href="#5-挂载逻辑卷" class="headerlink" title="5. 挂载逻辑卷"></a>5. 挂载逻辑卷</h4><ol>
-<li><p>创建挂载点：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /data</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>挂载逻辑卷到 <code>/data</code>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount /dev/vg_data/lv_data /data</span><br></pre></td></tr></table></figure>
+<li><p><strong>更改 Swap 文件权限</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> 600 /data/swapfile</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>确认挂载成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -h | grep /data</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>设置文件为Swap</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkswap /data/swapfile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>激活Swap文件</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> swapon /data/swapfile</span><br></pre></td></tr></table></figure></li>
 </ol>
-<hr>
-<h4 id="6-设置开机自动挂载"><a href="#6-设置开机自动挂载" class="headerlink" title="6. 设置开机自动挂载"></a>6. 设置开机自动挂载</h4><p>编辑 <code>/etc/fstab</code> 文件，使逻辑卷在开机时自动挂载：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/fstab</span><br></pre></td></tr></table></figure>
+<h4 id="3-配置开机自启"><a href="#3-配置开机自启" class="headerlink" title="3. 配置开机自启"></a>3. 配置开机自启</h4><p>为了确保每次系统启动时自动启用 Swap 文件，我们需要在 <code>/etc/fstab</code> 文件中添加一行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/data/swapfile   none    swap    sw    0   0</span><br></pre></td></tr></table></figure>
 
-<p>在文件末尾添加以下内容：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/dev/vg_data/lv_data /data ext4 defaults 0 0</span><br></pre></td></tr></table></figure>
+<p>使用以下命令将其添加：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/fstab</span><br></pre></td></tr></table></figure>
 
-<p>测试 <code>fstab</code> 配置是否正确：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> umount /data</span><br><span class="line"><span class="built_in">sudo</span> mount -a</span><br></pre></td></tr></table></figure>
-<p>如果没有错误，挂载设置无误。</p>
-<hr>
-<h3 id="其他-Linux-系统的注意事项"><a href="#其他-Linux-系统的注意事项" class="headerlink" title="其他 Linux 系统的注意事项"></a><strong>其他 Linux 系统的注意事项</strong></h3><ol>
-<li><p><strong>文件系统支持</strong>:<br>不同发行版可能默认支持不同文件系统（如 <code>XFS</code> 或 <code>Btrfs</code>）。可以根据需求替换 <code>mkfs.ext4</code> 为适合的文件系统命令，例如：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.xfs /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>卷组管理</strong>:<br>如果有多个硬盘，可将多个物理卷（如 <code>/dev/vdb</code> 和 <code>/dev/vdc</code>）加入同一卷组：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgextend vg_data /dev/vdc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>调整逻辑卷大小</strong>:<br>如果需要扩展逻辑卷：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvextend -L +50G /dev/vg_data/lv_data</span><br><span class="line"><span class="built_in">sudo</span> resize2fs /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>通过以上步骤，我们成功配置了数据盘并挂载到 <code>/data</code>。这种使用 LVM 的方式不仅提供了灵活的卷管理能力，还能在未来需要时动态扩展存储，避免繁琐的重新分区操作。</p>
-<p>确保在生产环境操作前备份重要数据，执行步骤时严格按照实际需求调整命令。</p>
+<p>在文件末尾添加上面的一行，并保存退出。</p>
+<h4 id="4-验证-Swap-文件创建成功"><a href="#4-验证-Swap-文件创建成功" class="headerlink" title="4. 验证 Swap 文件创建成功"></a>4. 验证 Swap 文件创建成功</h4><p>最后，我们可以验证 Swap 文件是否创建并成功启用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">swapon --show</span><br></pre></td></tr></table></figure>
+
+<p>如果输出中出现 <code>/data/swapfile</code>，则说明创建成功。</p>
+<h4 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h4><p>通过本文中的步骤，你可以在没有 Swap 分区的服务器上创建一个Swap文件，从而有效缓解内存不足的情况。这种方法适用于内存充足但没有预配置Swap分区的服务器，确保系统稳定运行。</p>
 
       
     </div>
