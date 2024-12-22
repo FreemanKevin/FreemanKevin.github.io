@@ -325,6 +325,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/20/Debian-offline-package/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Freeman Kevin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kevin's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/20/Debian-offline-package/" class="post-title-link" itemprop="url">Debian 系统下制作离线安装包</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-12-20 12:17:25" itemprop="dateCreated datePublished" datetime="2024-12-20T12:17:25+08:00">2024-12-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>离线安装在Linux系统中是一个常见的需求。以下是在Debian系列操作系统（如Debian, Ubuntu）上创建和使用离线安装包的完整步骤。</p>
+<hr>
+<h2 id="在联网的环境下"><a href="#在联网的环境下" class="headerlink" title="在联网的环境下"></a>在联网的环境下</h2><h3 id="1-下载软件包及其依赖"><a href="#1-下载软件包及其依赖" class="headerlink" title="1. 下载软件包及其依赖"></a>1. 下载软件包及其依赖</h3><p>首先，确定你需要的软件包和版本。使用APT的下载功能来获取软件包和它的所有依赖，但不安装它们。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install --download-only &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这会将软件包及其依赖下载到 <code>/var/cache/apt/archives/</code> 目录。</p>
+<h3 id="2-复制下载的包"><a href="#2-复制下载的包" class="headerlink" title="2. 复制下载的包"></a>2. 复制下载的包</h3><p>将下载的 <code>.deb</code> 包复制到一个移动存储设备上。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /var/cache/apt/archives/*.deb /path/to/your/usb-drive/debian-offline-packages</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-创建本地APT仓库"><a href="#3-创建本地APT仓库" class="headerlink" title="3. 创建本地APT仓库"></a>3. 创建本地APT仓库</h3><p>在移动存储设备的相同目录下，使用 <code>dpkg-scanpackages</code> 工具来创建 <code>Packages.gz</code> 索引文件。如果没有安装 <code>dpkg-dev</code>，需要先安装它。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install dpkg-dev</span><br><span class="line"><span class="built_in">cd</span> /path/to/your/usb-drive/debian-offline-packages</span><br><span class="line">dpkg-scanpackages . /dev/null | gzip -9c &gt; Packages.gz</span><br></pre></td></tr></table></figure>
+
+<h2 id="在离线的环境下"><a href="#在离线的环境下" class="headerlink" title="在离线的环境下"></a>在离线的环境下</h2><h3 id="4-准备本地APT仓库"><a href="#4-准备本地APT仓库" class="headerlink" title="4. 准备本地APT仓库"></a>4. 准备本地APT仓库</h3><p>将移动存储设备连接到离线的Debian系统。复制 <code>.deb</code> 包到本地文件系统，并保留目录结构。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /path/to/local/repo</span><br><span class="line"><span class="built_in">cp</span> /path/to/your/usb-drive/debian-offline-packages/* /path/to/local/repo</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-添加本地仓库到APT源"><a href="#5-添加本地仓库到APT源" class="headerlink" title="5. 添加本地仓库到APT源"></a>5. 添加本地仓库到APT源</h3><p>创建一个APT源列表文件，以便APT可以使用本地仓库。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;deb [trusted=yes] file:///path/to/local/repo ./&#x27;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/local-offline-repo.list</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-更新软件包列表"><a href="#6-更新软件包列表" class="headerlink" title="6. 更新软件包列表"></a>6. 更新软件包列表</h3><p>更新本地包数据库，使APT能够识别新的本地仓库。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-安装软件"><a href="#7-安装软件" class="headerlink" title="7. 安装软件"></a>7. 安装软件</h3><p>现在，使用 <code>apt-get install</code> 命令安装软件包，APT将解决所有本地依赖。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>这个过程假定你已经有了移动存储设备，如USB驱动器，并且它已经被挂载到了你的系统上。</li>
+<li><code>&lt;package-name&gt;</code> 是你想要下载并安装的软件包名称。</li>
+<li><code>/path/to/your/usb-drive</code> 是你USB驱动器的挂载点。</li>
+<li><code>/path/to/local/repo</code> 是你在离线机器上创建的本地仓库目录的路径。</li>
+</ul>
+<p>按照这些步骤，你应该能够在Debian系列系统上进行离线软件安装。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/20/centos-offline-package/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -417,110 +521,6 @@
 <li>如果您下载了大量的包，并且依赖很复杂，建议直接下载整个 CentOS 仓库，并在离线环境中设置本地镜像。</li>
 </ul>
 <p>按照这些步骤，您应该能够在没有网络连接的情况下在 CentOS 7.9 系统上安装软件。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/20/Debian-offline-package/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Freeman Kevin">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kevin's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/20/Debian-offline-package/" class="post-title-link" itemprop="url">Debian 系统下制作离线安装包</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-12-20 12:17:25" itemprop="dateCreated datePublished" datetime="2024-12-20T12:17:25+08:00">2024-12-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 14:53:03" itemprop="dateModified" datetime="2024-12-22T14:53:03+08:00">2024-12-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>离线安装在Linux系统中是一个常见的需求。以下是在Debian系列操作系统（如Debian, Ubuntu）上创建和使用离线安装包的完整步骤。</p>
-<hr>
-<h2 id="在联网的环境下"><a href="#在联网的环境下" class="headerlink" title="在联网的环境下"></a>在联网的环境下</h2><h3 id="1-下载软件包及其依赖"><a href="#1-下载软件包及其依赖" class="headerlink" title="1. 下载软件包及其依赖"></a>1. 下载软件包及其依赖</h3><p>首先，确定你需要的软件包和版本。使用APT的下载功能来获取软件包和它的所有依赖，但不安装它们。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install --download-only &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
-
-<p>这会将软件包及其依赖下载到 <code>/var/cache/apt/archives/</code> 目录。</p>
-<h3 id="2-复制下载的包"><a href="#2-复制下载的包" class="headerlink" title="2. 复制下载的包"></a>2. 复制下载的包</h3><p>将下载的 <code>.deb</code> 包复制到一个移动存储设备上。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /var/cache/apt/archives/*.deb /path/to/your/usb-drive/debian-offline-packages</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-创建本地APT仓库"><a href="#3-创建本地APT仓库" class="headerlink" title="3. 创建本地APT仓库"></a>3. 创建本地APT仓库</h3><p>在移动存储设备的相同目录下，使用 <code>dpkg-scanpackages</code> 工具来创建 <code>Packages.gz</code> 索引文件。如果没有安装 <code>dpkg-dev</code>，需要先安装它。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install dpkg-dev</span><br><span class="line"><span class="built_in">cd</span> /path/to/your/usb-drive/debian-offline-packages</span><br><span class="line">dpkg-scanpackages . /dev/null | gzip -9c &gt; Packages.gz</span><br></pre></td></tr></table></figure>
-
-<h2 id="在离线的环境下"><a href="#在离线的环境下" class="headerlink" title="在离线的环境下"></a>在离线的环境下</h2><h3 id="4-准备本地APT仓库"><a href="#4-准备本地APT仓库" class="headerlink" title="4. 准备本地APT仓库"></a>4. 准备本地APT仓库</h3><p>将移动存储设备连接到离线的Debian系统。复制 <code>.deb</code> 包到本地文件系统，并保留目录结构。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /path/to/local/repo</span><br><span class="line"><span class="built_in">cp</span> /path/to/your/usb-drive/debian-offline-packages/* /path/to/local/repo</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-添加本地仓库到APT源"><a href="#5-添加本地仓库到APT源" class="headerlink" title="5. 添加本地仓库到APT源"></a>5. 添加本地仓库到APT源</h3><p>创建一个APT源列表文件，以便APT可以使用本地仓库。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;deb [trusted=yes] file:///path/to/local/repo ./&#x27;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/local-offline-repo.list</span><br></pre></td></tr></table></figure>
-
-<h3 id="6-更新软件包列表"><a href="#6-更新软件包列表" class="headerlink" title="6. 更新软件包列表"></a>6. 更新软件包列表</h3><p>更新本地包数据库，使APT能够识别新的本地仓库。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></table></figure>
-
-<h3 id="7-安装软件"><a href="#7-安装软件" class="headerlink" title="7. 安装软件"></a>7. 安装软件</h3><p>现在，使用 <code>apt-get install</code> 命令安装软件包，APT将解决所有本地依赖。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
-<li>这个过程假定你已经有了移动存储设备，如USB驱动器，并且它已经被挂载到了你的系统上。</li>
-<li><code>&lt;package-name&gt;</code> 是你想要下载并安装的软件包名称。</li>
-<li><code>/path/to/your/usb-drive</code> 是你USB驱动器的挂载点。</li>
-<li><code>/path/to/local/repo</code> 是你在离线机器上创建的本地仓库目录的路径。</li>
-</ul>
-<p>按照这些步骤，你应该能够在Debian系列系统上进行离线软件安装。</p>
 
       
     </div>
@@ -1543,7 +1543,13 @@
         <a href="https://github.com/freemankevin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;freemankevin" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://x.com/fr75301596" title="Twitter → https:&#x2F;&#x2F;x.com&#x2F;fr75301596" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+        <a href="https://stackoverflow.com/users/14609582/kevin" title="StackOver → https:&#x2F;&#x2F;stackoverflow.com&#x2F;users&#x2F;14609582&#x2F;kevin" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>StackOver</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://mastodon.social/@freemankevin" title="Mastodon → https:&#x2F;&#x2F;mastodon.social&#x2F;@freemankevin" rel="noopener" target="_blank"><i class="fab fa-mastodon fa-fw"></i>Mastodon</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://bsky.app/profile/freemankevin.bsky.social" title="Bluesky → https:&#x2F;&#x2F;bsky.app&#x2F;profile&#x2F;freemankevin.bsky.social" rel="noopener" target="_blank"><i class="fab fa-bluesky fa-fw"></i>Bluesky</a>
       </span>
   </div>
 
