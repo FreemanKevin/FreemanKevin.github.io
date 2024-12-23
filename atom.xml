@@ -71,12 +71,12 @@
     <link href="https://freemankevin.uk/2024/12/20/debian-offline-package/"/>
     <id>https://freemankevin.uk/2024/12/20/debian-offline-package/</id>
     <published>2024-12-20T04:17:25.000Z</published>
-    <updated>2024-12-23T14:37:43.803Z</updated>
+    <updated>2024-12-23T15:55:02.387Z</updated>
     
-    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;离线安装在 Linux 系统中是一个常见需求，特别是在无法联网的环境中。本文介绍了如何在 Debian 系列操作系统（如 Debian 和 Ubuntu）上创建和使用离线安装包的完整步骤。首先，我们在联网环境下下载所需的软件包及其依赖，并创建本地 APT 仓库。然后，我们将这些包复制到离线系统上，并配置本地仓库以便进行安装。通过这些步骤，你可以方便地在离线环境中安装所需的软件。</p><span id="more"></span><h2 id="在联网的环境下"><a href="#在联网的环境下" class="headerlink" title="在联网的环境下"></a>在联网的环境下</h2><h3 id="1-下载软件包及其依赖"><a href="#1-下载软件包及其依赖" class="headerlink" title="1. 下载软件包及其依赖"></a>1. 下载软件包及其依赖</h3><p>首先，确定你需要的软件包和版本。使用APT的下载功能来获取软件包和它的所有依赖，但不安装它们。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install --download-only &lt;package-name&gt;</span><br></pre></td></tr></table></figure><p>这会将软件包及其依赖下载到 <code>/var/cache/apt/archives/</code> 目录。</p><h3 id="2-复制下载的包"><a href="#2-复制下载的包" class="headerlink" title="2. 复制下载的包"></a>2. 复制下载的包</h3><p>将下载的 <code>.deb</code> 包复制到一个移动存储设备上。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /var/cache/apt/archives/*.deb /path/to/your/usb-drive/debian-offline-packages</span><br></pre></td></tr></table></figure><h3 id="3-创建本地APT仓库"><a href="#3-创建本地APT仓库" class="headerlink" title="3. 创建本地APT仓库"></a>3. 创建本地APT仓库</h3><p>在移动存储设备的相同目录下，使用 <code>dpkg-scanpackages</code> 工具来创建 <code>Packages.gz</code> 索引文件。如果没有安装 <code>dpkg-dev</code>，需要先安装它。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install dpkg-dev</span><br><span class="line"><span class="built_in">cd</span> /path/to/your/usb-drive/debian-offline-packages</span><br><span class="line">dpkg-scanpackages . /dev/null | gzip -9c &gt; Packages.gz</span><br></pre></td></tr></table></figure><h2 id="在离线的环境下"><a href="#在离线的环境下" class="headerlink" title="在离线的环境下"></a>在离线的环境下</h2><h3 id="4-准备本地APT仓库"><a href="#4-准备本地APT仓库" class="headerlink" title="4. 准备本地APT仓库"></a>4. 准备本地APT仓库</h3><p>将移动存储设备连接到离线的Debian系统。复制 <code>.deb</code> 包到本地文件系统，并保留目录结构。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /path/to/local/repo</span><br><span class="line"><span class="built_in">cp</span> /path/to/your/usb-drive/debian-offline-packages/* /path/to/local/repo</span><br></pre></td></tr></table></figure><h3 id="5-添加本地仓库到APT源"><a href="#5-添加本地仓库到APT源" class="headerlink" title="5. 添加本地仓库到APT源"></a>5. 添加本地仓库到APT源</h3><p>创建一个APT源列表文件，以便APT可以使用本地仓库。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;deb [trusted=yes] file:///path/to/local/repo ./&#x27;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/local-offline-repo.list</span><br></pre></td></tr></table></figure><h3 id="6-更新软件包列表"><a href="#6-更新软件包列表" class="headerlink" title="6. 更新软件包列表"></a>6. 更新软件包列表</h3><p>更新本地包数据库，使APT能够识别新的本地仓库。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></table></figure><h3 id="7-安装软件"><a href="#7-安装软件" class="headerlink" title="7. 安装软件"></a>7. 安装软件</h3><p>现在，使用 <code>apt-get install</code> 命令安装软件包，APT将解决所有本地依赖。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install &lt;package-name&gt;</span><br></pre></td></tr></table></figure><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul><li>这个过程假定你已经有了移动存储设备，如USB驱动器，并且它已经被挂载到了你的系统上。</li><li><code>&lt;package-name&gt;</code> 是你想要下载并安装的软件包名称。</li><li><code>/path/to/your/usb-drive</code> 是你USB驱动器的挂载点。</li><li><code>/path/to/local/repo</code> 是你在离线机器上创建的本地仓库目录的路径。</li></ul><p>按照这些步骤，你应该能够在Debian系列系统上进行离线软件安装。</p>]]></content>
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;离线安装在 Linux 系统中是一个常见需求，特别是在无法联网的环境中。本文介绍了如何在 Debian 系列操作系统（如 Debian 和 Ubuntu）上创建和使用离线安装包的完整步骤。首先，我们在联网环境下下载所需的软件包及其依赖，并创建本地 APT 仓库。然后，我们将这些包复制到离线系统上，并配置本地仓库以便进行安装。通过这些步骤，你可以方便地在离线环境中安装所需的软件。</p><span id="more"></span><h2 id="在联网的环境下"><a href="#在联网的环境下" class="headerlink" title="在联网的环境下"></a>在联网的环境下</h2><h3 id="1-下载软件包及其依赖"><a href="#1-下载软件包及其依赖" class="headerlink" title="1. 下载软件包及其依赖"></a>1. 下载软件包及其依赖</h3><p>首先，确定你需要的软件包和版本。使用APT的下载功能来获取软件包和它的所有依赖，但不安装它们。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install --download-only &lt;package-name&gt;</span><br></pre></td></tr></table></figure><p>这会将软件包及其依赖下载到 <code>/var/cache/apt/archives/</code> 目录。</p><h3 id="2-复制下载的包"><a href="#2-复制下载的包" class="headerlink" title="2. 复制下载的包"></a>2. 复制下载的包</h3><p>将下载的 <code>.deb</code> 包复制到一个移动存储设备上。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /var/cache/apt/archives/*.deb /path/to/your/usb-drive/debian-offline-packages</span><br></pre></td></tr></table></figure><h3 id="3-创建本地APT仓库"><a href="#3-创建本地APT仓库" class="headerlink" title="3. 创建本地APT仓库"></a>3. 创建本地APT仓库</h3><p>在移动存储设备的相同目录下，使用 <code>dpkg-scanpackages</code> 工具来创建 <code>Packages.gz</code> 索引文件。如果没有安装 <code>dpkg-dev</code>，需要先安装它。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install dpkg-dev</span><br><span class="line"><span class="built_in">cd</span> /path/to/your/usb-drive/debian-offline-packages</span><br><span class="line">dpkg-scanpackages . /dev/null | gzip -9c &gt; Packages.gz</span><br></pre></td></tr></table></figure><h2 id="在离线的环境下"><a href="#在离线的环境下" class="headerlink" title="在离线的环境下"></a>在离线的环境下</h2><h3 id="4-准备本地APT仓库"><a href="#4-准备本地APT仓库" class="headerlink" title="4. 准备本地APT仓库"></a>4. 准备本地APT仓库</h3><p>将移动存储设备连接到离线的Debian系统。复制 <code>.deb</code> 包到本地文件系统，并保留目录结构。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /path/to/local/repo</span><br><span class="line"><span class="built_in">cp</span> /path/to/your/usb-drive/debian-offline-packages/* /path/to/local/repo</span><br></pre></td></tr></table></figure><h3 id="5-添加本地仓库到APT源"><a href="#5-添加本地仓库到APT源" class="headerlink" title="5. 添加本地仓库到APT源"></a>5. 添加本地仓库到APT源</h3><p>创建一个APT源列表文件，以便APT可以使用本地仓库。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;deb [trusted=yes] file:///path/to/local/repo ./&#x27;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/local-offline-repo.list</span><br></pre></td></tr></table></figure><h3 id="6-更新软件包列表"><a href="#6-更新软件包列表" class="headerlink" title="6. 更新软件包列表"></a>6. 更新软件包列表</h3><p>更新本地包数据库，使APT能够识别新的本地仓库。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></table></figure><h3 id="7-安装软件"><a href="#7-安装软件" class="headerlink" title="7. 安装软件"></a>7. 安装软件</h3><p>现在，使用 <code>apt-get install</code> 命令安装软件包，APT将解决所有本地依赖。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install &lt;package-name&gt;</span><br></pre></td></tr></table></figure><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul><li>这个过程假定你已经有了移动存储设备，如USB驱动器，并且它已经被挂载到了你的系统上。</li><li><code>&lt;package-name&gt;</code> 是你想要下载并安装的软件包名称。</li><li><code>/path/to/your/usb-drive</code> 是你USB驱动器的挂载点。</li><li><code>/path/to/local/repo</code> 是你在离线机器上创建的本地仓库目录的路径。</li></ul><p>按照这些步骤，你应该能够在Debian系列系统上进行离线软件安装。</p>]]></content>
     
     
-    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;离线安装在 Linux 系统中是一个常见需求，特别是在无法联网的环境中。本文介绍了如何在 Debian 系列操作系统（如 Debian 和 Ubuntu）上创建和使用离线安装包的完整步骤。首先，我们在联网环境下下载所需的软件包及其依赖，并创建本地 APT 仓库。然后，我们将这些包复制到离线系统上，并配置本地仓库以便进行安装。通过这些步骤，你可以方便地在离线环境中安装所需的软件。&lt;/p&gt;</summary>
+    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;离线安装在 Linux 系统中是一个常见需求，特别是在无法联网的环境中。本文介绍了如何在 Debian 系列操作系统（如 Debian 和 Ubuntu）上创建和使用离线安装包的完整步骤。首先，我们在联网环境下下载所需的软件包及其依赖，并创建本地 APT 仓库。然后，我们将这些包复制到离线系统上，并配置本地仓库以便进行安装。通过这些步骤，你可以方便地在离线环境中安装所需的软件。&lt;/p&gt;</summary>
     
     
     
@@ -215,31 +215,6 @@
   </entry>
   
   <entry>
-    <title>GitHub 推送代码失败的解决方案</title>
-    <link href="https://freemankevin.uk/2024/12/11/github-push-error/"/>
-    <id>https://freemankevin.uk/2024/12/11/github-push-error/</id>
-    <published>2024-12-11T04:17:25.000Z</published>
-    <updated>2024-12-23T14:41:05.347Z</updated>
-    
-    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在使用 Git 推送代码到 GitHub 时，常常会遇到推送失败的问题，即使网络带宽正常。主要原因是 Git 默认不会通过本地代理，即使代理设置为全局模式也无效。本文介绍了通过设置 Git 的代理来解决推送问题的具体步骤。首先，修改全局 Git 配置文件，添加代理设置。然后，通过命令验证代理配置是否生效。通过这些步骤，你可以解决 Git 推送代码到 GitHub 时遇到的问题。</p><span id="more"></span><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>在使用 Git 推送代码到 GitHub 时，<strong>推送经常失败</strong>，但带宽测试显示网络正常，上传和下载速度都没问题。经过排查发现，<strong>Git 默认不会通过本地代理</strong>，即使代理设置为全局模式也无效。这导致 GitHub 的访问不稳定。</p><hr><h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>通过设置 Git 的代理，可以解决推送问题。</p><h4 id="1-修改全局-Git-配置"><a href="#1-修改全局-Git-配置" class="headerlink" title="1. 修改全局 Git 配置"></a>1. 修改全局 Git 配置</h4><p>执行以下命令编辑 Git 的全局配置文件：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --edit</span><br></pre></td></tr></table></figure><p>添加如下内容，将 <code>127.0.0.1:7890</code> 替换为你的代理地址和端口：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[http]</span><br><span class="line">proxy = http://127.0.0.1:7890</span><br><span class="line"></span><br><span class="line">[https]</span><br><span class="line">proxy = https://127.0.0.1:7890</span><br></pre></td></tr></table></figure><h4 id="2-验证代理配置"><a href="#2-验证代理配置" class="headerlink" title="2. 验证代理配置"></a>2. 验证代理配置</h4><p>使用以下命令检查配置是否生效：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --get https.proxy</span><br></pre></td></tr></table></figure><p>若返回代理地址（如 <code>https://127.0.0.1:7890</code>），说明设置成功。</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在使用 Git 推送代码到 GitHub 时，常常会遇到推送失败的问题，即使网络带宽正常。主要原因是 Git 默认不会通过本地代理，即使代理设置为全局模式也无效。本文介绍了通过设置 Git 的代理来解决推送问题的具体步骤。首先，修改全局 Git 配置文件，添加代理设置。然后，通过命令验证代理配置是否生效。通过这些步骤，你可以解决 Git 推送代码到 GitHub 时遇到的问题。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="GitHub" scheme="https://freemankevin.uk/categories/GitHub/"/>
-    
-    
-    <category term="GitHub" scheme="https://freemankevin.uk/tags/GitHub/"/>
-    
-    <category term="Git" scheme="https://freemankevin.uk/tags/Git/"/>
-    
-    <category term="Proxy" scheme="https://freemankevin.uk/tags/Proxy/"/>
-    
-  </entry>
-  
-  <entry>
     <title>数据盘挂载与LVM 创建</title>
     <link href="https://freemankevin.uk/2024/12/11/mount-hd-lvm/"/>
     <id>https://freemankevin.uk/2024/12/11/mount-hd-lvm/</id>
@@ -261,6 +236,31 @@
     <category term="Mount" scheme="https://freemankevin.uk/tags/Mount/"/>
     
     <category term="LVM" scheme="https://freemankevin.uk/tags/LVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GitHub 推送代码失败的解决方案</title>
+    <link href="https://freemankevin.uk/2024/12/11/github-push-error/"/>
+    <id>https://freemankevin.uk/2024/12/11/github-push-error/</id>
+    <published>2024-12-11T04:17:25.000Z</published>
+    <updated>2024-12-23T14:41:05.347Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在使用 Git 推送代码到 GitHub 时，常常会遇到推送失败的问题，即使网络带宽正常。主要原因是 Git 默认不会通过本地代理，即使代理设置为全局模式也无效。本文介绍了通过设置 Git 的代理来解决推送问题的具体步骤。首先，修改全局 Git 配置文件，添加代理设置。然后，通过命令验证代理配置是否生效。通过这些步骤，你可以解决 Git 推送代码到 GitHub 时遇到的问题。</p><span id="more"></span><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>在使用 Git 推送代码到 GitHub 时，<strong>推送经常失败</strong>，但带宽测试显示网络正常，上传和下载速度都没问题。经过排查发现，<strong>Git 默认不会通过本地代理</strong>，即使代理设置为全局模式也无效。这导致 GitHub 的访问不稳定。</p><hr><h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>通过设置 Git 的代理，可以解决推送问题。</p><h4 id="1-修改全局-Git-配置"><a href="#1-修改全局-Git-配置" class="headerlink" title="1. 修改全局 Git 配置"></a>1. 修改全局 Git 配置</h4><p>执行以下命令编辑 Git 的全局配置文件：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --edit</span><br></pre></td></tr></table></figure><p>添加如下内容，将 <code>127.0.0.1:7890</code> 替换为你的代理地址和端口：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[http]</span><br><span class="line">proxy = http://127.0.0.1:7890</span><br><span class="line"></span><br><span class="line">[https]</span><br><span class="line">proxy = https://127.0.0.1:7890</span><br></pre></td></tr></table></figure><h4 id="2-验证代理配置"><a href="#2-验证代理配置" class="headerlink" title="2. 验证代理配置"></a>2. 验证代理配置</h4><p>使用以下命令检查配置是否生效：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --get https.proxy</span><br></pre></td></tr></table></figure><p>若返回代理地址（如 <code>https://127.0.0.1:7890</code>），说明设置成功。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在使用 Git 推送代码到 GitHub 时，常常会遇到推送失败的问题，即使网络带宽正常。主要原因是 Git 默认不会通过本地代理，即使代理设置为全局模式也无效。本文介绍了通过设置 Git 的代理来解决推送问题的具体步骤。首先，修改全局 Git 配置文件，添加代理设置。然后，通过命令验证代理配置是否生效。通过这些步骤，你可以解决 Git 推送代码到 GitHub 时遇到的问题。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="GitHub" scheme="https://freemankevin.uk/categories/GitHub/"/>
+    
+    
+    <category term="GitHub" scheme="https://freemankevin.uk/tags/GitHub/"/>
+    
+    <category term="Git" scheme="https://freemankevin.uk/tags/Git/"/>
+    
+    <category term="Proxy" scheme="https://freemankevin.uk/tags/Proxy/"/>
     
   </entry>
   
