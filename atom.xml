@@ -92,31 +92,6 @@
   </entry>
   
   <entry>
-    <title>使用 Rufus 创建 Linux 启动 U 盘指南</title>
-    <link href="https://freemankevin.uk/2024/12/20/rufus/"/>
-    <id>https://freemankevin.uk/2024/12/20/rufus/</id>
-    <published>2024-12-20T04:17:25.000Z</published>
-    <updated>2024-12-23T14:44:30.704Z</updated>
-    
-    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rufus 是一个免费、开源的工具，用于创建启动 U 盘，非常适合安装各种 Linux 发行版。本文介绍了使用 Rufus 为 Linux 发行版（如 Debian 或 CentOS）创建启动 U 盘的详细步骤。首先，准备好 U 盘、Linux ISO 文件和 Rufus 软件。然后，在 Rufus 中选择设备、配置启动选项和文件系统，并启动创建过程。完成后，使用启动 U 盘进行 Linux 安装。通过这些步骤，你可以轻松创建 Linux 启动 U 盘，并在目标电脑上安装所需的操作系统。</p><span id="more"></span><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>在开始之前，请确保你已经准备好以下几样东西：</p><ul><li><strong>一个 4 GB 或更大容量的 U 盘</strong>：请注意，所有现有数据都将被清除。</li><li><strong>Linux ISO 文件</strong>：从 Linux 发行版的官网下载你需要安装的 ISO 文件，例如 Debian 或 CentOS。</li><li><strong>下载 Rufus</strong>：访问 <a href="https://rufus.ie/">Rufus 官网</a> 下载最新版本的 Rufus。</li></ul><h2 id="步骤-1-打开-Rufus"><a href="#步骤-1-打开-Rufus" class="headerlink" title="步骤 1: 打开 Rufus"></a>步骤 1: 打开 Rufus</h2><ol><li>插入 U 盘。</li><li>运行你下载的 Rufus.exe 文件。</li><li>如果系统请求权限，请确认。</li></ol><h2 id="步骤-2-配置-Rufus"><a href="#步骤-2-配置-Rufus" class="headerlink" title="步骤 2: 配置 Rufus"></a>步骤 2: 配置 Rufus</h2><p>在 Rufus 的界面中，进行以下配置：</p><ol><li><strong>设备</strong>：确保你的 U 盘在「设备」下被正确选择。</li><li><strong>启动选择</strong>：点击「选择」按钮，浏览并选择你的 Linux ISO 文件。</li><li><strong>分区方案</strong>：选择适合你系统的分区方案。<ul><li><strong>MBR</strong>：用于旧系统或传统 BIOS。</li><li><strong>GPT</strong>：用于较新系统或 UEFI 模式。</li></ul></li><li><strong>目标系统</strong>：根据你选择的分区方案，这里会自动填充「BIOS（或 UEFI-CSM）」或「UEFI（非 CSM）」。</li><li><strong>文件系统</strong>：一般选择「FAT32」（尤其是对于 UEFI 启动），这是大多数 Linux 启动 U 盘推荐的格式。</li><li><strong>卷标</strong>：你可以给 U 盘命名，例如「LINUXINSTALL」。</li></ol><h2 id="步骤-3-启动创建过程"><a href="#步骤-3-启动创建过程" class="headerlink" title="步骤 3: 启动创建过程"></a>步骤 3: 启动创建过程</h2><ol><li>确认所有设置正确无误后，点击「开始」按钮。</li><li>Rufus 将提示你所有数据将被清除。点击「确定」继续。</li><li>等待 Rufus 完成启动 U 盘的创建。这可能需要几分钟时间。</li></ol><h2 id="步骤-4-使用启动-U-盘安装-Linux"><a href="#步骤-4-使用启动-U-盘安装-Linux" class="headerlink" title="步骤 4: 使用启动 U 盘安装 Linux"></a>步骤 4: 使用启动 U 盘安装 Linux</h2><ol><li>完成 U 盘创建后，安全移除 U 盘。</li><li>将 U 盘插入你想要安装 Linux 的电脑。</li><li>重启电脑，并进入 BIOS&#x2F;UEFI 设置。</li><li>在 BIOS&#x2F;UEFI 中设置从 U 盘启动。</li><li>保存设置并退出 BIOS&#x2F;UEFI。</li><li>电脑将从 U 盘启动，并开始 Linux 安装过程。按照屏幕上的指示完成 Linux 的安装。</li></ol><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul><li>确保在创建过程中不要移除 U 盘。</li><li>如果你的电脑在启动时没有提示进入 BIOS&#x2F;UEFI，你可能需要查找特定于你电脑型号的快捷键。</li><li>在使用 U 盘之前，确保备份 U 盘上的所有重要数据。</li></ul><p>通过以上步骤，你应该能够顺利使用 Rufus 创建一个 Linux 启动 U 盘，并使用它来安装 Debian、CentOS 或其他 Linux 操作系统。</p><p>当然，对于安装Windows 操作系统也是类似的过程。</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Rufus 是一个免费、开源的工具，用于创建启动 U 盘，非常适合安装各种 Linux 发行版。本文介绍了使用 Rufus 为 Linux 发行版（如 Debian 或 CentOS）创建启动 U 盘的详细步骤。首先，准备好 U 盘、Linux ISO 文件和 Rufus 软件。然后，在 Rufus 中选择设备、配置启动选项和文件系统，并启动创建过程。完成后，使用启动 U 盘进行 Linux 安装。通过这些步骤，你可以轻松创建 Linux 启动 U 盘，并在目标电脑上安装所需的操作系统。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
-    
-    
-    <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
-    
-    <category term="Rufus" scheme="https://freemankevin.uk/tags/Rufus/"/>
-    
-    <category term="Windows" scheme="https://freemankevin.uk/tags/Windows/"/>
-    
-  </entry>
-  
-  <entry>
     <title>使用镜像ISO 文件制做本地Yum 源</title>
     <link href="https://freemankevin.uk/2024/12/20/yum/"/>
     <id>https://freemankevin.uk/2024/12/20/yum/</id>
@@ -138,6 +113,31 @@
     <category term="CentOS" scheme="https://freemankevin.uk/tags/CentOS/"/>
     
     <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用 Rufus 创建 Linux 启动 U 盘指南</title>
+    <link href="https://freemankevin.uk/2024/12/20/rufus/"/>
+    <id>https://freemankevin.uk/2024/12/20/rufus/</id>
+    <published>2024-12-20T04:17:25.000Z</published>
+    <updated>2024-12-23T14:44:30.704Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rufus 是一个免费、开源的工具，用于创建启动 U 盘，非常适合安装各种 Linux 发行版。本文介绍了使用 Rufus 为 Linux 发行版（如 Debian 或 CentOS）创建启动 U 盘的详细步骤。首先，准备好 U 盘、Linux ISO 文件和 Rufus 软件。然后，在 Rufus 中选择设备、配置启动选项和文件系统，并启动创建过程。完成后，使用启动 U 盘进行 Linux 安装。通过这些步骤，你可以轻松创建 Linux 启动 U 盘，并在目标电脑上安装所需的操作系统。</p><span id="more"></span><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>在开始之前，请确保你已经准备好以下几样东西：</p><ul><li><strong>一个 4 GB 或更大容量的 U 盘</strong>：请注意，所有现有数据都将被清除。</li><li><strong>Linux ISO 文件</strong>：从 Linux 发行版的官网下载你需要安装的 ISO 文件，例如 Debian 或 CentOS。</li><li><strong>下载 Rufus</strong>：访问 <a href="https://rufus.ie/">Rufus 官网</a> 下载最新版本的 Rufus。</li></ul><h2 id="步骤-1-打开-Rufus"><a href="#步骤-1-打开-Rufus" class="headerlink" title="步骤 1: 打开 Rufus"></a>步骤 1: 打开 Rufus</h2><ol><li>插入 U 盘。</li><li>运行你下载的 Rufus.exe 文件。</li><li>如果系统请求权限，请确认。</li></ol><h2 id="步骤-2-配置-Rufus"><a href="#步骤-2-配置-Rufus" class="headerlink" title="步骤 2: 配置 Rufus"></a>步骤 2: 配置 Rufus</h2><p>在 Rufus 的界面中，进行以下配置：</p><ol><li><strong>设备</strong>：确保你的 U 盘在「设备」下被正确选择。</li><li><strong>启动选择</strong>：点击「选择」按钮，浏览并选择你的 Linux ISO 文件。</li><li><strong>分区方案</strong>：选择适合你系统的分区方案。<ul><li><strong>MBR</strong>：用于旧系统或传统 BIOS。</li><li><strong>GPT</strong>：用于较新系统或 UEFI 模式。</li></ul></li><li><strong>目标系统</strong>：根据你选择的分区方案，这里会自动填充「BIOS（或 UEFI-CSM）」或「UEFI（非 CSM）」。</li><li><strong>文件系统</strong>：一般选择「FAT32」（尤其是对于 UEFI 启动），这是大多数 Linux 启动 U 盘推荐的格式。</li><li><strong>卷标</strong>：你可以给 U 盘命名，例如「LINUXINSTALL」。</li></ol><h2 id="步骤-3-启动创建过程"><a href="#步骤-3-启动创建过程" class="headerlink" title="步骤 3: 启动创建过程"></a>步骤 3: 启动创建过程</h2><ol><li>确认所有设置正确无误后，点击「开始」按钮。</li><li>Rufus 将提示你所有数据将被清除。点击「确定」继续。</li><li>等待 Rufus 完成启动 U 盘的创建。这可能需要几分钟时间。</li></ol><h2 id="步骤-4-使用启动-U-盘安装-Linux"><a href="#步骤-4-使用启动-U-盘安装-Linux" class="headerlink" title="步骤 4: 使用启动 U 盘安装 Linux"></a>步骤 4: 使用启动 U 盘安装 Linux</h2><ol><li>完成 U 盘创建后，安全移除 U 盘。</li><li>将 U 盘插入你想要安装 Linux 的电脑。</li><li>重启电脑，并进入 BIOS&#x2F;UEFI 设置。</li><li>在 BIOS&#x2F;UEFI 中设置从 U 盘启动。</li><li>保存设置并退出 BIOS&#x2F;UEFI。</li><li>电脑将从 U 盘启动，并开始 Linux 安装过程。按照屏幕上的指示完成 Linux 的安装。</li></ol><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul><li>确保在创建过程中不要移除 U 盘。</li><li>如果你的电脑在启动时没有提示进入 BIOS&#x2F;UEFI，你可能需要查找特定于你电脑型号的快捷键。</li><li>在使用 U 盘之前，确保备份 U 盘上的所有重要数据。</li></ul><p>通过以上步骤，你应该能够顺利使用 Rufus 创建一个 Linux 启动 U 盘，并使用它来安装 Debian、CentOS 或其他 Linux 操作系统。</p><p>当然，对于安装Windows 操作系统也是类似的过程。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Rufus 是一个免费、开源的工具，用于创建启动 U 盘，非常适合安装各种 Linux 发行版。本文介绍了使用 Rufus 为 Linux 发行版（如 Debian 或 CentOS）创建启动 U 盘的详细步骤。首先，准备好 U 盘、Linux ISO 文件和 Rufus 软件。然后，在 Rufus 中选择设备、配置启动选项和文件系统，并启动创建过程。完成后，使用启动 U 盘进行 Linux 安装。通过这些步骤，你可以轻松创建 Linux 启动 U 盘，并在目标电脑上安装所需的操作系统。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
+    
+    <category term="Rufus" scheme="https://freemankevin.uk/tags/Rufus/"/>
+    
+    <category term="Windows" scheme="https://freemankevin.uk/tags/Windows/"/>
     
   </entry>
   
