@@ -6,7 +6,7 @@
   <link href="https://freemankevin.uk/atom.xml" rel="self"/>
   
   <link href="https://freemankevin.uk/"/>
-  <updated>2024-12-23T14:37:32.796Z</updated>
+  <updated>2024-12-25T15:35:43.745Z</updated>
   <id>https://freemankevin.uk/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何使用 MkDocs 创建和部署博客站点</title>
+    <link href="https://freemankevin.uk/2024/12/25/mkdocs-started/"/>
+    <id>https://freemankevin.uk/2024/12/25/mkdocs-started/</id>
+    <published>2024-12-25T01:00:00.000Z</published>
+    <updated>2024-12-25T15:35:43.745Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本指南将帮助你从头开始创建一个使用 MkDocs 的博客站点，并将其托管在 GitHub Pages 上。我们将涵盖以下内容：首先，我们会介绍如何安装 MkDocs，然后创建一个新的 MkDocs 项目。接下来，我们会配置和编辑内容，之后将站点部署到 GitHub Pages。我们还将介绍如何配置自定义域名，最后会添加 <code>.gitignore</code> 文件来忽略不必要的文件。</p><span id="more"></span><h2 id="1-安装-MkDocs"><a href="#1-安装-MkDocs" class="headerlink" title="1. 安装 MkDocs"></a>1. 安装 MkDocs</h2><p>首先，你需要确保已经安装了 MkDocs。你可以使用 <code>pip</code> 来安装 MkDocs：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install mkdocs</span><br></pre></td></tr></table></figure><h2 id="1-安装-MkDocs-1"><a href="#1-安装-MkDocs-1" class="headerlink" title="1. 安装 MkDocs"></a>1. 安装 MkDocs</h2><p>首先，你需要确保已经安装了 MkDocs。你可以使用 <code>pip</code> 来安装 MkDocs：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install mkdocs</span><br></pre></td></tr></table></figure><h2 id="2-创建-MkDocs-项目"><a href="#2-创建-MkDocs-项目" class="headerlink" title="2. 创建 MkDocs 项目"></a>2. 创建 MkDocs 项目</h2><p>使用 MkDocs 的命令行工具创建一个新的项目：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdocs new my-blog</span><br><span class="line">cd my-blog</span><br></pre></td></tr></table></figure><p>这将创建一个名为 <code>my-blog</code> 的目录，其中包含一个基本的 MkDocs 配置文件和一些示例内容。</p><h2 id="3-配置和编辑内容"><a href="#3-配置和编辑内容" class="headerlink" title="3. 配置和编辑内容"></a>3. 配置和编辑内容</h2><h3 id="启动开发服务器"><a href="#启动开发服务器" class="headerlink" title="启动开发服务器"></a>启动开发服务器</h3><p>启动 MkDocs 的开发服务器，这样你可以在本地查看你的站点：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdocs serve</span><br></pre></td></tr></table></figure><p>运行此命令后，打开浏览器并访问 <code>http://127.0.0.1:8000/</code>，你应该能够看到 MkDocs 生成的默认页面。</p><h3 id="编辑内容"><a href="#编辑内容" class="headerlink" title="编辑内容"></a>编辑内容</h3><p>项目目录中有一个 <code>docs</code> 文件夹，里面包含一个 <code>index.md</code> 文件。你可以编辑这个文件来修改主页内容，并添加更多的 Markdown 文件来创建其他页面。</p><h3 id="配置站点"><a href="#配置站点" class="headerlink" title="配置站点"></a>配置站点</h3><p>项目目录中有一个名为 <code>mkdocs.yml</code> 的文件，这是 MkDocs 的配置文件。你可以编辑这个文件来配置站点的各种设置，例如站点名称、主题、导航等。</p><p>示例 <code>mkdocs.yml</code> 配置文件：</p><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">site_name:</span> <span class="string">My</span> <span class="string">Blog</span></span><br><span class="line"><span class="attr">nav:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">Home:</span> <span class="string">index.md</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">About:</span> <span class="string">about.md</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">readthedocs</span></span><br></pre></td></tr></table></figure><h2 id="4-部署到-GitHub-Pages"><a href="#4-部署到-GitHub-Pages" class="headerlink" title="4. 部署到 GitHub Pages"></a>4. 部署到 GitHub Pages</h2><p>当你对内容和配置满意后，可以将站点部署到 GitHub Pages。</p><h3 id="推送代码到-GitHub"><a href="#推送代码到-GitHub" class="headerlink" title="推送代码到 GitHub"></a>推送代码到 GitHub</h3><p>首先，初始化一个新的 Git 仓库并推送到 GitHub：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git init</span><br><span class="line">git remote add origin https://github.com/&lt;your-username&gt;/&lt;your-repo&gt;.git</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;Initial commit&quot;</span><br><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure><h3 id="部署到-GitHub-Pages"><a href="#部署到-GitHub-Pages" class="headerlink" title="部署到 GitHub Pages"></a>部署到 GitHub Pages</h3><p>使用 <code>mkdocs gh-deploy</code> 命令来部署站点：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdocs gh-deploy</span><br></pre></td></tr></table></figure><h2 id="5-配置自定义域名"><a href="#5-配置自定义域名" class="headerlink" title="5. 配置自定义域名"></a>5. 配置自定义域名</h2><p>如果你已经购买了自定义域名，可以按照以下步骤配置：</p><h3 id="配置域名-DNS"><a href="#配置域名-DNS" class="headerlink" title="配置域名 DNS"></a>配置域名 DNS</h3><p>在你的域名注册服务商的管理面板中，添加一个 CNAME 记录，指向你的 GitHub Pages URL。</p><p>示例：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Type: CNAME</span><br><span class="line">Name: www</span><br><span class="line">Value: &lt;your-github-username&gt;.github.io</span><br></pre></td></tr></table></figure><p>如果你想使用裸域名（例如 <code>yourdomain.com</code>），你需要配置 A 记录指向 GitHub 的 IP 地址：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Type: A</span><br><span class="line">Name: @</span><br><span class="line">Value: 185.199.108.153</span><br><span class="line">Value: 185.199.109.153</span><br><span class="line">Value: 185.199.110.153</span><br><span class="line">Value: 185.199.111.153</span><br></pre></td></tr></table></figure><h3 id="创建-CNAME-文件"><a href="#创建-CNAME-文件" class="headerlink" title="创建 CNAME 文件"></a>创建 CNAME 文件</h3><p>在 <code>docs</code> 目录下创建一个名为 <code>CNAME</code> 的文件，并添加你的域名：</p><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;yourdomain.com&quot;</span> &gt; docs/CNAME</span><br></pre></td></tr></table></figure><p>然后重新构建并部署：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdocs build</span><br><span class="line">mkdocs gh-deploy</span><br></pre></td></tr></table></figure><h2 id="6-添加-gitignore-文件"><a href="#6-添加-gitignore-文件" class="headerlink" title="6. 添加 .gitignore 文件"></a>6. 添加 <code>.gitignore</code> 文件</h2><p>为了避免将不必要的文件推送到仓库中，创建一个 <code>.gitignore</code> 文件并添加以下内容：</p><p>plaintext</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 忽略操作系统生成的文件</span><br><span class="line"># macOS</span><br><span class="line">.DS_Store</span><br><span class="line"></span><br><span class="line"># Windows</span><br><span class="line">Thumbs.db</span><br><span class="line">ehthumbs.db</span><br><span class="line">Desktop.ini</span><br><span class="line"></span><br><span class="line"># VS Code 设置文件</span><br><span class="line">.vscode/</span><br><span class="line"></span><br><span class="line"># Python</span><br><span class="line">*.pyc</span><br><span class="line">*.pyo</span><br><span class="line">*.pyd</span><br><span class="line">__pycache__/</span><br><span class="line">*.env</span><br><span class="line">*.venv</span><br><span class="line">env/</span><br><span class="line">venv/</span><br><span class="line">ENV/</span><br><span class="line">env.bak/</span><br><span class="line">venv.bak/</span><br><span class="line"></span><br><span class="line"># MkDocs 构建输出</span><br><span class="line">site/</span><br><span class="line"></span><br><span class="line"># MkDocs 配置文件备份</span><br><span class="line">mkdocs.yml.bak</span><br><span class="line"></span><br><span class="line"># 忽略日志文件和数据库</span><br><span class="line">*.log</span><br><span class="line">*.sql</span><br><span class="line">*.sqlite</span><br><span class="line"></span><br><span class="line"># 忽略挂载目录</span><br><span class="line">mnt/</span><br><span class="line">media/</span><br></pre></td></tr></table></figure><p>将 <code>.gitignore</code> 文件添加到 Git 仓库并提交：</p><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git add .gitignore</span><br><span class="line">git commit -m <span class="string">&quot;Add .gitignore file&quot;</span></span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure><p>通过以上步骤，你就可以创建并部署一个使用 MkDocs 的博客站点，并配置自定义域名和忽略不必要的文件。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本指南将帮助你从头开始创建一个使用 MkDocs 的博客站点，并将其托管在 GitHub Pages 上。我们将涵盖以下内容：首先，我们会介绍如何安装 MkDocs，然后创建一个新的 MkDocs 项目。接下来，我们会配置和编辑内容，之后将站点部署到 GitHub Pages。我们还将介绍如何配置自定义域名，最后会添加 &lt;code&gt;.gitignore&lt;/code&gt; 文件来忽略不必要的文件。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="博客" scheme="https://freemankevin.uk/categories/%E5%8D%9A%E5%AE%A2/"/>
+    
+    
+    <category term="MkDocs" scheme="https://freemankevin.uk/tags/MkDocs/"/>
+    
+    <category term="GitHub Pages" scheme="https://freemankevin.uk/tags/GitHub-Pages/"/>
+    
+    <category term="博客" scheme="https://freemankevin.uk/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+  </entry>
   
   <entry>
     <title>ElasticSearch 索引的自动备份</title>
@@ -215,31 +240,6 @@
   </entry>
   
   <entry>
-    <title>GitHub 推送代码失败的解决方案</title>
-    <link href="https://freemankevin.uk/2024/12/11/github-push-error/"/>
-    <id>https://freemankevin.uk/2024/12/11/github-push-error/</id>
-    <published>2024-12-11T04:17:25.000Z</published>
-    <updated>2024-12-24T13:12:31.223Z</updated>
-    
-    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在使用 Git 推送代码到 GitHub 时，常常会遇到推送失败的问题，即使网络带宽正常。主要原因是 Git 默认不会通过本地代理，即使代理设置为全局模式也无效。本文介绍了通过设置 Git 的代理来解决推送问题的具体步骤。首先，修改全局 Git 配置文件，添加代理设置。然后，通过命令验证代理配置是否生效。通过这些步骤，你可以解决 Git 推送代码到 GitHub 时遇到的问题。</p><span id="more"></span><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>在使用 Git 推送代码到 GitHub 时，<strong>推送经常失败</strong>，但带宽测试显示网络正常，上传和下载速度都没问题。经过排查发现，<strong>Git 默认不会通过本地代理</strong>，即使代理设置为全局模式也无效。这导致 GitHub 的访问不稳定。</p><hr><h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>通过设置 Git 的代理，可以解决推送问题。</p><h4 id="1-修改全局-Git-配置"><a href="#1-修改全局-Git-配置" class="headerlink" title="1. 修改全局 Git 配置"></a>1. 修改全局 Git 配置</h4><p>执行以下命令编辑 Git 的全局配置文件：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --edit</span><br></pre></td></tr></table></figure><p>添加如下内容，将 <code>127.0.0.1:7890</code> 替换为你的代理地址和端口：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[http]</span><br><span class="line">proxy = http://127.0.0.1:7890</span><br><span class="line"></span><br><span class="line">[https]</span><br><span class="line">proxy = https://127.0.0.1:7890</span><br></pre></td></tr></table></figure><h4 id="2-验证代理配置"><a href="#2-验证代理配置" class="headerlink" title="2. 验证代理配置"></a>2. 验证代理配置</h4><p>使用以下命令检查配置是否生效：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --get https.proxy</span><br></pre></td></tr></table></figure><p>若返回代理地址（如 <code>https://127.0.0.1:7890</code>），说明设置成功。</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在使用 Git 推送代码到 GitHub 时，常常会遇到推送失败的问题，即使网络带宽正常。主要原因是 Git 默认不会通过本地代理，即使代理设置为全局模式也无效。本文介绍了通过设置 Git 的代理来解决推送问题的具体步骤。首先，修改全局 Git 配置文件，添加代理设置。然后，通过命令验证代理配置是否生效。通过这些步骤，你可以解决 Git 推送代码到 GitHub 时遇到的问题。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="GitHub" scheme="https://freemankevin.uk/categories/GitHub/"/>
-    
-    
-    <category term="GitHub" scheme="https://freemankevin.uk/tags/GitHub/"/>
-    
-    <category term="Git" scheme="https://freemankevin.uk/tags/Git/"/>
-    
-    <category term="Proxy" scheme="https://freemankevin.uk/tags/Proxy/"/>
-    
-  </entry>
-  
-  <entry>
     <title>数据盘挂载与LVM 创建</title>
     <link href="https://freemankevin.uk/2024/12/11/mount-hd-lvm/"/>
     <id>https://freemankevin.uk/2024/12/11/mount-hd-lvm/</id>
@@ -286,6 +286,31 @@
     <category term="Mount" scheme="https://freemankevin.uk/tags/Mount/"/>
     
     <category term="Swap" scheme="https://freemankevin.uk/tags/Swap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GitHub 推送代码失败的解决方案</title>
+    <link href="https://freemankevin.uk/2024/12/11/github-push-error/"/>
+    <id>https://freemankevin.uk/2024/12/11/github-push-error/</id>
+    <published>2024-12-11T04:17:25.000Z</published>
+    <updated>2024-12-24T13:12:31.223Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在使用 Git 推送代码到 GitHub 时，常常会遇到推送失败的问题，即使网络带宽正常。主要原因是 Git 默认不会通过本地代理，即使代理设置为全局模式也无效。本文介绍了通过设置 Git 的代理来解决推送问题的具体步骤。首先，修改全局 Git 配置文件，添加代理设置。然后，通过命令验证代理配置是否生效。通过这些步骤，你可以解决 Git 推送代码到 GitHub 时遇到的问题。</p><span id="more"></span><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>在使用 Git 推送代码到 GitHub 时，<strong>推送经常失败</strong>，但带宽测试显示网络正常，上传和下载速度都没问题。经过排查发现，<strong>Git 默认不会通过本地代理</strong>，即使代理设置为全局模式也无效。这导致 GitHub 的访问不稳定。</p><hr><h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>通过设置 Git 的代理，可以解决推送问题。</p><h4 id="1-修改全局-Git-配置"><a href="#1-修改全局-Git-配置" class="headerlink" title="1. 修改全局 Git 配置"></a>1. 修改全局 Git 配置</h4><p>执行以下命令编辑 Git 的全局配置文件：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --edit</span><br></pre></td></tr></table></figure><p>添加如下内容，将 <code>127.0.0.1:7890</code> 替换为你的代理地址和端口：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[http]</span><br><span class="line">proxy = http://127.0.0.1:7890</span><br><span class="line"></span><br><span class="line">[https]</span><br><span class="line">proxy = https://127.0.0.1:7890</span><br></pre></td></tr></table></figure><h4 id="2-验证代理配置"><a href="#2-验证代理配置" class="headerlink" title="2. 验证代理配置"></a>2. 验证代理配置</h4><p>使用以下命令检查配置是否生效：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --get https.proxy</span><br></pre></td></tr></table></figure><p>若返回代理地址（如 <code>https://127.0.0.1:7890</code>），说明设置成功。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在使用 Git 推送代码到 GitHub 时，常常会遇到推送失败的问题，即使网络带宽正常。主要原因是 Git 默认不会通过本地代理，即使代理设置为全局模式也无效。本文介绍了通过设置 Git 的代理来解决推送问题的具体步骤。首先，修改全局 Git 配置文件，添加代理设置。然后，通过命令验证代理配置是否生效。通过这些步骤，你可以解决 Git 推送代码到 GitHub 时遇到的问题。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="GitHub" scheme="https://freemankevin.uk/categories/GitHub/"/>
+    
+    
+    <category term="GitHub" scheme="https://freemankevin.uk/tags/GitHub/"/>
+    
+    <category term="Git" scheme="https://freemankevin.uk/tags/Git/"/>
+    
+    <category term="Proxy" scheme="https://freemankevin.uk/tags/Proxy/"/>
     
   </entry>
   
