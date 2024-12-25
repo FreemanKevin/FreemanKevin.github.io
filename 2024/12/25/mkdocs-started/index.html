@@ -27,11 +27,11 @@
 <meta property="og:description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本指南将帮助你从头开始创建一个使用 MkDocs 的博客站点，并将其托管在 GitHub Pages 上。我们将涵盖以下内容：首先，我们会介绍如何安装 MkDocs，然后创建一个新的 MkDocs 项目。接下来，我们会配置和编辑内容，之后将站点部署到 GitHub Pages。我们还将介绍如何配置自定义域名，最后会添加 .gi">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-12-25T01:00:00.000Z">
-<meta property="article:modified_time" content="2024-12-25T15:35:43.745Z">
+<meta property="article:modified_time" content="2024-12-25T15:41:47.168Z">
 <meta property="article:author" content="Freeman Kevin">
+<meta property="article:tag" content="GitHub">
 <meta property="article:tag" content="MkDocs">
 <meta property="article:tag" content="GitHub Pages">
-<meta property="article:tag" content="博客">
 <meta name="twitter:card" content="summary">
 
 
@@ -142,7 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85-MkDocs"><span class="nav-number">1.</span> <span class="nav-text">1. 安装 MkDocs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85-MkDocs-1"><span class="nav-number">2.</span> <span class="nav-text">1. 安装 MkDocs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BA-MkDocs-%E9%A1%B9%E7%9B%AE"><span class="nav-number">3.</span> <span class="nav-text">2. 创建 MkDocs 项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%85%8D%E7%BD%AE%E5%92%8C%E7%BC%96%E8%BE%91%E5%86%85%E5%AE%B9"><span class="nav-number">4.</span> <span class="nav-text">3. 配置和编辑内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%BC%80%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">4.1.</span> <span class="nav-text">启动开发服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%86%85%E5%AE%B9"><span class="nav-number">4.2.</span> <span class="nav-text">编辑内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%AB%99%E7%82%B9"><span class="nav-number">4.3.</span> <span class="nav-text">配置站点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%83%A8%E7%BD%B2%E5%88%B0-GitHub-Pages"><span class="nav-number">5.</span> <span class="nav-text">4. 部署到 GitHub Pages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0-GitHub"><span class="nav-number">5.1.</span> <span class="nav-text">推送代码到 GitHub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0-GitHub-Pages"><span class="nav-number">5.2.</span> <span class="nav-text">部署到 GitHub Pages</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D"><span class="nav-number">6.</span> <span class="nav-text">5. 配置自定义域名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%9F%9F%E5%90%8D-DNS"><span class="nav-number">6.1.</span> <span class="nav-text">配置域名 DNS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-CNAME-%E6%96%87%E4%BB%B6"><span class="nav-number">6.2.</span> <span class="nav-text">创建 CNAME 文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%B7%BB%E5%8A%A0-gitignore-%E6%96%87%E4%BB%B6"><span class="nav-number">7.</span> <span class="nav-text">6. 添加 .gitignore 文件</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-MkDocs"><span class="nav-number">1.</span> <span class="nav-text">安装 MkDocs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-MkDocs-%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">创建 MkDocs 项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%92%8C%E7%BC%96%E8%BE%91%E5%86%85%E5%AE%B9"><span class="nav-number">3.</span> <span class="nav-text">配置和编辑内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%BC%80%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">启动开发服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%86%85%E5%AE%B9"><span class="nav-number">3.2.</span> <span class="nav-text">编辑内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%AB%99%E7%82%B9"><span class="nav-number">3.3.</span> <span class="nav-text">配置站点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0-GitHub-Pages"><span class="nav-number">4.</span> <span class="nav-text">部署到 GitHub Pages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0-GitHub"><span class="nav-number">4.1.</span> <span class="nav-text">推送代码到 GitHub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0-GitHub-Pages-1"><span class="nav-number">4.2.</span> <span class="nav-text">部署到 GitHub Pages</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D"><span class="nav-number">5.</span> <span class="nav-text">配置自定义域名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%9F%9F%E5%90%8D-DNS"><span class="nav-number">5.1.</span> <span class="nav-text">配置域名 DNS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-CNAME-%E6%96%87%E4%BB%B6"><span class="nav-number">5.2.</span> <span class="nav-text">创建 CNAME 文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0-gitignore-%E6%96%87%E4%BB%B6"><span class="nav-number">6.</span> <span class="nav-text">添加 .gitignore 文件</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -245,7 +245,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">博客</span></a>
+          <a href="/categories/MkDocs/" itemprop="url" rel="index"><span itemprop="name">MkDocs</span></a>
         </span>
     </span>
 
@@ -275,17 +275,14 @@
     <div class="post-body" itemprop="articleBody"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本指南将帮助你从头开始创建一个使用 MkDocs 的博客站点，并将其托管在 GitHub Pages 上。我们将涵盖以下内容：首先，我们会介绍如何安装 MkDocs，然后创建一个新的 MkDocs 项目。接下来，我们会配置和编辑内容，之后将站点部署到 GitHub Pages。我们还将介绍如何配置自定义域名，最后会添加 <code>.gitignore</code> 文件来忽略不必要的文件。</p>
 <span id="more"></span>
 
-<h2 id="1-安装-MkDocs"><a href="#1-安装-MkDocs" class="headerlink" title="1. 安装 MkDocs"></a>1. 安装 MkDocs</h2><p>首先，你需要确保已经安装了 MkDocs。你可以使用 <code>pip</code> 来安装 MkDocs：</p>
+<h2 id="安装-MkDocs"><a href="#安装-MkDocs" class="headerlink" title="安装 MkDocs"></a>安装 MkDocs</h2><p>首先，你需要确保已经安装了 MkDocs。你可以使用 <code>pip</code> 来安装 MkDocs：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install mkdocs</span><br></pre></td></tr></table></figure>
 
-<h2 id="1-安装-MkDocs-1"><a href="#1-安装-MkDocs-1" class="headerlink" title="1. 安装 MkDocs"></a>1. 安装 MkDocs</h2><p>首先，你需要确保已经安装了 MkDocs。你可以使用 <code>pip</code> 来安装 MkDocs：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install mkdocs</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-创建-MkDocs-项目"><a href="#2-创建-MkDocs-项目" class="headerlink" title="2. 创建 MkDocs 项目"></a>2. 创建 MkDocs 项目</h2><p>使用 MkDocs 的命令行工具创建一个新的项目：</p>
+<h2 id="创建-MkDocs-项目"><a href="#创建-MkDocs-项目" class="headerlink" title="创建 MkDocs 项目"></a>创建 MkDocs 项目</h2><p>使用 MkDocs 的命令行工具创建一个新的项目：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdocs new my-blog</span><br><span class="line">cd my-blog</span><br></pre></td></tr></table></figure>
 
 <p>这将创建一个名为 <code>my-blog</code> 的目录，其中包含一个基本的 MkDocs 配置文件和一些示例内容。</p>
-<h2 id="3-配置和编辑内容"><a href="#3-配置和编辑内容" class="headerlink" title="3. 配置和编辑内容"></a>3. 配置和编辑内容</h2><h3 id="启动开发服务器"><a href="#启动开发服务器" class="headerlink" title="启动开发服务器"></a>启动开发服务器</h3><p>启动 MkDocs 的开发服务器，这样你可以在本地查看你的站点：</p>
+<h2 id="配置和编辑内容"><a href="#配置和编辑内容" class="headerlink" title="配置和编辑内容"></a>配置和编辑内容</h2><h3 id="启动开发服务器"><a href="#启动开发服务器" class="headerlink" title="启动开发服务器"></a>启动开发服务器</h3><p>启动 MkDocs 的开发服务器，这样你可以在本地查看你的站点：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdocs serve</span><br></pre></td></tr></table></figure>
 
 
@@ -296,16 +293,16 @@
 <p>示例 <code>mkdocs.yml</code> 配置文件：</p>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">site_name:</span> <span class="string">My</span> <span class="string">Blog</span></span><br><span class="line"><span class="attr">nav:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">Home:</span> <span class="string">index.md</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">About:</span> <span class="string">about.md</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">readthedocs</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="4-部署到-GitHub-Pages"><a href="#4-部署到-GitHub-Pages" class="headerlink" title="4. 部署到 GitHub Pages"></a>4. 部署到 GitHub Pages</h2><p>当你对内容和配置满意后，可以将站点部署到 GitHub Pages。</p>
+<h2 id="部署到-GitHub-Pages"><a href="#部署到-GitHub-Pages" class="headerlink" title="部署到 GitHub Pages"></a>部署到 GitHub Pages</h2><p>当你对内容和配置满意后，可以将站点部署到 GitHub Pages。</p>
 <h3 id="推送代码到-GitHub"><a href="#推送代码到-GitHub" class="headerlink" title="推送代码到 GitHub"></a>推送代码到 GitHub</h3><p>首先，初始化一个新的 Git 仓库并推送到 GitHub：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git init</span><br><span class="line">git remote add origin https://github.com/&lt;your-username&gt;/&lt;your-repo&gt;.git</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;Initial commit&quot;</span><br><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure>
 
-<h3 id="部署到-GitHub-Pages"><a href="#部署到-GitHub-Pages" class="headerlink" title="部署到 GitHub Pages"></a>部署到 GitHub Pages</h3><p>使用 <code>mkdocs gh-deploy</code> 命令来部署站点：</p>
+<h3 id="部署到-GitHub-Pages-1"><a href="#部署到-GitHub-Pages-1" class="headerlink" title="部署到 GitHub Pages"></a>部署到 GitHub Pages</h3><p>使用 <code>mkdocs gh-deploy</code> 命令来部署站点：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdocs gh-deploy</span><br></pre></td></tr></table></figure>
 
 
 
-<h2 id="5-配置自定义域名"><a href="#5-配置自定义域名" class="headerlink" title="5. 配置自定义域名"></a>5. 配置自定义域名</h2><p>如果你已经购买了自定义域名，可以按照以下步骤配置：</p>
+<h2 id="配置自定义域名"><a href="#配置自定义域名" class="headerlink" title="配置自定义域名"></a>配置自定义域名</h2><p>如果你已经购买了自定义域名，可以按照以下步骤配置：</p>
 <h3 id="配置域名-DNS"><a href="#配置域名-DNS" class="headerlink" title="配置域名 DNS"></a>配置域名 DNS</h3><p>在你的域名注册服务商的管理面板中，添加一个 CNAME 记录，指向你的 GitHub Pages URL。</p>
 <p>示例：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Type: CNAME</span><br><span class="line">Name: www</span><br><span class="line">Value: &lt;your-github-username&gt;.github.io</span><br></pre></td></tr></table></figure>
@@ -321,7 +318,7 @@
 <p>然后重新构建并部署：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdocs build</span><br><span class="line">mkdocs gh-deploy</span><br></pre></td></tr></table></figure>
 
-<h2 id="6-添加-gitignore-文件"><a href="#6-添加-gitignore-文件" class="headerlink" title="6. 添加 .gitignore 文件"></a>6. 添加 <code>.gitignore</code> 文件</h2><p>为了避免将不必要的文件推送到仓库中，创建一个 <code>.gitignore</code> 文件并添加以下内容：</p>
+<h2 id="添加-gitignore-文件"><a href="#添加-gitignore-文件" class="headerlink" title="添加 .gitignore 文件"></a>添加 <code>.gitignore</code> 文件</h2><p>为了避免将不必要的文件推送到仓库中，创建一个 <code>.gitignore</code> 文件并添加以下内容：</p>
 <p>plaintext</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 忽略操作系统生成的文件</span><br><span class="line"># macOS</span><br><span class="line">.DS_Store</span><br><span class="line"></span><br><span class="line"># Windows</span><br><span class="line">Thumbs.db</span><br><span class="line">ehthumbs.db</span><br><span class="line">Desktop.ini</span><br><span class="line"></span><br><span class="line"># VS Code 设置文件</span><br><span class="line">.vscode/</span><br><span class="line"></span><br><span class="line"># Python</span><br><span class="line">*.pyc</span><br><span class="line">*.pyo</span><br><span class="line">*.pyd</span><br><span class="line">__pycache__/</span><br><span class="line">*.env</span><br><span class="line">*.venv</span><br><span class="line">env/</span><br><span class="line">venv/</span><br><span class="line">ENV/</span><br><span class="line">env.bak/</span><br><span class="line">venv.bak/</span><br><span class="line"></span><br><span class="line"># MkDocs 构建输出</span><br><span class="line">site/</span><br><span class="line"></span><br><span class="line"># MkDocs 配置文件备份</span><br><span class="line">mkdocs.yml.bak</span><br><span class="line"></span><br><span class="line"># 忽略日志文件和数据库</span><br><span class="line">*.log</span><br><span class="line">*.sql</span><br><span class="line">*.sqlite</span><br><span class="line"></span><br><span class="line"># 忽略挂载目录</span><br><span class="line">mnt/</span><br><span class="line">media/</span><br></pre></td></tr></table></figure>
 
@@ -338,9 +335,9 @@
 
     <footer class="post-footer">
           <div class="post-tags">
+              <a href="/tags/GitHub/" rel="tag"># GitHub</a>
               <a href="/tags/MkDocs/" rel="tag"># MkDocs</a>
               <a href="/tags/GitHub-Pages/" rel="tag"># GitHub Pages</a>
-              <a href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag"># 博客</a>
           </div>
 
         

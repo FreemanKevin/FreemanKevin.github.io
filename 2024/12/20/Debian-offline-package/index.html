@@ -27,7 +27,7 @@
 <meta property="og:description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;离线安装在 Linux 系统中是一个常见需求，特别是在无法联网的环境中。本文介绍了如何在 Debian 系列操作系统（如 Debian 和 Ubuntu）上创建和使用离线安装包的完整步骤。首先，我们在联网环境下下载所需的软件包及其依赖，并创建本地 APT 仓库。然后，我们将这些包复制到离线系统上，并配置本地仓库以便进行安装。通">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-12-20T04:17:25.000Z">
-<meta property="article:modified_time" content="2024-12-24T13:13:07.759Z">
+<meta property="article:modified_time" content="2024-12-25T15:43:06.877Z">
 <meta property="article:author" content="Freeman Kevin">
 <meta property="article:tag" content="Offline">
 <meta property="article:tag" content="Apt">
@@ -142,7 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E8%81%94%E7%BD%91%E7%9A%84%E7%8E%AF%E5%A2%83%E4%B8%8B"><span class="nav-number">1.</span> <span class="nav-text">在联网的环境下</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8B%E8%BD%BD%E8%BD%AF%E4%BB%B6%E5%8C%85%E5%8F%8A%E5%85%B6%E4%BE%9D%E8%B5%96"><span class="nav-number">1.1.</span> <span class="nav-text">1. 下载软件包及其依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A4%8D%E5%88%B6%E4%B8%8B%E8%BD%BD%E7%9A%84%E5%8C%85"><span class="nav-number">1.2.</span> <span class="nav-text">2. 复制下载的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%88%9B%E5%BB%BA%E6%9C%AC%E5%9C%B0APT%E4%BB%93%E5%BA%93"><span class="nav-number">1.3.</span> <span class="nav-text">3. 创建本地APT仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E7%A6%BB%E7%BA%BF%E7%9A%84%E7%8E%AF%E5%A2%83%E4%B8%8B"><span class="nav-number">2.</span> <span class="nav-text">在离线的环境下</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%87%86%E5%A4%87%E6%9C%AC%E5%9C%B0APT%E4%BB%93%E5%BA%93"><span class="nav-number">2.1.</span> <span class="nav-text">4. 准备本地APT仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%B7%BB%E5%8A%A0%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93%E5%88%B0APT%E6%BA%90"><span class="nav-number">2.2.</span> <span class="nav-text">5. 添加本地仓库到APT源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E6%9B%B4%E6%96%B0%E8%BD%AF%E4%BB%B6%E5%8C%85%E5%88%97%E8%A1%A8"><span class="nav-number">2.3.</span> <span class="nav-text">6. 更新软件包列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6"><span class="nav-number">2.4.</span> <span class="nav-text">7. 安装软件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">3.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E8%81%94%E7%BD%91%E7%9A%84%E7%8E%AF%E5%A2%83%E4%B8%8B"><span class="nav-number">1.</span> <span class="nav-text">在联网的环境下</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E8%BD%AF%E4%BB%B6%E5%8C%85%E5%8F%8A%E5%85%B6%E4%BE%9D%E8%B5%96"><span class="nav-number">1.1.</span> <span class="nav-text">下载软件包及其依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E4%B8%8B%E8%BD%BD%E7%9A%84%E5%8C%85"><span class="nav-number">1.2.</span> <span class="nav-text">复制下载的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%AC%E5%9C%B0APT%E4%BB%93%E5%BA%93"><span class="nav-number">1.3.</span> <span class="nav-text">创建本地APT仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E7%A6%BB%E7%BA%BF%E7%9A%84%E7%8E%AF%E5%A2%83%E4%B8%8B"><span class="nav-number">2.</span> <span class="nav-text">在离线的环境下</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E6%9C%AC%E5%9C%B0APT%E4%BB%93%E5%BA%93"><span class="nav-number">2.1.</span> <span class="nav-text">准备本地APT仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93%E5%88%B0APT%E6%BA%90"><span class="nav-number">2.2.</span> <span class="nav-text">添加本地仓库到APT源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E8%BD%AF%E4%BB%B6%E5%8C%85%E5%88%97%E8%A1%A8"><span class="nav-number">2.3.</span> <span class="nav-text">更新软件包列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6"><span class="nav-number">2.4.</span> <span class="nav-text">安装软件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">3.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -275,27 +275,27 @@
     <div class="post-body" itemprop="articleBody"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;离线安装在 Linux 系统中是一个常见需求，特别是在无法联网的环境中。本文介绍了如何在 Debian 系列操作系统（如 Debian 和 Ubuntu）上创建和使用离线安装包的完整步骤。首先，我们在联网环境下下载所需的软件包及其依赖，并创建本地 APT 仓库。然后，我们将这些包复制到离线系统上，并配置本地仓库以便进行安装。通过这些步骤，你可以方便地在离线环境中安装所需的软件。</p>
 <span id="more"></span>
 
-<h2 id="在联网的环境下"><a href="#在联网的环境下" class="headerlink" title="在联网的环境下"></a>在联网的环境下</h2><h3 id="1-下载软件包及其依赖"><a href="#1-下载软件包及其依赖" class="headerlink" title="1. 下载软件包及其依赖"></a>1. 下载软件包及其依赖</h3><p>首先，确定你需要的软件包和版本。使用APT的下载功能来获取软件包和它的所有依赖，但不安装它们。</p>
+<h2 id="在联网的环境下"><a href="#在联网的环境下" class="headerlink" title="在联网的环境下"></a>在联网的环境下</h2><h3 id="下载软件包及其依赖"><a href="#下载软件包及其依赖" class="headerlink" title="下载软件包及其依赖"></a>下载软件包及其依赖</h3><p>首先，确定你需要的软件包和版本。使用APT的下载功能来获取软件包和它的所有依赖，但不安装它们。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install --download-only &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
 
 <p>这会将软件包及其依赖下载到 <code>/var/cache/apt/archives/</code> 目录。</p>
-<h3 id="2-复制下载的包"><a href="#2-复制下载的包" class="headerlink" title="2. 复制下载的包"></a>2. 复制下载的包</h3><p>将下载的 <code>.deb</code> 包复制到一个移动存储设备上。</p>
+<h3 id="复制下载的包"><a href="#复制下载的包" class="headerlink" title="复制下载的包"></a>复制下载的包</h3><p>将下载的 <code>.deb</code> 包复制到一个移动存储设备上。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /var/cache/apt/archives/*.deb /path/to/your/usb-drive/debian-offline-packages</span><br></pre></td></tr></table></figure>
 
 
-<h3 id="3-创建本地APT仓库"><a href="#3-创建本地APT仓库" class="headerlink" title="3. 创建本地APT仓库"></a>3. 创建本地APT仓库</h3><p>在移动存储设备的相同目录下，使用 <code>dpkg-scanpackages</code> 工具来创建 <code>Packages.gz</code> 索引文件。如果没有安装 <code>dpkg-dev</code>，需要先安装它。</p>
+<h3 id="创建本地APT仓库"><a href="#创建本地APT仓库" class="headerlink" title="创建本地APT仓库"></a>创建本地APT仓库</h3><p>在移动存储设备的相同目录下，使用 <code>dpkg-scanpackages</code> 工具来创建 <code>Packages.gz</code> 索引文件。如果没有安装 <code>dpkg-dev</code>，需要先安装它。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install dpkg-dev</span><br><span class="line"><span class="built_in">cd</span> /path/to/your/usb-drive/debian-offline-packages</span><br><span class="line">dpkg-scanpackages . /dev/null | gzip -9c &gt; Packages.gz</span><br></pre></td></tr></table></figure>
 
-<h2 id="在离线的环境下"><a href="#在离线的环境下" class="headerlink" title="在离线的环境下"></a>在离线的环境下</h2><h3 id="4-准备本地APT仓库"><a href="#4-准备本地APT仓库" class="headerlink" title="4. 准备本地APT仓库"></a>4. 准备本地APT仓库</h3><p>将移动存储设备连接到离线的Debian系统。复制 <code>.deb</code> 包到本地文件系统，并保留目录结构。</p>
+<h2 id="在离线的环境下"><a href="#在离线的环境下" class="headerlink" title="在离线的环境下"></a>在离线的环境下</h2><h3 id="准备本地APT仓库"><a href="#准备本地APT仓库" class="headerlink" title="准备本地APT仓库"></a>准备本地APT仓库</h3><p>将移动存储设备连接到离线的Debian系统。复制 <code>.deb</code> 包到本地文件系统，并保留目录结构。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /path/to/local/repo</span><br><span class="line"><span class="built_in">cp</span> /path/to/your/usb-drive/debian-offline-packages/* /path/to/local/repo</span><br></pre></td></tr></table></figure>
 
-<h3 id="5-添加本地仓库到APT源"><a href="#5-添加本地仓库到APT源" class="headerlink" title="5. 添加本地仓库到APT源"></a>5. 添加本地仓库到APT源</h3><p>创建一个APT源列表文件，以便APT可以使用本地仓库。</p>
+<h3 id="添加本地仓库到APT源"><a href="#添加本地仓库到APT源" class="headerlink" title="添加本地仓库到APT源"></a>添加本地仓库到APT源</h3><p>创建一个APT源列表文件，以便APT可以使用本地仓库。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;deb [trusted=yes] file:///path/to/local/repo ./&#x27;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/local-offline-repo.list</span><br></pre></td></tr></table></figure>
 
-<h3 id="6-更新软件包列表"><a href="#6-更新软件包列表" class="headerlink" title="6. 更新软件包列表"></a>6. 更新软件包列表</h3><p>更新本地包数据库，使APT能够识别新的本地仓库。</p>
+<h3 id="更新软件包列表"><a href="#更新软件包列表" class="headerlink" title="更新软件包列表"></a>更新软件包列表</h3><p>更新本地包数据库，使APT能够识别新的本地仓库。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></table></figure>
 
-<h3 id="7-安装软件"><a href="#7-安装软件" class="headerlink" title="7. 安装软件"></a>7. 安装软件</h3><p>现在，使用 <code>apt-get install</code> 命令安装软件包，APT将解决所有本地依赖。</p>
+<h3 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h3><p>现在，使用 <code>apt-get install</code> 命令安装软件包，APT将解决所有本地依赖。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install &lt;package-name&gt;</span><br></pre></td></tr></table></figure>
 
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>

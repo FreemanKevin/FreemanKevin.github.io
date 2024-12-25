@@ -27,7 +27,7 @@
 <meta property="og:description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VNC（Virtual Network Computing）是一个远程桌面访问协议，允许用户通过网络远程访问 Linux 系统的图形化界面。本文介绍了如何在不同的 Linux 发行版（包括 Ubuntu&#x2F;Debian、CentOS&#x2F;RHEL、openSUSE 和 Arch Linux）中安装和配置 VNC">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-12-19T02:00:00.000Z">
-<meta property="article:modified_time" content="2024-12-24T13:12:31.224Z">
+<meta property="article:modified_time" content="2024-12-25T15:49:33.800Z">
 <meta property="article:author" content="Freeman Kevin">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="VNC">
@@ -141,7 +141,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Ubuntu-Debian-%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">1. Ubuntu&#x2F;Debian 系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-TigerVNC"><span class="nav-number">1.1.</span> <span class="nav-text">安装 TigerVNC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-VNC"><span class="nav-number">1.2.</span> <span class="nav-text">配置 VNC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-CentOS-RHEL-%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.</span> <span class="nav-text">2. CentOS&#x2F;RHEL 系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-TigerVNC-1"><span class="nav-number">2.1.</span> <span class="nav-text">安装 TigerVNC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-VNC-1"><span class="nav-number">2.2.</span> <span class="nav-text">配置 VNC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-openSUSE-%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.</span> <span class="nav-text">3. openSUSE 系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-TightVNC"><span class="nav-number">3.1.</span> <span class="nav-text">安装 TightVNC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-VNC-2"><span class="nav-number">3.2.</span> <span class="nav-text">配置 VNC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Arch-Linux"><span class="nav-number">4.</span> <span class="nav-text">4. Arch Linux</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-TigerVNC-2"><span class="nav-number">4.1.</span> <span class="nav-text">安装 TigerVNC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-VNC-3"><span class="nav-number">4.2.</span> <span class="nav-text">配置 VNC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"><span class="nav-number">5.</span> <span class="nav-text">5. 常见问题排查</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ubuntu-Debian-%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">Ubuntu&#x2F;Debian 系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-TigerVNC"><span class="nav-number">1.1.</span> <span class="nav-text">安装 TigerVNC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-VNC"><span class="nav-number">1.2.</span> <span class="nav-text">配置 VNC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS-RHEL-%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.</span> <span class="nav-text">CentOS&#x2F;RHEL 系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-TigerVNC-1"><span class="nav-number">2.1.</span> <span class="nav-text">安装 TigerVNC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-VNC-1"><span class="nav-number">2.2.</span> <span class="nav-text">配置 VNC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#openSUSE-%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.</span> <span class="nav-text">openSUSE 系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-TightVNC"><span class="nav-number">3.1.</span> <span class="nav-text">安装 TightVNC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-VNC-2"><span class="nav-number">3.2.</span> <span class="nav-text">配置 VNC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Arch-Linux"><span class="nav-number">4.</span> <span class="nav-text">Arch Linux</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-TigerVNC-2"><span class="nav-number">4.1.</span> <span class="nav-text">安装 TigerVNC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-VNC-3"><span class="nav-number">4.2.</span> <span class="nav-text">配置 VNC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"><span class="nav-number">5.</span> <span class="nav-text">常见问题排查</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -166,7 +166,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -274,7 +274,7 @@
     <div class="post-body" itemprop="articleBody"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VNC（Virtual Network Computing）是一个远程桌面访问协议，允许用户通过网络远程访问 Linux 系统的图形化界面。本文介绍了如何在不同的 Linux 发行版（包括 Ubuntu&#x2F;Debian、CentOS&#x2F;RHEL、openSUSE 和 Arch Linux）中安装和配置 VNC 服务。通过详细的步骤指导，包括安装 VNC 软件、配置 VNC 密码、创建启动脚本和启动 VNC 服务，你可以在各个系统上实现远程桌面访问。此外，本文还提供了常见问题的排查方法，以帮助解决可能遇到的连接和显示问题。</p>
 <span id="more"></span>
 
-<h2 id="1-Ubuntu-Debian-系统"><a href="#1-Ubuntu-Debian-系统" class="headerlink" title="1. Ubuntu&#x2F;Debian 系统"></a>1. Ubuntu&#x2F;Debian 系统</h2><p>Ubuntu 和 Debian 系统可以通过 APT 包管理器安装常见的 VNC 服务。</p>
+<h2 id="Ubuntu-Debian-系统"><a href="#Ubuntu-Debian-系统" class="headerlink" title="Ubuntu&#x2F;Debian 系统"></a>Ubuntu&#x2F;Debian 系统</h2><p>Ubuntu 和 Debian 系统可以通过 APT 包管理器安装常见的 VNC 服务。</p>
 <h3 id="安装-TigerVNC"><a href="#安装-TigerVNC" class="headerlink" title="安装 TigerVNC"></a>安装 TigerVNC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install tigervnc-standalone-server tigervnc-xorg-extension</span><br></pre></td></tr></table></figure>
 
 <h3 id="配置-VNC"><a href="#配置-VNC" class="headerlink" title="配置 VNC"></a>配置 VNC</h3><ol>
@@ -296,7 +296,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncserver -<span class="built_in">kill</span> :1</span><br></pre></td></tr></table></figure></li>
 </ol>
 <hr>
-<h2 id="2-CentOS-RHEL-系统"><a href="#2-CentOS-RHEL-系统" class="headerlink" title="2. CentOS&#x2F;RHEL 系统"></a>2. CentOS&#x2F;RHEL 系统</h2><p>CentOS 和 RHEL 通常通过 YUM 或 DNF 安装 VNC 服务。</p>
+<h2 id="CentOS-RHEL-系统"><a href="#CentOS-RHEL-系统" class="headerlink" title="CentOS&#x2F;RHEL 系统"></a>CentOS&#x2F;RHEL 系统</h2><p>CentOS 和 RHEL 通常通过 YUM 或 DNF 安装 VNC 服务。</p>
 <h3 id="安装-TigerVNC-1"><a href="#安装-TigerVNC-1" class="headerlink" title="安装 TigerVNC"></a>安装 TigerVNC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install tigervnc-server</span><br></pre></td></tr></table></figure>
 
 <h3 id="配置-VNC-1"><a href="#配置-VNC-1" class="headerlink" title="配置 VNC"></a>配置 VNC</h3><ol>
@@ -320,7 +320,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start vncserver@:1</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> vncserver@:1</span><br></pre></td></tr></table></figure></li>
 </ol>
 <hr>
-<h2 id="3-openSUSE-系统"><a href="#3-openSUSE-系统" class="headerlink" title="3. openSUSE 系统"></a>3. openSUSE 系统</h2><p>openSUSE 系统也支持安装和配置 VNC 服务。</p>
+<h2 id="openSUSE-系统"><a href="#openSUSE-系统" class="headerlink" title="openSUSE 系统"></a>openSUSE 系统</h2><p>openSUSE 系统也支持安装和配置 VNC 服务。</p>
 <h3 id="安装-TightVNC"><a href="#安装-TightVNC" class="headerlink" title="安装 TightVNC"></a>安装 TightVNC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> zypper install tightvnc</span><br></pre></td></tr></table></figure>
 
 <h3 id="配置-VNC-2"><a href="#配置-VNC-2" class="headerlink" title="配置 VNC"></a>配置 VNC</h3><ol>
@@ -340,7 +340,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncserver -<span class="built_in">kill</span> :1</span><br></pre></td></tr></table></figure></li>
 </ol>
 <hr>
-<h2 id="4-Arch-Linux"><a href="#4-Arch-Linux" class="headerlink" title="4. Arch Linux"></a>4. Arch Linux</h2><p>在 Arch Linux 上，可以通过 <code>pacman</code> 包管理器安装 VNC 服务。</p>
+<h2 id="Arch-Linux"><a href="#Arch-Linux" class="headerlink" title="Arch Linux"></a>Arch Linux</h2><p>在 Arch Linux 上，可以通过 <code>pacman</code> 包管理器安装 VNC 服务。</p>
 <h3 id="安装-TigerVNC-2"><a href="#安装-TigerVNC-2" class="headerlink" title="安装 TigerVNC"></a>安装 TigerVNC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S tigervnc</span><br></pre></td></tr></table></figure>
 
 <h3 id="配置-VNC-3"><a href="#配置-VNC-3" class="headerlink" title="配置 VNC"></a>配置 VNC</h3><ol>
@@ -360,7 +360,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vncserver -<span class="built_in">kill</span> :1</span><br></pre></td></tr></table></figure></li>
 </ol>
 <hr>
-<h2 id="5-常见问题排查"><a href="#5-常见问题排查" class="headerlink" title="5. 常见问题排查"></a>5. 常见问题排查</h2><ul>
+<h2 id="常见问题排查"><a href="#常见问题排查" class="headerlink" title="常见问题排查"></a>常见问题排查</h2><ul>
 <li><p><strong>连接失败</strong>：</p>
 <ul>
 <li>检查防火墙是否允许 VNC 端口（默认 5901）。<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw allow 5901</span><br></pre></td></tr></table></figure></li>

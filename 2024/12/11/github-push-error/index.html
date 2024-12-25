@@ -27,7 +27,7 @@
 <meta property="og:description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在使用 Git 推送代码到 GitHub 时，常常会遇到推送失败的问题，即使网络带宽正常。主要原因是 Git 默认不会通过本地代理，即使代理设置为全局模式也无效。本文介绍了通过设置 Git 的代理来解决推送问题的具体步骤。首先，修改全局 Git 配置文件，添加代理设置。然后，通过命令验证代理配置是否生效。通过这些步骤，你可以解">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-12-11T04:17:25.000Z">
-<meta property="article:modified_time" content="2024-12-24T13:12:31.223Z">
+<meta property="article:modified_time" content="2024-12-25T15:46:46.421Z">
 <meta property="article:author" content="Freeman Kevin">
 <meta property="article:tag" content="GitHub">
 <meta property="article:tag" content="Git">
@@ -142,7 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%BF%AE%E6%94%B9%E5%85%A8%E5%B1%80-Git-%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">1. 修改全局 Git 配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">2. 验证代理配置</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%85%A8%E5%B1%80-Git-%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">修改全局 Git 配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">验证代理配置</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -278,13 +278,13 @@
 <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>在使用 Git 推送代码到 GitHub 时，<strong>推送经常失败</strong>，但带宽测试显示网络正常，上传和下载速度都没问题。经过排查发现，<strong>Git 默认不会通过本地代理</strong>，即使代理设置为全局模式也无效。这导致 GitHub 的访问不稳定。</p>
 <hr>
 <h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>通过设置 Git 的代理，可以解决推送问题。</p>
-<h4 id="1-修改全局-Git-配置"><a href="#1-修改全局-Git-配置" class="headerlink" title="1. 修改全局 Git 配置"></a>1. 修改全局 Git 配置</h4><p>执行以下命令编辑 Git 的全局配置文件：</p>
+<h4 id="修改全局-Git-配置"><a href="#修改全局-Git-配置" class="headerlink" title="修改全局 Git 配置"></a>修改全局 Git 配置</h4><p>执行以下命令编辑 Git 的全局配置文件：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --edit</span><br></pre></td></tr></table></figure>
 
 <p>添加如下内容，将 <code>127.0.0.1:7890</code> 替换为你的代理地址和端口：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[http]</span><br><span class="line">proxy = http://127.0.0.1:7890</span><br><span class="line"></span><br><span class="line">[https]</span><br><span class="line">proxy = https://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
 
-<h4 id="2-验证代理配置"><a href="#2-验证代理配置" class="headerlink" title="2. 验证代理配置"></a>2. 验证代理配置</h4><p>使用以下命令检查配置是否生效：</p>
+<h4 id="验证代理配置"><a href="#验证代理配置" class="headerlink" title="验证代理配置"></a>验证代理配置</h4><p>使用以下命令检查配置是否生效：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --get https.proxy</span><br></pre></td></tr></table></figure>
 
 <p>若返回代理地址（如 <code>https://127.0.0.1:7890</code>），说明设置成功。</p>
@@ -306,10 +306,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2024/12/11/mount-hd-lvm/" rel="prev" title="数据盘挂载与LVM 创建">
+                  <i class="fa fa-angle-left"></i> 数据盘挂载与LVM 创建
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2024/12/11/swap/" rel="next" title="在没有 Swap 的服务器上创建 Swap">
-                  在没有 Swap 的服务器上创建 Swap <i class="fa fa-angle-right"></i>
+                <a href="/2024/12/13/firewalld/" rel="next" title="如何在不同 Linux 系统下开启防火墙">
+                  如何在不同 Linux 系统下开启防火墙 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

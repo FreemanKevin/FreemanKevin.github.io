@@ -27,7 +27,7 @@
 <meta property="og:description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在本文中，我们将介绍如何使用 Docker Compose 部署带有用户和密码认证的 Elasticsearch 服务，并实现索引的自动备份。首先，我们将展示如何准备配置文件并启动 Elasticsearch 服务。接着，我们将讲解如何配置并验证快照仓库。最后，我们提供了一个用于自动备份 Elasticsearch 索引的脚本">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-12-22T04:17:25.000Z">
-<meta property="article:modified_time" content="2024-12-23T14:37:32.796Z">
+<meta property="article:modified_time" content="2024-12-25T15:44:45.363Z">
 <meta property="article:author" content="Freeman Kevin">
 <meta property="article:tag" content="Cron">
 <meta property="article:tag" content="ElasticSearch">
@@ -142,7 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%83%A8%E7%BD%B2-Elasticsearch-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">1. 部署 Elasticsearch 服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%87%86%E5%A4%87%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 准备文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#env-%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">.env 文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#es-yaml-%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.2.</span> <span class="nav-text">es.yaml 文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 部署服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E4%B8%8E%E9%AA%8C%E8%AF%81"><span class="nav-number">2.</span> <span class="nav-text">2. 接口调用与验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%B5%8B%E8%AF%95%E8%BF%9E%E6%8E%A5"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 测试连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%AA%8C%E8%AF%81%E5%BF%AB%E7%85%A7%E4%BB%93%E5%BA%93"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 验证快照仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">3. 备份脚本的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">4. 定时任务的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%AA%8C%E8%AF%81%E5%A4%87%E4%BB%BD"><span class="nav-number">5.</span> <span class="nav-text">5. 验证备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">6. 总结</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2-Elasticsearch-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">部署 Elasticsearch 服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">准备文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#env-%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">.env 文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#es-yaml-%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.2.</span> <span class="nav-text">es.yaml 文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.2.</span> <span class="nav-text">部署服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E4%B8%8E%E9%AA%8C%E8%AF%81"><span class="nav-number">2.</span> <span class="nav-text">接口调用与验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E8%BF%9E%E6%8E%A5"><span class="nav-number">2.1.</span> <span class="nav-text">测试连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E5%BF%AB%E7%85%A7%E4%BB%93%E5%BA%93"><span class="nav-number">2.2.</span> <span class="nav-text">验证快照仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">备份脚本的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">定时任务的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E5%A4%87%E4%BB%BD"><span class="nav-number">5.</span> <span class="nav-text">验证备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -275,13 +275,13 @@
     <div class="post-body" itemprop="articleBody"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在本文中，我们将介绍如何使用 Docker Compose 部署带有用户和密码认证的 Elasticsearch 服务，并实现索引的自动备份。首先，我们将展示如何准备配置文件并启动 Elasticsearch 服务。接着，我们将讲解如何配置并验证快照仓库。最后，我们提供了一个用于自动备份 Elasticsearch 索引的脚本，并通过 Crontab 定时任务实现自动备份。本文将帮助你确保数据的安全性和可恢复性。</p>
 <span id="more"></span>
 
-<h2 id="1-部署-Elasticsearch-服务"><a href="#1-部署-Elasticsearch-服务" class="headerlink" title="1. 部署 Elasticsearch 服务"></a>1. 部署 Elasticsearch 服务</h2><p>使用 Docker Compose 部署 Elasticsearch 服务，带有用户、密码认证的单节点配置。</p>
-<h3 id="1-1-准备文件"><a href="#1-1-准备文件" class="headerlink" title="1.1 准备文件"></a>1.1 准备文件</h3><h4 id="env-文件"><a href="#env-文件" class="headerlink" title=".env 文件"></a>.env 文件</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ELASTIC_VERSION=8.10.2</span><br><span class="line">ELASTIC_PASSWORD=yourpassword</span><br><span class="line">ES_JAVA_OPTS=-Xms4g -Xmx4g</span><br></pre></td></tr></table></figure>
+<h2 id="部署-Elasticsearch-服务"><a href="#部署-Elasticsearch-服务" class="headerlink" title="部署 Elasticsearch 服务"></a>部署 Elasticsearch 服务</h2><p>使用 Docker Compose 部署 Elasticsearch 服务，带有用户、密码认证的单节点配置。</p>
+<h3 id="准备文件"><a href="#准备文件" class="headerlink" title="准备文件"></a>准备文件</h3><h4 id="env-文件"><a href="#env-文件" class="headerlink" title=".env 文件"></a>.env 文件</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ELASTIC_VERSION=8.10.2</span><br><span class="line">ELASTIC_PASSWORD=yourpassword</span><br><span class="line">ES_JAVA_OPTS=-Xms4g -Xmx4g</span><br></pre></td></tr></table></figure>
 
 <h4 id="es-yaml-文件"><a href="#es-yaml-文件" class="headerlink" title="es.yaml 文件"></a>es.yaml 文件</h4><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.8&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">elasticsearch:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/elasticsearch/elasticsearch:$&#123;ELASTIC_VERSION&#125;</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">elasticsearch</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.type=single-node</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ELASTIC_PASSWORD=$&#123;ELASTIC_PASSWORD&#125;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">xpack.security.enabled=true</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">path.repo=/usr/share/elasticsearch/snapshots</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">path.plugins=/usr/share/elasticsearch/plugins</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">9200</span><span class="string">:9200</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">es-data:/usr/share/elasticsearch/data</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">es-snapshots:/usr/share/elasticsearch/snapshots</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">es-plugins:/usr/share/elasticsearch/plugins</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">es-data:</span></span><br><span class="line">  <span class="attr">es-snapshots:</span></span><br><span class="line">  <span class="attr">es-plugins:</span></span><br></pre></td></tr></table></figure>
 
 
-<h3 id="1-2-部署服务"><a href="#1-2-部署服务" class="headerlink" title="1.2 部署服务"></a>1.2 部署服务</h3><ol>
+<h3 id="部署服务"><a href="#部署服务" class="headerlink" title="部署服务"></a>部署服务</h3><ol>
 <li>启动 Elasticsearch 服务：</li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker-compose -f es.yaml up -d</span><br></pre></td></tr></table></figure>
@@ -293,16 +293,16 @@
 
 <p>返回集群信息表示服务启动成功。</p>
 <hr>
-<h2 id="2-接口调用与验证"><a href="#2-接口调用与验证" class="headerlink" title="2. 接口调用与验证"></a>2. 接口调用与验证</h2><p>在开始备份前，需要确保以下几点：</p>
+<h2 id="接口调用与验证"><a href="#接口调用与验证" class="headerlink" title="接口调用与验证"></a>接口调用与验证</h2><p>在开始备份前，需要确保以下几点：</p>
 <ol>
 <li>已有访问 Elasticsearch 集群的权限。</li>
 <li>确保集群健康状态为绿色或黄色。</li>
 </ol>
-<h3 id="2-1-测试连接"><a href="#2-1-测试连接" class="headerlink" title="2.1 测试连接"></a>2.1 测试连接</h3><p>通过以下命令测试连接：</p>
+<h3 id="测试连接"><a href="#测试连接" class="headerlink" title="测试连接"></a>测试连接</h3><p>通过以下命令测试连接：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -u <span class="string">&quot;elastic:<span class="variable">$&#123;ELASTIC_PASSWORD&#125;</span>&quot;</span> -X GET <span class="string">&quot;http://&lt;your-es-host&gt;:9200&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>如果连接成功，将返回集群的基本信息（JSON 格式）。</p>
-<h3 id="2-2-验证快照仓库"><a href="#2-2-验证快照仓库" class="headerlink" title="2.2 验证快照仓库"></a>2.2 验证快照仓库</h3><p>在 ES 中，备份索引需要先配置一个快照仓库。</p>
+<h3 id="验证快照仓库"><a href="#验证快照仓库" class="headerlink" title="验证快照仓库"></a>验证快照仓库</h3><p>在 ES 中，备份索引需要先配置一个快照仓库。</p>
 <ol>
 <li>创建快照仓库：</li>
 </ol>
@@ -315,14 +315,14 @@
 
 <p>返回结果中 <code>&quot;status&quot;: &quot;SUCCESS&quot;</code> 表示仓库配置正确。</p>
 <hr>
-<h2 id="3-备份脚本的实现"><a href="#3-备份脚本的实现" class="headerlink" title="3. 备份脚本的实现"></a>3. 备份脚本的实现</h2><p>以下是一个用于自动备份 Elasticsearch 索引的脚本：</p>
+<h2 id="备份脚本的实现"><a href="#备份脚本的实现" class="headerlink" title="备份脚本的实现"></a>备份脚本的实现</h2><p>以下是一个用于自动备份 Elasticsearch 索引的脚本：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置参数</span></span><br><span class="line">ES_HOST=<span class="string">&quot;http://&lt;your-es-host&gt;:9200&quot;</span></span><br><span class="line">USERNAME=<span class="string">&quot;elastic&quot;</span></span><br><span class="line">PASSWORD=<span class="string">&quot;&lt;yourpassword&gt;&quot;</span></span><br><span class="line">BACKUP_REPO=<span class="string">&quot;backup_repo&quot;</span></span><br><span class="line">BACKUP_NAME=<span class="string">&quot;snapshot_<span class="subst">$(date +%Y-%m-%d-%H-%M)</span>&quot;</span></span><br><span class="line">INDEX_NAME=<span class="string">&quot;&lt;your-index-name&gt;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建备份</span></span><br><span class="line">curl -u <span class="string">&quot;<span class="variable">$USERNAME</span>:<span class="variable">$PASSWORD</span>&quot;</span> -X PUT <span class="string">&quot;<span class="variable">$ES_HOST</span>/_snapshot/<span class="variable">$BACKUP_REPO</span>/<span class="variable">$BACKUP_NAME</span>&quot;</span> -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> -d<span class="string">&#x27;</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  &quot;indices&quot;: &quot;&#x27;</span><span class="variable">$INDEX_NAME</span><span class="string">&#x27;&quot;,</span></span><br><span class="line"><span class="string">  &quot;ignore_unavailable&quot;: true,</span></span><br><span class="line"><span class="string">  &quot;include_global_state&quot;: false</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查备份状态</span></span><br><span class="line">curl -u <span class="string">&quot;<span class="variable">$USERNAME</span>:<span class="variable">$PASSWORD</span>&quot;</span> -X GET <span class="string">&quot;<span class="variable">$ES_HOST</span>/_snapshot/<span class="variable">$BACKUP_REPO</span>/<span class="variable">$BACKUP_NAME</span>/_status&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>保存脚本为 <code>es_backup.sh</code>，并赋予可执行权限：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x es_backup.sh</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="4-定时任务的配置"><a href="#4-定时任务的配置" class="headerlink" title="4. 定时任务的配置"></a>4. 定时任务的配置</h2><p>通过 <code>crontab</code> 设置定时任务，实现备份脚本的自动执行。</p>
+<h2 id="定时任务的配置"><a href="#定时任务的配置" class="headerlink" title="定时任务的配置"></a>定时任务的配置</h2><p>通过 <code>crontab</code> 设置定时任务，实现备份脚本的自动执行。</p>
 <ol>
 <li>编辑 crontab：</li>
 </ol>
@@ -337,7 +337,7 @@
 <li>保存并退出。</li>
 </ol>
 <hr>
-<h2 id="5-验证备份"><a href="#5-验证备份" class="headerlink" title="5. 验证备份"></a>5. 验证备份</h2><ol>
+<h2 id="验证备份"><a href="#验证备份" class="headerlink" title="验证备份"></a>验证备份</h2><ol>
 <li>查看已有的快照：</li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -u <span class="string">&quot;elastic:<span class="variable">$&#123;ELASTIC_PASSWORD&#125;</span>&quot;</span> -X GET <span class="string">&quot;http://&lt;your-es-host&gt;:9200/_snapshot/backup_repo/_all&quot;</span></span><br></pre></td></tr></table></figure>
@@ -348,7 +348,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -u <span class="string">&quot;elastic:<span class="variable">$&#123;ELASTIC_PASSWORD&#125;</span>&quot;</span> -X POST <span class="string">&quot;http://&lt;your-es-host&gt;:9200/_snapshot/backup_repo/&lt;snapshot-name&gt;/_restore&quot;</span> -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> -d<span class="string">&#x27;</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  &quot;indices&quot;: &quot;&lt;your-index-name&gt;&quot;,</span></span><br><span class="line"><span class="string">  &quot;ignore_unavailable&quot;: true,</span></span><br><span class="line"><span class="string">  &quot;include_global_state&quot;: false</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>通过本文档的步骤，你可以快速实现 Elasticsearch 索引的自动备份，并通过 Docker Compose 快速部署一个带用户和密码认证的 Elasticsearch 单节点服务。确保备份脚本和定时任务配置正确，以降低数据丢失的风险。在生产环境中，请根据业务需求调整备份策略和存储位置。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过本文档的步骤，你可以快速实现 Elasticsearch 索引的自动备份，并通过 Docker Compose 快速部署一个带用户和密码认证的 Elasticsearch 单节点服务。确保备份脚本和定时任务配置正确，以降低数据丢失的风险。在生产环境中，请根据业务需求调整备份策略和存储位置。</p>
 
     </div>
 
