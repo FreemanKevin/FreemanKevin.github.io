@@ -6,7 +6,7 @@
   <link href="https://freemankevin.uk/atom.xml" rel="self"/>
   
   <link href="https://freemankevin.uk/"/>
-  <updated>2024-12-25T15:41:47.168Z</updated>
+  <updated>2024-12-26T13:08:04.641Z</updated>
   <id>https://freemankevin.uk/</id>
   
   <author>
@@ -15,6 +15,56 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>数据盘挂载与 GPT 分区</title>
+    <link href="https://freemankevin.uk/2024/12/26/mount-hd-gpt/"/>
+    <id>https://freemankevin.uk/2024/12/26/mount-hd-gpt/</id>
+    <published>2024-12-26T04:00:00.000Z</published>
+    <updated>2024-12-26T13:08:04.641Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在 Linux 系统中，磁盘分区和挂载是常见的管理任务，尤其在添加新的数据盘时。对于大于 2TB 的磁盘，通常需要使用 GPT（GUID Partition Table）分区模式，因为传统的 MBR（Master Boot Record）分区表不支持超过 2TB 的磁盘容量。在本文中，我们将展示如何使用 GPT 分区表创建分区，格式化为 <code>ext4</code> 文件系统，并挂载到指定目录。此外，还会介绍如何配置系统，以确保在系统重启后能够自动挂载磁盘。最终，您将学会如何有效地管理 Linux 系统中的大容量磁盘，确保数据安全与系统稳定。</p><span id="more"></span><h3 id="创建-GPT-分区表"><a href="#创建-GPT-分区表" class="headerlink" title="创建 GPT 分区表"></a>创建 GPT 分区表</h3><p>使用 <code>parted</code> 工具在 <code>/dev/sdb</code> 磁盘上创建一个新的 GPT 分区表：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">parted /dev/sdb mklabel gpt</span><br></pre></td></tr></table></figure><h3 id="创建分区"><a href="#创建分区" class="headerlink" title="创建分区"></a>创建分区</h3><p>创建一个占用整个磁盘的主分区，并格式化为 <code>ext4</code> 文件系统：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">parted /dev/sdb mkpart primary ext4 0% 100%</span><br></pre></td></tr></table></figure><p>等待分区操作完成。</p><h3 id="格式化分区"><a href="#格式化分区" class="headerlink" title="格式化分区"></a>格式化分区</h3><p>格式化新创建的分区 <code>/dev/sdb1</code>：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkfs.ext4 /dev/sdb1</span><br></pre></td></tr></table></figure><h3 id="挂载分区"><a href="#挂载分区" class="headerlink" title="挂载分区"></a>挂载分区</h3><p>创建一个挂载点 <code>/data</code> 并挂载新分区：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /data</span><br><span class="line">mount /dev/sdb1 /data</span><br></pre></td></tr></table></figure><h3 id="永久挂载设置"><a href="#永久挂载设置" class="headerlink" title="永久挂载设置"></a>永久挂载设置</h3><p>为了使挂载在启动时自动进行，需要编辑 <code>/etc/fstab</code> 文件：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;/dev/sdb1 /data ext4 defaults 0 2&quot; &gt;&gt; /etc/fstab</span><br></pre></td></tr></table></figure><p>运行以下命令以验证配置是否正确：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mount -a</span><br></pre></td></tr></table></figure><h3 id="确认磁盘已成功挂载"><a href="#确认磁盘已成功挂载" class="headerlink" title="确认磁盘已成功挂载"></a>确认磁盘已成功挂载</h3><p>使用 <code>df -Th</code> 命令查看所有文件系统及其类型，确认 <code>/dev/sdb1</code> 是否正确挂载在 <code>/data</code> 下：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">df -Th</span><br></pre></td></tr></table></figure><h3 id="查看块设备信息"><a href="#查看块设备信息" class="headerlink" title="查看块设备信息"></a>查看块设备信息</h3><p>使用 <code>lsblk</code> 命令查看所有块设备的挂载点和大小，确认挂载情况：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure><h3 id="获取磁盘-UUID"><a href="#获取磁盘-UUID" class="headerlink" title="获取磁盘 UUID"></a>获取磁盘 UUID</h3><p>使用 <code>blkid</code> 命令获取 <code>/dev/sdb1</code> 的 UUID，这有助于 <code>/etc/fstab</code> 中的稳定性配置：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">blkid /dev/sdb1</span><br></pre></td></tr></table></figure><p>可以使用这个 UUID 替换 <code>/etc/fstab</code> 中的设备名，以确保即使设备名变化，挂载依然稳定：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;UUID=$(blkid -s UUID -o value /dev/sdb1) /data ext4 defaults 0 2&quot; &gt;&gt; /etc/fstab</span><br></pre></td></tr></table></figure><hr><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>此文档提供了从创建 GPT 分区表到挂载和确认分区的完整步骤。在每一步操作后，建议使用校验命令（如 <code>lsblk</code> 和 <code>df -Th</code>）确保配置的正确性。这种分区和挂载方式可以适应多种场景，并确保数据存储的安全与稳定。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在 Linux 系统中，磁盘分区和挂载是常见的管理任务，尤其在添加新的数据盘时。对于大于 2TB 的磁盘，通常需要使用 GPT（GUID Partition Table）分区模式，因为传统的 MBR（Master Boot Record）分区表不支持超过 2TB 的磁盘容量。在本文中，我们将展示如何使用 GPT 分区表创建分区，格式化为 &lt;code&gt;ext4&lt;/code&gt; 文件系统，并挂载到指定目录。此外，还会介绍如何配置系统，以确保在系统重启后能够自动挂载磁盘。最终，您将学会如何有效地管理 Linux 系统中的大容量磁盘，确保数据安全与系统稳定。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
+    
+    <category term="GPT" scheme="https://freemankevin.uk/tags/GPT/"/>
+    
+    <category term="Mount" scheme="https://freemankevin.uk/tags/Mount/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>如何优化 PostgreSQL 数据库以支持高并发</title>
+    <link href="https://freemankevin.uk/2024/12/26/postgresql-optimization/"/>
+    <id>https://freemankevin.uk/2024/12/26/postgresql-optimization/</id>
+    <published>2024-12-26T03:34:15.000Z</published>
+    <updated>2024-12-26T13:13:55.319Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文将介绍如何优化 PostgreSQL 数据库以支持高并发场景。我们会针对内存缓存、连接数、索引、日志、查询优化等方面进行详细的优化建议，以帮助提升数据库的性能。</p><span id="more"></span><blockquote><p>这里以16C 核心、32GB 物理内存和 20GB 虚拟内存的服务器举例。</p></blockquote><h2 id="常规考虑"><a href="#常规考虑" class="headerlink" title="常规考虑"></a>常规考虑</h2><h3 id="共享缓冲区"><a href="#共享缓冲区" class="headerlink" title="共享缓冲区"></a>共享缓冲区</h3><ul><li><p><strong>作用</strong>：<code>shared_buffers</code> 是 PostgreSQL 用来缓存数据页的内存区域。如果这个值设置得过小，数据库需要频繁访问磁盘，导致性能下降。</p></li><li><p><strong>优化建议</strong>：设置为物理内存的 25%-40%。对于 32GB 的物理内存，可以设置为 8GB 到 12GB 之间。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">shared_buffers = 8GB  # 可根据内存进行调整</span><br></pre></td></tr></table></figure></li></ul><h3 id="工作内存"><a href="#工作内存" class="headerlink" title="工作内存"></a>工作内存</h3><ul><li><p><strong>作用</strong>：<code>work_mem</code> 定义了单个查询操作（如排序、哈希连接等）所能使用的内存。对于大查询，适当增加 <code>work_mem</code> 可以减少磁盘交换。</p></li><li><p><strong>优化建议</strong>: 增加每个查询的内存使用量，但不要过高，以免消耗过多内存。一般可以设置为 4MB 到 16MB，具体根据查询复杂度调整。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">work_mem = 16MB  # 根据实际负载进行调整</span><br></pre></td></tr></table></figure></li></ul><h3 id="维护工作内存"><a href="#维护工作内存" class="headerlink" title="维护工作内存"></a>维护工作内存</h3><ul><li><p><strong>作用</strong>：<code>maintenance_work_mem</code> 定义了 PostgreSQL 用于执行某些维护操作（如创建索引、VACUUM、分析等）的内存大小。增加此值可以加速这些操作。</p></li><li><p><strong>优化建议</strong>: 增加该值可以提高 <code>VACUUM</code> 和索引创建的速度。对于 32GB 内存的机器，可以设置为 512MB 到 1GB。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">maintenance_work_mem = 512MB</span><br></pre></td></tr></table></figure></li></ul><h3 id="自动工作内存"><a href="#自动工作内存" class="headerlink" title="自动工作内存"></a>自动工作内存</h3><ul><li><p><strong>作用</strong>：<code>effective_cache_size</code> 告诉 PostgreSQL 查询优化器可用的操作系统缓存大小，以帮助它估计缓存命中率。</p></li><li><p><strong>优化建议</strong>: 设置为系统中可用于缓存的数据量，通常为系统总内存的 50%-75%。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">effective_cache_size = 24GB  # 根据实际可用内存设置</span><br></pre></td></tr></table></figure></li></ul><h3 id="最大连接数"><a href="#最大连接数" class="headerlink" title="最大连接数"></a>最大连接数</h3><ul><li><p><strong>作用</strong>：<code>max_connections</code> 定义了数据库可以同时接入的最大客户端连接数。如果这个值设置得过高，可能导致内存和 CPU 资源过度消耗。</p></li><li><p><strong>优化建议</strong>: 适当增加最大连接数，但要确保服务器有足够的内存来处理这些连接。假设你需要支持 500-1000 个并发连接，通常设置在 200 到 500 之间。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">max_connections = 500</span><br></pre></td></tr></table></figure></li></ul><h3 id="WAL-日志设置"><a href="#WAL-日志设置" class="headerlink" title="WAL 日志设置"></a>WAL 日志设置</h3><ul><li><p><strong>作用</strong>：<code>wal_buffers</code> 控制 PostgreSQL 在写入 WAL（Write-Ahead Logging）日志时的缓冲区大小。如果设置得过小，会影响数据库写入性能。</p></li><li><p><strong>优化建议</strong>: 对于大型数据库，设置一个更大的 <code>wal_buffers</code> 可以提高写入性能。可以考虑将其设置为 16MB 或更大。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wal_buffers = 16MB</span><br></pre></td></tr></table></figure></li></ul><h3 id="WAL-日志检查点频率"><a href="#WAL-日志检查点频率" class="headerlink" title="WAL 日志检查点频率"></a>WAL 日志检查点频率</h3><ul><li><p><strong>作用</strong>：<code>checkpoint_segments</code> 决定了日志切换点之间可以有多少个日志文件。如果这个值设置得太小，可能会导致频繁的磁盘 I&#x2F;O 操作。</p></li><li><p><strong>优化建议</strong>：</p><ul><li>增加 <code>checkpoint_segments</code> 可以减少 checkpoint 的频率，从而减少磁盘 I&#x2F;O。</li><li>默认的 <code>checkpoint_timeout</code> 可以保持在 5 分钟左右。<code>checkpoint_completion_target</code> 控制检查点完成的目标时间，如果系统负载较高，考虑将其设为较低值。</li></ul><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">checkpoint_timeout = 5min</span><br><span class="line">checkpoint_completion_target = 0.9</span><br><span class="line">checkpoint_segments = 64</span><br></pre></td></tr></table></figure></li></ul><h3 id="同步提交"><a href="#同步提交" class="headerlink" title="同步提交"></a>同步提交</h3><ul><li><p><strong>作用</strong>：<code>synchronous_commit</code> 控制事务是否需要等待 WAL 日志完全写入磁盘。默认情况下，这个参数是启用的，会确保数据一致性，但也可能影响性能。</p></li><li><p><strong>优化建议</strong>：如果对数据一致性要求不是极其严格，可以考虑设置为 <code>off</code>，以提高写入性能。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">synchronous_commit = off</span><br></pre></td></tr></table></figure></li></ul><h3 id="并行查询设置"><a href="#并行查询设置" class="headerlink" title="并行查询设置"></a>并行查询设置</h3><ul><li><p><strong>作用</strong>：控制单个查询操作中使用的最大并行工作进程数。在多核 CPU 上启用并行查询可以大大提高查询性能。</p></li><li><p><strong>优化建议</strong>：在较多核心的机器上，可以适当增加该值以加速查询。假设你有多个核心，可以设置为 4 或更高。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">max_parallel_workers_per_gather = 4</span><br></pre></td></tr></table></figure></li></ul><h3 id="查询优化器设置"><a href="#查询优化器设置" class="headerlink" title="查询优化器设置"></a>查询优化器设置</h3><ul><li><p><strong>作用</strong>：<code>random_page_cost</code> 和 <code>seq_page_cost</code> 控制查询优化器对磁盘访问的成本估算。调优这两个参数可以帮助优化器做出更好的查询计划。</p></li><li><p><strong>优化建议</strong>：如果使用的是 SSD 硬盘，<code>random_page_cost</code> 和 <code>seq_page_cost</code> 可以适当降低，因为 SSD 具有较低的随机访问延迟。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">random_page_cost = 1.1  # 如果使用 SSD 硬盘</span><br><span class="line">seq_page_cost = 1.0</span><br></pre></td></tr></table></figure></li></ul><h3 id="日志记录设置"><a href="#日志记录设置" class="headerlink" title="日志记录设置"></a>日志记录设置</h3><ul><li><p><strong>作用</strong>：该参数控制哪些查询会被记录到日志中。设置该参数可以帮助你识别慢查询，进行进一步的优化。</p></li><li><p><strong>优化建议</strong>：设置一个较低的时间阈值（例如 500ms），以记录可能导致性能瓶颈的慢查询。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">log_min_duration_statement = 500  # 记录执行超过500ms的查询</span><br></pre></td></tr></table></figure></li></ul><h3 id="自动清理设置"><a href="#自动清理设置" class="headerlink" title="自动清理设置"></a>自动清理设置</h3><ul><li><p><strong>作用</strong>：<code>autovacuum</code> 用于自动清理死行（dead tuples）并进行数据库的碎片整理。如果未适当配置，可能会导致数据库膨胀，影响查询性能。</p></li><li><p><strong>优化建议</strong>：确保启用 <code>autovacuum</code> 并根据负载调整其参数，以确保定期清理死行和索引碎片。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">autovacuum = on</span><br><span class="line">autovacuum_vacuum_cost_delay = 20ms  # 减少自动清理对性能的影响</span><br><span class="line">autovacuum_vacuum_scale_factor = 0.2  # 当表数据增长 20% 时触发自动清理</span><br></pre></td></tr></table></figure></li></ul><h3 id="优化-IO-操作"><a href="#优化-IO-操作" class="headerlink" title="优化 IO 操作"></a>优化 IO 操作</h3><ul><li><p><strong>作用</strong>：<code>effective_io_concurrency</code> 控制 IO 操作的并发级别，对于多磁盘系统和使用 RAID 或 SSD 时特别有用。</p></li><li><p><strong>优化建议</strong>：如果使用 SSD 或 RAID 磁盘阵列，适当增加并发级别。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">effective_io_concurrency = 200  # 根据磁盘性能进行调整</span><br></pre></td></tr></table></figure></li></ul><h3 id="分离存储路径"><a href="#分离存储路径" class="headerlink" title="分离存储路径"></a>分离存储路径</h3><ul><li><p><strong>作用</strong>：将日志存储路径与数据存储路径分开，可以减少磁盘 I&#x2F;O 竞争，提升数据库的写入性能，尤其是在高并发写入时，能有效减少 I&#x2F;O 阻塞。</p></li><li><p><strong>优化建议</strong>： </p><ul><li>将数据存储路径和 WAL 日志存储路径分开，最好使用不同的磁盘或分区。</li><li>将 WAL 日志存储在 SSD 上，数据存储在机械硬盘（HDD）上。</li></ul><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">数据存储路径</span></span><br><span class="line">data_directory = &#x27;/data/postgresql/data&#x27;  # 数据存储在磁盘 A</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">日志存储路径</span></span><br><span class="line">log_directory = &#x27;/var/log/postgresql/logs&#x27;  # WAL 日志存储在磁盘 B（SSD）</span><br></pre></td></tr></table></figure></li></ul><hr><h2 id="灵活调整"><a href="#灵活调整" class="headerlink" title="灵活调整"></a>灵活调整</h2><blockquote><p>适用于较低配置或共享资源的服务器</p></blockquote><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">shared_buffers = 4GB</span><br><span class="line">work_mem = 4MB</span><br><span class="line">maintenance_work_mem = 128MB </span><br><span class="line">effective_cache_size = 6GB</span><br><span class="line">max_parallel_workers_per_gather = 16</span><br><span class="line">max_parallel_workers = 16</span><br><span class="line">autovacuum = off</span><br><span class="line">log_min_duration_statement = -1 </span><br><span class="line">wal_level = minimal</span><br><span class="line">synchronous_commit = off</span><br><span class="line">checkpoint_timeout = 30min</span><br></pre></td></tr></table></figure><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>针对 PostgreSQL 数据库的优化，需要根据具体的硬件配置和应用场景进行调整。上述建议主要针对提高数据库在高并发场景下的性能，特别是内存缓存、连接数、索引、日志、查询优化等方面。适当的内存配置和优化索引、查询及并行性设置，能有效提高数据库的并发处理能力。</p><p>如果你有更多具体的应用场景或需要进一步的调优，随时告诉我！</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文将介绍如何优化 PostgreSQL 数据库以支持高并发场景。我们会针对内存缓存、连接数、索引、日志、查询优化等方面进行详细的优化建议，以帮助提升数据库的性能。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="PostgreSQL" scheme="https://freemankevin.uk/categories/PostgreSQL/"/>
+    
+    
+    <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
+    
+    <category term="Memory" scheme="https://freemankevin.uk/tags/Memory/"/>
+    
+    <category term="PostgreSQL" scheme="https://freemankevin.uk/tags/PostgreSQL/"/>
+    
+  </entry>
   
   <entry>
     <title>如何使用 MkDocs 创建和部署博客站点</title>
@@ -67,31 +117,6 @@
   </entry>
   
   <entry>
-    <title>CentOS 系统下制作离线安装包</title>
-    <link href="https://freemankevin.uk/2024/12/20/centos-offline-package/"/>
-    <id>https://freemankevin.uk/2024/12/20/centos-offline-package/</id>
-    <published>2024-12-20T04:17:25.000Z</published>
-    <updated>2024-12-25T15:43:47.537Z</updated>
-    
-    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在无法联网的环境中安装软件需要提前准备好所有必要的安装包及其依赖项。本文将指导你如何在 CentOS 7.9 系统上创建一个离线软件安装包。首先，我们会使用 yum 命令下载所需软件及其依赖项，然后创建一个本地仓库。接着，我们会将下载的目录打包并传输到目标离线机器。最后，我们会在离线机器上解压并配置本地仓库，以便顺利安装软件。通过这些步骤，你可以在没有网络连接的情况下方便地安装所需的软件。</p><span id="more"></span><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>在开始之前，请确保您有一台可以联网的 CentOS 7.9 系统，用于下载软件及其依赖。</p><h2 id="下载软件及其依赖"><a href="#下载软件及其依赖" class="headerlink" title="下载软件及其依赖"></a>下载软件及其依赖</h2><p>您可以使用 <code>yum</code> 的 <code>--downloadonly</code> 和 <code>--downloaddir</code> 选项来下载软件包和它们的所有依赖。</p><p>例如，如果您想下载 <code>httpd</code>（Apache Web 服务器）及其所有依赖，可以执行以下命令：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install --downloadonly --downloaddir=/path/to/download/directory httpd</span><br></pre></td></tr></table></figure><p>将 <code>/path/to/download/directory</code> 替换为您想要保存下载文件的目录路径。</p><h2 id="创建本地仓库"><a href="#创建本地仓库" class="headerlink" title="创建本地仓库"></a>创建本地仓库</h2><p>下载所有包后，您需要在下载目录中创建一个本地仓库，这样在离线安装时 <code>yum</code> 能够识别并正确处理依赖关系。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /path/to/download/directory</span><br><span class="line"><span class="comment"># sudo rpm --import /path/to/RPM-GPG-KEY-PGDG # 如果有的话</span></span><br><span class="line">createrepo .</span><br></pre></td></tr></table></figure><p>如果 <code>createrepo</code> 命令不可用，您需要先在线安装 <code>createrepo</code> 包：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install createrepo</span><br></pre></td></tr></table></figure><p>并在同样的联网环境中运行 <code>createrepo</code> 命令。</p><h2 id="打包下载目录"><a href="#打包下载目录" class="headerlink" title="打包下载目录"></a>打包下载目录</h2><p>将带有软件包和本地仓库元数据的下载目录打包，以便于传输。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -czvf offline-packages.tar.gz -C /path/to/download/directory .</span><br></pre></td></tr></table></figure><h2 id="传输到离线机器"><a href="#传输到离线机器" class="headerlink" title="传输到离线机器"></a>传输到离线机器</h2><p>使用 USB 驱动器、光盘或其他媒体将 <code>offline-packages.tar.gz</code> 文件传输到离线 CentOS 7.9 机器上。</p><h2 id="离线安装软件"><a href="#离线安装软件" class="headerlink" title="离线安装软件"></a>离线安装软件</h2><p>在离线机器上，执行以下步骤来安装软件：</p><h3 id="解压软件包"><a href="#解压软件包" class="headerlink" title="解压软件包"></a>解压软件包</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xzvf /path/to/offline-packages.tar.gz -C /path/to/local/repo</span><br></pre></td></tr></table></figure><h3 id="配置本地仓库"><a href="#配置本地仓库" class="headerlink" title="配置本地仓库"></a>配置本地仓库</h3><p>创建一个新的 YUM 仓库配置文件：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /etc/yum.repos.d/local.repo</span><br></pre></td></tr></table></figure><p>添加以下内容：</p><figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[local-repo]</span></span><br><span class="line"><span class="attr">name</span>=Local Repository</span><br><span class="line"><span class="attr">baseurl</span>=file:///path/to/local/repo</span><br><span class="line"><span class="attr">enabled</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">0</span></span><br></pre></td></tr></table></figure><p>确保替换 <code>/path/to/local/repo</code> 为您解压缩软件包的实际目录。</p><h3 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h3><p>现在您可以使用 <code>yum</code> 从本地仓库安装软件，<code>yum</code> 会自动处理所有依赖关系。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 可能需要清理其他旧仓库，然后执行清理缓存，yum clean all &amp;&amp; yum makecache fast</span></span><br><span class="line">yum install --disablerepo=<span class="string">&#x27;*&#x27;</span> --enablerepo=<span class="string">&#x27;local-repo&#x27;</span> httpd</span><br></pre></td></tr></table></figure><p>用您实际下载的软件包名替换 <code>httpd</code>。</p><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul><li>请确保在可联网的机器上下载软件包时的 CentOS 版本和离线机器上的版本一致，以免因版本不匹配导致依赖问题。</li><li>如果您下载了大量的包，并且依赖很复杂，建议直接下载整个 CentOS 仓库，并在离线环境中设置本地镜像。</li></ul><p>按照这些步骤，您应该能够在没有网络连接的情况下在 CentOS 7.9 系统上安装软件。</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在无法联网的环境中安装软件需要提前准备好所有必要的安装包及其依赖项。本文将指导你如何在 CentOS 7.9 系统上创建一个离线软件安装包。首先，我们会使用 yum 命令下载所需软件及其依赖项，然后创建一个本地仓库。接着，我们会将下载的目录打包并传输到目标离线机器。最后，我们会在离线机器上解压并配置本地仓库，以便顺利安装软件。通过这些步骤，你可以在没有网络连接的情况下方便地安装所需的软件。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
-    
-    
-    <category term="Yum" scheme="https://freemankevin.uk/tags/Yum/"/>
-    
-    <category term="Offline" scheme="https://freemankevin.uk/tags/Offline/"/>
-    
-    <category term="CentOS" scheme="https://freemankevin.uk/tags/CentOS/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Debian 系统下制作离线安装包</title>
     <link href="https://freemankevin.uk/2024/12/20/debian-offline-package/"/>
     <id>https://freemankevin.uk/2024/12/20/debian-offline-package/</id>
@@ -108,11 +133,61 @@
     <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
     
     
-    <category term="Offline" scheme="https://freemankevin.uk/tags/Offline/"/>
-    
     <category term="Apt" scheme="https://freemankevin.uk/tags/Apt/"/>
     
+    <category term="Offline" scheme="https://freemankevin.uk/tags/Offline/"/>
+    
     <category term="Debian" scheme="https://freemankevin.uk/tags/Debian/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用镜像 ISO 文件制做本地Yum 源</title>
+    <link href="https://freemankevin.uk/2024/12/20/iso-yum/"/>
+    <id>https://freemankevin.uk/2024/12/20/iso-yum/</id>
+    <published>2024-12-20T04:17:25.000Z</published>
+    <updated>2024-12-26T13:08:04.641Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文介绍了如何在 CentOS 7 环境中使用镜像 ISO 文件制作本地 YUM 源。通过详细步骤指导，用户可以下载并挂载 CentOS 7.9 的 ISO 文件，创建 YUM 仓库配置文件，清理 YUM 缓存，并测试新的 YUM 仓库配置。文章还介绍了如何设置开机自动挂载 ISO 文件，以确保每次启动时本地 YUM 源都可用。通过这些步骤，用户可以在本地环境中使用 YUM 安装、更新或删除软件包。</p><span id="more"></span><h3 id="上传ISO文件"><a href="#上传ISO文件" class="headerlink" title="上传ISO文件"></a>上传ISO文件</h3><p>   阿里云ISO 镜像下载地址：<a href="https://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/">https://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/</a></p><p>   将CentOS 7.9的ISO文件上传到你的CentOS 7.4服务器上。假设ISO文件位于<code>/path/to/CentOS-7.9.iso</code>。</p><h3 id="创建挂载点"><a href="#创建挂载点" class="headerlink" title="创建挂载点"></a>创建挂载点</h3><p>   创建一个目录来作为ISO文件的挂载点。</p>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /mnt/cdrom</span><br></pre></td></tr></table></figure><h3 id="挂载ISO文件"><a href="#挂载ISO文件" class="headerlink" title="挂载ISO文件"></a>挂载ISO文件</h3><p>   使用<code>mount</code>命令将ISO文件挂载到刚创建的挂载点。</p>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount -o loop /path/to/CentOS-7.9.iso /mnt/cdrom</span><br></pre></td></tr></table></figure><p>   <code>loop</code>选项用于将文件作为块设备挂载。</p><h3 id="创建YUM仓库配置文件"><a href="#创建YUM仓库配置文件" class="headerlink" title="创建YUM仓库配置文件"></a>创建YUM仓库配置文件</h3><p>   在<code>/etc/yum.repos.d/</code>目录下创建一个新的<code>.repo</code>文件。</p>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vi /etc/yum.repos.d/CentOS-Base.repo</span><br></pre></td></tr></table></figure><p>   在该文件中添加以下内容：</p>   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[local-cdrom]</span><br><span class="line">name=CentOS-7.9 Local Repository</span><br><span class="line">baseurl=file:///mnt/cdrom</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0 # 跳过检查</span><br><span class="line">gpgkey=file:///mnt/cdrom/RPM-GPG-KEY-CentOS-7</span><br></pre></td></tr></table></figure><p>   按<code>ESC</code>，然后输入<code>:wq</code>保存并退出vi编辑器。</p><h3 id="清理YUM缓存"><a href="#清理YUM缓存" class="headerlink" title="清理YUM缓存"></a>清理YUM缓存</h3><p>   清理YUM缓存，确保YUM识别新的仓库。</p>   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo yum clean all</span><br><span class="line">sudo yum makecache</span><br></pre></td></tr></table></figure><h3 id="测试新的YUM仓库"><a href="#测试新的YUM仓库" class="headerlink" title="测试新的YUM仓库"></a>测试新的YUM仓库</h3><p>   使用YUM repolist命令检查仓库列表，确保本地仓库已经被添加。</p>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum repolist</span><br></pre></td></tr></table></figure><h3 id="设置开机自动挂载"><a href="#设置开机自动挂载" class="headerlink" title="设置开机自动挂载"></a>设置开机自动挂载</h3><p>   如果你希望每次开机自动挂载ISO文件，可以编辑<code>/etc/fstab</code>文件。</p>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vi /etc/fstab</span><br></pre></td></tr></table></figure><p>   在文件末尾添加以下行：</p>   <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/path/to/CentOS-7.9.iso /mnt/cdrom iso9660 loop,ro 0 0</span><br></pre></td></tr></table></figure><p>   再次按<code>ESC</code>，然后输入<code>:wq</code>保存并退出vi编辑器。</p><h3 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h3><p>现在你可以使用本地YUM源来安装、更新或删除软件包了。例如：</p><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install &lt;package-name&gt;</span><br></pre></td></tr></table></figure><p>确保在执行这些步骤之前，你有足够的权限，以防需要root权限执行某些命令。此外，ISO文件的路径应该是静态的；如果ISO文件移动到其他位置，你需要更新<code>/etc/fstab</code>和<code>/etc/yum.repos.d/CentOS-Base.repo</code>文件中的路径。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文介绍了如何在 CentOS 7 环境中使用镜像 ISO 文件制作本地 YUM 源。通过详细步骤指导，用户可以下载并挂载 CentOS 7.9 的 ISO 文件，创建 YUM 仓库配置文件，清理 YUM 缓存，并测试新的 YUM 仓库配置。文章还介绍了如何设置开机自动挂载 ISO 文件，以确保每次启动时本地 YUM 源都可用。通过这些步骤，用户可以在本地环境中使用 YUM 安装、更新或删除软件包。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
+    
+    
+    <category term="Yum" scheme="https://freemankevin.uk/tags/Yum/"/>
+    
+    <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
+    
+    <category term="CentOS" scheme="https://freemankevin.uk/tags/CentOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS 系统下制作离线安装包</title>
+    <link href="https://freemankevin.uk/2024/12/20/centos-offline-package/"/>
+    <id>https://freemankevin.uk/2024/12/20/centos-offline-package/</id>
+    <published>2024-12-20T04:17:25.000Z</published>
+    <updated>2024-12-25T15:43:47.537Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在无法联网的环境中安装软件需要提前准备好所有必要的安装包及其依赖项。本文将指导你如何在 CentOS 7.9 系统上创建一个离线软件安装包。首先，我们会使用 yum 命令下载所需软件及其依赖项，然后创建一个本地仓库。接着，我们会将下载的目录打包并传输到目标离线机器。最后，我们会在离线机器上解压并配置本地仓库，以便顺利安装软件。通过这些步骤，你可以在没有网络连接的情况下方便地安装所需的软件。</p><span id="more"></span><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>在开始之前，请确保您有一台可以联网的 CentOS 7.9 系统，用于下载软件及其依赖。</p><h2 id="下载软件及其依赖"><a href="#下载软件及其依赖" class="headerlink" title="下载软件及其依赖"></a>下载软件及其依赖</h2><p>您可以使用 <code>yum</code> 的 <code>--downloadonly</code> 和 <code>--downloaddir</code> 选项来下载软件包和它们的所有依赖。</p><p>例如，如果您想下载 <code>httpd</code>（Apache Web 服务器）及其所有依赖，可以执行以下命令：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install --downloadonly --downloaddir=/path/to/download/directory httpd</span><br></pre></td></tr></table></figure><p>将 <code>/path/to/download/directory</code> 替换为您想要保存下载文件的目录路径。</p><h2 id="创建本地仓库"><a href="#创建本地仓库" class="headerlink" title="创建本地仓库"></a>创建本地仓库</h2><p>下载所有包后，您需要在下载目录中创建一个本地仓库，这样在离线安装时 <code>yum</code> 能够识别并正确处理依赖关系。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /path/to/download/directory</span><br><span class="line"><span class="comment"># sudo rpm --import /path/to/RPM-GPG-KEY-PGDG # 如果有的话</span></span><br><span class="line">createrepo .</span><br></pre></td></tr></table></figure><p>如果 <code>createrepo</code> 命令不可用，您需要先在线安装 <code>createrepo</code> 包：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install createrepo</span><br></pre></td></tr></table></figure><p>并在同样的联网环境中运行 <code>createrepo</code> 命令。</p><h2 id="打包下载目录"><a href="#打包下载目录" class="headerlink" title="打包下载目录"></a>打包下载目录</h2><p>将带有软件包和本地仓库元数据的下载目录打包，以便于传输。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -czvf offline-packages.tar.gz -C /path/to/download/directory .</span><br></pre></td></tr></table></figure><h2 id="传输到离线机器"><a href="#传输到离线机器" class="headerlink" title="传输到离线机器"></a>传输到离线机器</h2><p>使用 USB 驱动器、光盘或其他媒体将 <code>offline-packages.tar.gz</code> 文件传输到离线 CentOS 7.9 机器上。</p><h2 id="离线安装软件"><a href="#离线安装软件" class="headerlink" title="离线安装软件"></a>离线安装软件</h2><p>在离线机器上，执行以下步骤来安装软件：</p><h3 id="解压软件包"><a href="#解压软件包" class="headerlink" title="解压软件包"></a>解压软件包</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xzvf /path/to/offline-packages.tar.gz -C /path/to/local/repo</span><br></pre></td></tr></table></figure><h3 id="配置本地仓库"><a href="#配置本地仓库" class="headerlink" title="配置本地仓库"></a>配置本地仓库</h3><p>创建一个新的 YUM 仓库配置文件：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /etc/yum.repos.d/local.repo</span><br></pre></td></tr></table></figure><p>添加以下内容：</p><figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[local-repo]</span></span><br><span class="line"><span class="attr">name</span>=Local Repository</span><br><span class="line"><span class="attr">baseurl</span>=file:///path/to/local/repo</span><br><span class="line"><span class="attr">enabled</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">0</span></span><br></pre></td></tr></table></figure><p>确保替换 <code>/path/to/local/repo</code> 为您解压缩软件包的实际目录。</p><h3 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h3><p>现在您可以使用 <code>yum</code> 从本地仓库安装软件，<code>yum</code> 会自动处理所有依赖关系。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 可能需要清理其他旧仓库，然后执行清理缓存，yum clean all &amp;&amp; yum makecache fast</span></span><br><span class="line">yum install --disablerepo=<span class="string">&#x27;*&#x27;</span> --enablerepo=<span class="string">&#x27;local-repo&#x27;</span> httpd</span><br></pre></td></tr></table></figure><p>用您实际下载的软件包名替换 <code>httpd</code>。</p><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul><li>请确保在可联网的机器上下载软件包时的 CentOS 版本和离线机器上的版本一致，以免因版本不匹配导致依赖问题。</li><li>如果您下载了大量的包，并且依赖很复杂，建议直接下载整个 CentOS 仓库，并在离线环境中设置本地镜像。</li></ul><p>按照这些步骤，您应该能够在没有网络连接的情况下在 CentOS 7.9 系统上安装软件。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在无法联网的环境中安装软件需要提前准备好所有必要的安装包及其依赖项。本文将指导你如何在 CentOS 7.9 系统上创建一个离线软件安装包。首先，我们会使用 yum 命令下载所需软件及其依赖项，然后创建一个本地仓库。接着，我们会将下载的目录打包并传输到目标离线机器。最后，我们会在离线机器上解压并配置本地仓库，以便顺利安装软件。通过这些步骤，你可以在没有网络连接的情况下方便地安装所需的软件。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
+    
+    
+    <category term="Offline" scheme="https://freemankevin.uk/tags/Offline/"/>
+    
+    <category term="Yum" scheme="https://freemankevin.uk/tags/Yum/"/>
+    
+    <category term="CentOS" scheme="https://freemankevin.uk/tags/CentOS/"/>
     
   </entry>
   
@@ -138,31 +213,6 @@
     <category term="Rufus" scheme="https://freemankevin.uk/tags/Rufus/"/>
     
     <category term="Windows" scheme="https://freemankevin.uk/tags/Windows/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用镜像ISO 文件制做本地Yum 源</title>
-    <link href="https://freemankevin.uk/2024/12/20/yum/"/>
-    <id>https://freemankevin.uk/2024/12/20/yum/</id>
-    <published>2024-12-20T04:17:25.000Z</published>
-    <updated>2024-12-25T16:00:45.467Z</updated>
-    
-    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文介绍了如何在 CentOS 7 环境中使用镜像 ISO 文件制作本地 YUM 源。通过详细步骤指导，用户可以下载并挂载 CentOS 7.9 的 ISO 文件，创建 YUM 仓库配置文件，清理 YUM 缓存，并测试新的 YUM 仓库配置。文章还介绍了如何设置开机自动挂载 ISO 文件，以确保每次启动时本地 YUM 源都可用。通过这些步骤，用户可以在本地环境中使用 YUM 安装、更新或删除软件包。</p><span id="more"></span><h3 id="上传ISO文件"><a href="#上传ISO文件" class="headerlink" title="上传ISO文件"></a>上传ISO文件</h3><p>   阿里云ISO 镜像下载地址：<a href="https://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/">https://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/</a></p><p>   将CentOS 7.9的ISO文件上传到你的CentOS 7.4服务器上。假设ISO文件位于<code>/path/to/CentOS-7.9.iso</code>。</p><h3 id="创建挂载点"><a href="#创建挂载点" class="headerlink" title="创建挂载点"></a>创建挂载点</h3><p>   创建一个目录来作为ISO文件的挂载点。</p>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /mnt/cdrom</span><br></pre></td></tr></table></figure><h3 id="挂载ISO文件"><a href="#挂载ISO文件" class="headerlink" title="挂载ISO文件"></a>挂载ISO文件</h3><p>   使用<code>mount</code>命令将ISO文件挂载到刚创建的挂载点。</p>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount -o loop /path/to/CentOS-7.9.iso /mnt/cdrom</span><br></pre></td></tr></table></figure><p>   <code>loop</code>选项用于将文件作为块设备挂载。</p><h3 id="创建YUM仓库配置文件"><a href="#创建YUM仓库配置文件" class="headerlink" title="创建YUM仓库配置文件"></a>创建YUM仓库配置文件</h3><p>   在<code>/etc/yum.repos.d/</code>目录下创建一个新的<code>.repo</code>文件。</p>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vi /etc/yum.repos.d/CentOS-Base.repo</span><br></pre></td></tr></table></figure><p>   在该文件中添加以下内容：</p>   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[local-cdrom]</span><br><span class="line">name=CentOS-7.9 Local Repository</span><br><span class="line">baseurl=file:///mnt/cdrom</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0 # 跳过检查</span><br><span class="line">gpgkey=file:///mnt/cdrom/RPM-GPG-KEY-CentOS-7</span><br></pre></td></tr></table></figure><p>   按<code>ESC</code>，然后输入<code>:wq</code>保存并退出vi编辑器。</p><h3 id="清理YUM缓存"><a href="#清理YUM缓存" class="headerlink" title="清理YUM缓存"></a>清理YUM缓存</h3><p>   清理YUM缓存，确保YUM识别新的仓库。</p>   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo yum clean all</span><br><span class="line">sudo yum makecache</span><br></pre></td></tr></table></figure><h3 id="测试新的YUM仓库"><a href="#测试新的YUM仓库" class="headerlink" title="测试新的YUM仓库"></a>测试新的YUM仓库</h3><p>   使用YUM repolist命令检查仓库列表，确保本地仓库已经被添加。</p>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum repolist</span><br></pre></td></tr></table></figure><h3 id="设置开机自动挂载"><a href="#设置开机自动挂载" class="headerlink" title="设置开机自动挂载"></a>设置开机自动挂载</h3><p>   如果你希望每次开机自动挂载ISO文件，可以编辑<code>/etc/fstab</code>文件。</p>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vi /etc/fstab</span><br></pre></td></tr></table></figure><p>   在文件末尾添加以下行：</p>   <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/path/to/CentOS-7.9.iso /mnt/cdrom iso9660 loop,ro 0 0</span><br></pre></td></tr></table></figure><p>   再次按<code>ESC</code>，然后输入<code>:wq</code>保存并退出vi编辑器。</p><h3 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h3><p>现在你可以使用本地YUM源来安装、更新或删除软件包了。例如：</p><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install &lt;package-name&gt;</span><br></pre></td></tr></table></figure><p>确保在执行这些步骤之前，你有足够的权限，以防需要root权限执行某些命令。此外，ISO文件的路径应该是静态的；如果ISO文件移动到其他位置，你需要更新<code>/etc/fstab</code>和<code>/etc/yum.repos.d/CentOS-Base.repo</code>文件中的路径。</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文介绍了如何在 CentOS 7 环境中使用镜像 ISO 文件制作本地 YUM 源。通过详细步骤指导，用户可以下载并挂载 CentOS 7.9 的 ISO 文件，创建 YUM 仓库配置文件，清理 YUM 缓存，并测试新的 YUM 仓库配置。文章还介绍了如何设置开机自动挂载 ISO 文件，以确保每次启动时本地 YUM 源都可用。通过这些步骤，用户可以在本地环境中使用 YUM 安装、更新或删除软件包。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
-    
-    
-    <category term="Yum" scheme="https://freemankevin.uk/tags/Yum/"/>
-    
-    <category term="CentOS" scheme="https://freemankevin.uk/tags/CentOS/"/>
-    
-    <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
     
   </entry>
   
@@ -206,11 +256,11 @@
     <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
     
     
+    <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
+    
     <category term="Docker" scheme="https://freemankevin.uk/tags/Docker/"/>
     
     <category term="Container" scheme="https://freemankevin.uk/tags/Container/"/>
-    
-    <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
     
   </entry>
   
@@ -265,31 +315,6 @@
   </entry>
   
   <entry>
-    <title>数据盘挂载与LVM 创建</title>
-    <link href="https://freemankevin.uk/2024/12/11/mount-hd-lvm/"/>
-    <id>https://freemankevin.uk/2024/12/11/mount-hd-lvm/</id>
-    <published>2024-12-11T04:17:25.000Z</published>
-    <updated>2024-12-25T15:48:04.157Z</updated>
-    
-    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在服务器环境中，使用逻辑卷管理器（LVM）配置和挂载数据盘是一种灵活高效的方式。本文介绍了在 CentOS 和其他常见 Linux 系统中，如何使用 LVM 将新数据盘挂载到 &#x2F;data 目录。我们详细讲解了从安装 LVM 工具、初始化物理卷、创建卷组和逻辑卷，到创建文件系统、挂载逻辑卷以及设置开机自动挂载的步骤。此外，还提供了适用于不同 Linux 系统的注意事项和扩展管理技巧。通过这些步骤，你可以实现数据盘的灵活管理和高效利用。</p><span id="more"></span><h3 id="前置检查"><a href="#前置检查" class="headerlink" title="前置检查"></a><strong>前置检查</strong></h3><ol><li>确保目标硬盘（<code>vdb</code>）是新磁盘或非关键数据盘。</li><li>验证系统是否检测到硬盘：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>找到 <code>vdb</code>，确认其未分区或挂载。</li></ol><hr><h3 id="安装-LVM-工具"><a href="#安装-LVM-工具" class="headerlink" title="安装 LVM 工具"></a><strong>安装 LVM 工具</strong></h3><ul><li><p><strong>CentOS&#x2F;Red Hat 系统</strong>:</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y lvm2</span><br></pre></td></tr></table></figure></li><li><p><strong>Debian&#x2F;Ubuntu 系统</strong>:</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install -y lvm2</span><br></pre></td></tr></table></figure></li><li><p><strong>OpenSUSE 系统</strong>:</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> zypper install -y lvm2</span><br></pre></td></tr></table></figure></li></ul><hr><h3 id="LVM-配置步骤"><a href="#LVM-配置步骤" class="headerlink" title="LVM 配置步骤"></a><strong>LVM 配置步骤</strong></h3><h4 id="初始化物理卷-PV"><a href="#初始化物理卷-PV" class="headerlink" title="初始化物理卷 (PV)"></a>初始化物理卷 (PV)</h4><p>将 <code>vdb</code> 初始化为 LVM 的物理卷：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pvcreate /dev/vdb</span><br></pre></td></tr></table></figure><p>验证创建是否成功：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pvdisplay</span><br></pre></td></tr></table></figure><hr><h4 id="创建卷组-VG"><a href="#创建卷组-VG" class="headerlink" title="创建卷组 (VG)"></a>创建卷组 (VG)</h4><p>创建一个新的卷组 <code>vg_data</code>，并将 <code>vdb</code> 添加到该卷组：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgcreate vg_data /dev/vdb</span><br></pre></td></tr></table></figure><p>检查卷组信息：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgdisplay</span><br></pre></td></tr></table></figure><hr><h4 id="创建逻辑卷-LV"><a href="#创建逻辑卷-LV" class="headerlink" title="创建逻辑卷 (LV)"></a>创建逻辑卷 (LV)</h4><p>在卷组 <code>vg_data</code> 中创建逻辑卷 <code>lv_data</code>：</p><ul><li>使用所有剩余空间：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvcreate -l +100%FREE -n lv_data vg_data</span><br></pre></td></tr></table></figure></li><li>或者指定大小（如 100GB）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvcreate -L 100G -n lv_data vg_data</span><br></pre></td></tr></table></figure></li></ul><p>验证逻辑卷：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvdisplay</span><br></pre></td></tr></table></figure><hr><h4 id="创建文件系统"><a href="#创建文件系统" class="headerlink" title="创建文件系统"></a>创建文件系统</h4><p>为逻辑卷 <code>lv_data</code> 创建 EXT4 文件系统：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.ext4 /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure><hr><h4 id="挂载逻辑卷"><a href="#挂载逻辑卷" class="headerlink" title="挂载逻辑卷"></a>挂载逻辑卷</h4><ol><li><p>创建挂载点：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /data</span><br></pre></td></tr></table></figure></li><li><p>挂载逻辑卷到 <code>/data</code>：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount /dev/vg_data/lv_data /data</span><br></pre></td></tr></table></figure></li><li><p>确认挂载成功：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -h | grep /data</span><br></pre></td></tr></table></figure></li></ol><hr><h4 id="设置开机自动挂载"><a href="#设置开机自动挂载" class="headerlink" title="设置开机自动挂载"></a>设置开机自动挂载</h4><p>编辑 <code>/etc/fstab</code> 文件，使逻辑卷在开机时自动挂载：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/fstab</span><br></pre></td></tr></table></figure><p>在文件末尾添加以下内容：</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/dev/vg_data/lv_data /data ext4 defaults 0 0</span><br></pre></td></tr></table></figure><p>测试 <code>fstab</code> 配置是否正确：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> umount /data</span><br><span class="line"><span class="built_in">sudo</span> mount -a</span><br></pre></td></tr></table></figure><p>如果没有错误，挂载设置无误。</p><hr><h3 id="其他-Linux-系统的注意事项"><a href="#其他-Linux-系统的注意事项" class="headerlink" title="其他 Linux 系统的注意事项"></a><strong>其他 Linux 系统的注意事项</strong></h3><ol><li><p><strong>文件系统支持</strong>:<br>不同发行版可能默认支持不同文件系统（如 <code>XFS</code> 或 <code>Btrfs</code>）。可以根据需求替换 <code>mkfs.ext4</code> 为适合的文件系统命令，例如：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.xfs /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure></li><li><p><strong>卷组管理</strong>:<br>如果有多个硬盘，可将多个物理卷（如 <code>/dev/vdb</code> 和 <code>/dev/vdc</code>）加入同一卷组：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgextend vg_data /dev/vdc</span><br></pre></td></tr></table></figure></li><li><p><strong>调整逻辑卷大小</strong>:<br>如果需要扩展逻辑卷：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvextend -L +50G /dev/vg_data/lv_data</span><br><span class="line"><span class="built_in">sudo</span> resize2fs /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure></li></ol><hr><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>通过以上步骤，我们成功配置了数据盘并挂载到 <code>/data</code>。这种使用 LVM 的方式不仅提供了灵活的卷管理能力，还能在未来需要时动态扩展存储，避免繁琐的重新分区操作。</p><p>确保在生产环境操作前备份重要数据，执行步骤时严格按照实际需求调整命令。</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在服务器环境中，使用逻辑卷管理器（LVM）配置和挂载数据盘是一种灵活高效的方式。本文介绍了在 CentOS 和其他常见 Linux 系统中，如何使用 LVM 将新数据盘挂载到 &amp;#x2F;data 目录。我们详细讲解了从安装 LVM 工具、初始化物理卷、创建卷组和逻辑卷，到创建文件系统、挂载逻辑卷以及设置开机自动挂载的步骤。此外，还提供了适用于不同 Linux 系统的注意事项和扩展管理技巧。通过这些步骤，你可以实现数据盘的灵活管理和高效利用。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
-    
-    
-    <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
-    
-    <category term="Mount" scheme="https://freemankevin.uk/tags/Mount/"/>
-    
-    <category term="LVM" scheme="https://freemankevin.uk/tags/LVM/"/>
-    
-  </entry>
-  
-  <entry>
     <title>在没有 Swap 的服务器上创建 Swap</title>
     <link href="https://freemankevin.uk/2024/12/11/swap/"/>
     <id>https://freemankevin.uk/2024/12/11/swap/</id>
@@ -311,6 +336,31 @@
     <category term="Mount" scheme="https://freemankevin.uk/tags/Mount/"/>
     
     <category term="Swap" scheme="https://freemankevin.uk/tags/Swap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>数据盘挂载与 LVM 创建</title>
+    <link href="https://freemankevin.uk/2024/12/11/mount-hd-lvm/"/>
+    <id>https://freemankevin.uk/2024/12/11/mount-hd-lvm/</id>
+    <published>2024-12-11T04:17:25.000Z</published>
+    <updated>2024-12-26T13:08:04.642Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在服务器环境中，使用逻辑卷管理器（LVM）配置和挂载数据盘是一种灵活高效的方式。本文介绍了在 CentOS 和其他常见 Linux 系统中，如何使用 LVM 将新数据盘挂载到 &#x2F;data 目录。我们详细讲解了从安装 LVM 工具、初始化物理卷、创建卷组和逻辑卷，到创建文件系统、挂载逻辑卷以及设置开机自动挂载的步骤。此外，还提供了适用于不同 Linux 系统的注意事项和扩展管理技巧。通过这些步骤，你可以实现数据盘的灵活管理和高效利用。</p><span id="more"></span><h3 id="前置检查"><a href="#前置检查" class="headerlink" title="前置检查"></a><strong>前置检查</strong></h3><ol><li>确保目标硬盘（<code>vdb</code>）是新磁盘或非关键数据盘。</li><li>验证系统是否检测到硬盘：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>找到 <code>vdb</code>，确认其未分区或挂载。</li></ol><hr><h3 id="安装-LVM-工具"><a href="#安装-LVM-工具" class="headerlink" title="安装 LVM 工具"></a><strong>安装 LVM 工具</strong></h3><ul><li><p><strong>CentOS&#x2F;Red Hat 系统</strong>:</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y lvm2</span><br></pre></td></tr></table></figure></li><li><p><strong>Debian&#x2F;Ubuntu 系统</strong>:</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install -y lvm2</span><br></pre></td></tr></table></figure></li><li><p><strong>OpenSUSE 系统</strong>:</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> zypper install -y lvm2</span><br></pre></td></tr></table></figure></li></ul><hr><h3 id="LVM-配置步骤"><a href="#LVM-配置步骤" class="headerlink" title="LVM 配置步骤"></a><strong>LVM 配置步骤</strong></h3><h4 id="初始化物理卷-PV"><a href="#初始化物理卷-PV" class="headerlink" title="初始化物理卷 (PV)"></a>初始化物理卷 (PV)</h4><p>将 <code>vdb</code> 初始化为 LVM 的物理卷：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pvcreate /dev/vdb</span><br></pre></td></tr></table></figure><p>验证创建是否成功：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pvdisplay</span><br></pre></td></tr></table></figure><hr><h4 id="创建卷组-VG"><a href="#创建卷组-VG" class="headerlink" title="创建卷组 (VG)"></a>创建卷组 (VG)</h4><p>创建一个新的卷组 <code>vg_data</code>，并将 <code>vdb</code> 添加到该卷组：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgcreate vg_data /dev/vdb</span><br></pre></td></tr></table></figure><p>检查卷组信息：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgdisplay</span><br></pre></td></tr></table></figure><hr><h4 id="创建逻辑卷-LV"><a href="#创建逻辑卷-LV" class="headerlink" title="创建逻辑卷 (LV)"></a>创建逻辑卷 (LV)</h4><p>在卷组 <code>vg_data</code> 中创建逻辑卷 <code>lv_data</code>：</p><ul><li>使用所有剩余空间：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvcreate -l +100%FREE -n lv_data vg_data</span><br></pre></td></tr></table></figure></li><li>或者指定大小（如 100GB）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvcreate -L 100G -n lv_data vg_data</span><br></pre></td></tr></table></figure></li></ul><p>验证逻辑卷：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvdisplay</span><br></pre></td></tr></table></figure><hr><h4 id="创建文件系统"><a href="#创建文件系统" class="headerlink" title="创建文件系统"></a>创建文件系统</h4><p>为逻辑卷 <code>lv_data</code> 创建 EXT4 文件系统：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.ext4 /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure><hr><h4 id="挂载逻辑卷"><a href="#挂载逻辑卷" class="headerlink" title="挂载逻辑卷"></a>挂载逻辑卷</h4><ol><li><p>创建挂载点：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /data</span><br></pre></td></tr></table></figure></li><li><p>挂载逻辑卷到 <code>/data</code>：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount /dev/vg_data/lv_data /data</span><br></pre></td></tr></table></figure></li><li><p>确认挂载成功：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -h | grep /data</span><br></pre></td></tr></table></figure></li></ol><hr><h4 id="设置开机自动挂载"><a href="#设置开机自动挂载" class="headerlink" title="设置开机自动挂载"></a>设置开机自动挂载</h4><p>编辑 <code>/etc/fstab</code> 文件，使逻辑卷在开机时自动挂载：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/fstab</span><br></pre></td></tr></table></figure><p>在文件末尾添加以下内容：</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/dev/vg_data/lv_data /data ext4 defaults 0 0</span><br></pre></td></tr></table></figure><p>测试 <code>fstab</code> 配置是否正确：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> umount /data</span><br><span class="line"><span class="built_in">sudo</span> mount -a</span><br></pre></td></tr></table></figure><p>如果没有错误，挂载设置无误。</p><hr><h3 id="其他-Linux-系统的注意事项"><a href="#其他-Linux-系统的注意事项" class="headerlink" title="其他 Linux 系统的注意事项"></a><strong>其他 Linux 系统的注意事项</strong></h3><ol><li><p><strong>文件系统支持</strong>:<br>不同发行版可能默认支持不同文件系统（如 <code>XFS</code> 或 <code>Btrfs</code>）。可以根据需求替换 <code>mkfs.ext4</code> 为适合的文件系统命令，例如：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.xfs /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure></li><li><p><strong>卷组管理</strong>:<br>如果有多个硬盘，可将多个物理卷（如 <code>/dev/vdb</code> 和 <code>/dev/vdc</code>）加入同一卷组：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgextend vg_data /dev/vdc</span><br></pre></td></tr></table></figure></li><li><p><strong>调整逻辑卷大小</strong>:<br>如果需要扩展逻辑卷：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvextend -L +50G /dev/vg_data/lv_data</span><br><span class="line"><span class="built_in">sudo</span> resize2fs /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure></li></ol><hr><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>通过以上步骤，我们成功配置了数据盘并挂载到 <code>/data</code>。这种使用 LVM 的方式不仅提供了灵活的卷管理能力，还能在未来需要时动态扩展存储，避免繁琐的重新分区操作。</p><p>确保在生产环境操作前备份重要数据，执行步骤时严格按照实际需求调整命令。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在服务器环境中，使用逻辑卷管理器（LVM）配置和挂载数据盘是一种灵活高效的方式。本文介绍了在 CentOS 和其他常见 Linux 系统中，如何使用 LVM 将新数据盘挂载到 &amp;#x2F;data 目录。我们详细讲解了从安装 LVM 工具、初始化物理卷、创建卷组和逻辑卷，到创建文件系统、挂载逻辑卷以及设置开机自动挂载的步骤。此外，还提供了适用于不同 Linux 系统的注意事项和扩展管理技巧。通过这些步骤，你可以实现数据盘的灵活管理和高效利用。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://freemankevin.uk/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://freemankevin.uk/tags/Linux/"/>
+    
+    <category term="Mount" scheme="https://freemankevin.uk/tags/Mount/"/>
+    
+    <category term="LVM" scheme="https://freemankevin.uk/tags/LVM/"/>
     
   </entry>
   

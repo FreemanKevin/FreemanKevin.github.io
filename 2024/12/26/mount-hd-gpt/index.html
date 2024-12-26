@@ -19,29 +19,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"freemankevin.uk","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"O3AB73GDVU","apiKey":"b3f1048d604fe9a6c9648855741c1e6d","indexName":"kevin_notes_index","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在服务器环境中，使用逻辑卷管理器（LVM）配置和挂载数据盘是一种灵活高效的方式。本文介绍了在 CentOS 和其他常见 Linux 系统中，如何使用 LVM 将新数据盘挂载到 &#x2F;data 目录。我们详细讲解了从安装 LVM 工具、初始化物理卷、创建卷组和逻辑卷，到创建文件系统、挂载逻辑卷以及设置开机自动挂载的步骤。此">
+    <meta name="description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在 Linux 系统中，磁盘分区和挂载是常见的管理任务，尤其在添加新的数据盘时。对于大于 2TB 的磁盘，通常需要使用 GPT（GUID Partition Table）分区模式，因为传统的 MBR（Master Boot Record）分区表不支持超过 2TB 的磁盘容量。在本文中，我们将展示如何使用 GPT 分区表创建分区">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据盘挂载与 LVM 创建">
-<meta property="og:url" content="https://freemankevin.uk/2024/12/11/mount-hd-lvm/index.html">
+<meta property="og:title" content="数据盘挂载与 GPT 分区">
+<meta property="og:url" content="https://freemankevin.uk/2024/12/26/mount-hd-gpt/index.html">
 <meta property="og:site_name" content="Kevin&#39;s Notes">
-<meta property="og:description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在服务器环境中，使用逻辑卷管理器（LVM）配置和挂载数据盘是一种灵活高效的方式。本文介绍了在 CentOS 和其他常见 Linux 系统中，如何使用 LVM 将新数据盘挂载到 &#x2F;data 目录。我们详细讲解了从安装 LVM 工具、初始化物理卷、创建卷组和逻辑卷，到创建文件系统、挂载逻辑卷以及设置开机自动挂载的步骤。此">
+<meta property="og:description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在 Linux 系统中，磁盘分区和挂载是常见的管理任务，尤其在添加新的数据盘时。对于大于 2TB 的磁盘，通常需要使用 GPT（GUID Partition Table）分区模式，因为传统的 MBR（Master Boot Record）分区表不支持超过 2TB 的磁盘容量。在本文中，我们将展示如何使用 GPT 分区表创建分区">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-12-11T04:17:25.000Z">
-<meta property="article:modified_time" content="2024-12-26T13:08:04.642Z">
+<meta property="article:published_time" content="2024-12-26T04:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-26T13:08:04.641Z">
 <meta property="article:author" content="Freeman Kevin">
 <meta property="article:tag" content="Linux">
+<meta property="article:tag" content="GPT">
 <meta property="article:tag" content="Mount">
-<meta property="article:tag" content="LVM">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://freemankevin.uk/2024/12/11/mount-hd-lvm/">
+<link rel="canonical" href="https://freemankevin.uk/2024/12/26/mount-hd-gpt/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://freemankevin.uk/2024/12/11/mount-hd-lvm/","path":"2024/12/11/mount-hd-lvm/","title":"数据盘挂载与 LVM 创建"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://freemankevin.uk/2024/12/26/mount-hd-gpt/","path":"2024/12/26/mount-hd-gpt/","title":"数据盘挂载与 GPT 分区"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>数据盘挂载与 LVM 创建 | Kevin's Notes</title>
+<title>数据盘挂载与 GPT 分区 | Kevin's Notes</title>
   
 
 
@@ -142,7 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E6%A3%80%E6%9F%A5"><span class="nav-number">1.</span> <span class="nav-text">前置检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-LVM-%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">安装 LVM 工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LVM-%E9%85%8D%E7%BD%AE%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.</span> <span class="nav-text">LVM 配置步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%89%A9%E7%90%86%E5%8D%B7-PV"><span class="nav-number">3.1.</span> <span class="nav-text">初始化物理卷 (PV)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%8D%B7%E7%BB%84-VG"><span class="nav-number">3.2.</span> <span class="nav-text">创建卷组 (VG)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%80%BB%E8%BE%91%E5%8D%B7-LV"><span class="nav-number">3.3.</span> <span class="nav-text">创建逻辑卷 (LV)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.4.</span> <span class="nav-text">创建文件系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%82%E8%BD%BD%E9%80%BB%E8%BE%91%E5%8D%B7"><span class="nav-number">3.5.</span> <span class="nav-text">挂载逻辑卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BD"><span class="nav-number">3.6.</span> <span class="nav-text">设置开机自动挂载</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-Linux-%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.</span> <span class="nav-text">其他 Linux 系统的注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-GPT-%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="nav-number">1.</span> <span class="nav-text">创建 GPT 分区表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E5%8C%BA"><span class="nav-number">2.</span> <span class="nav-text">创建分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%88%86%E5%8C%BA"><span class="nav-number">3.</span> <span class="nav-text">格式化分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%82%E8%BD%BD%E5%88%86%E5%8C%BA"><span class="nav-number">4.</span> <span class="nav-text">挂载分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B0%B8%E4%B9%85%E6%8C%82%E8%BD%BD%E8%AE%BE%E7%BD%AE"><span class="nav-number">5.</span> <span class="nav-text">永久挂载设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4%E7%A3%81%E7%9B%98%E5%B7%B2%E6%88%90%E5%8A%9F%E6%8C%82%E8%BD%BD"><span class="nav-number">6.</span> <span class="nav-text">确认磁盘已成功挂载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%9D%97%E8%AE%BE%E5%A4%87%E4%BF%A1%E6%81%AF"><span class="nav-number">7.</span> <span class="nav-text">查看块设备信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E7%A3%81%E7%9B%98-UUID"><span class="nav-number">8.</span> <span class="nav-text">获取磁盘 UUID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -208,7 +208,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/11/mount-hd-lvm/">
+    <link itemprop="mainEntityOfPage" href="https://freemankevin.uk/2024/12/26/mount-hd-gpt/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -221,12 +221,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="数据盘挂载与 LVM 创建 | Kevin's Notes">
+      <meta itemprop="name" content="数据盘挂载与 GPT 分区 | Kevin's Notes">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          数据盘挂载与 LVM 创建
+          数据盘挂载与 GPT 分区
         </h1>
 
         <div class="post-meta-container">
@@ -237,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-11 12:17:25" itemprop="dateCreated datePublished" datetime="2024-12-11T12:17:25+08:00">2024-12-11</time>
+      <time title="创建时间：2024-12-26 12:00:00" itemprop="dateCreated datePublished" datetime="2024-12-26T12:00:00+08:00">2024-12-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -258,8 +258,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2024/12/11/mount-hd-lvm/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/12/11/mount-hd-lvm/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2024/12/26/mount-hd-gpt/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/12/26/mount-hd-gpt/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -272,87 +272,44 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在服务器环境中，使用逻辑卷管理器（LVM）配置和挂载数据盘是一种灵活高效的方式。本文介绍了在 CentOS 和其他常见 Linux 系统中，如何使用 LVM 将新数据盘挂载到 &#x2F;data 目录。我们详细讲解了从安装 LVM 工具、初始化物理卷、创建卷组和逻辑卷，到创建文件系统、挂载逻辑卷以及设置开机自动挂载的步骤。此外，还提供了适用于不同 Linux 系统的注意事项和扩展管理技巧。通过这些步骤，你可以实现数据盘的灵活管理和高效利用。</p>
+    <div class="post-body" itemprop="articleBody"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在 Linux 系统中，磁盘分区和挂载是常见的管理任务，尤其在添加新的数据盘时。对于大于 2TB 的磁盘，通常需要使用 GPT（GUID Partition Table）分区模式，因为传统的 MBR（Master Boot Record）分区表不支持超过 2TB 的磁盘容量。在本文中，我们将展示如何使用 GPT 分区表创建分区，格式化为 <code>ext4</code> 文件系统，并挂载到指定目录。此外，还会介绍如何配置系统，以确保在系统重启后能够自动挂载磁盘。最终，您将学会如何有效地管理 Linux 系统中的大容量磁盘，确保数据安全与系统稳定。</p>
 <span id="more"></span>
 
-<h3 id="前置检查"><a href="#前置检查" class="headerlink" title="前置检查"></a><strong>前置检查</strong></h3><ol>
-<li>确保目标硬盘（<code>vdb</code>）是新磁盘或非关键数据盘。</li>
-<li>验证系统是否检测到硬盘：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
-找到 <code>vdb</code>，确认其未分区或挂载。</li>
-</ol>
-<hr>
-<h3 id="安装-LVM-工具"><a href="#安装-LVM-工具" class="headerlink" title="安装 LVM 工具"></a><strong>安装 LVM 工具</strong></h3><ul>
-<li><p><strong>CentOS&#x2F;Red Hat 系统</strong>:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y lvm2</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>Debian&#x2F;Ubuntu 系统</strong>:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install -y lvm2</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>OpenSUSE 系统</strong>:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> zypper install -y lvm2</span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h3 id="LVM-配置步骤"><a href="#LVM-配置步骤" class="headerlink" title="LVM 配置步骤"></a><strong>LVM 配置步骤</strong></h3><h4 id="初始化物理卷-PV"><a href="#初始化物理卷-PV" class="headerlink" title="初始化物理卷 (PV)"></a>初始化物理卷 (PV)</h4><p>将 <code>vdb</code> 初始化为 LVM 的物理卷：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pvcreate /dev/vdb</span><br></pre></td></tr></table></figure>
+<h3 id="创建-GPT-分区表"><a href="#创建-GPT-分区表" class="headerlink" title="创建 GPT 分区表"></a>创建 GPT 分区表</h3><p>使用 <code>parted</code> 工具在 <code>/dev/sdb</code> 磁盘上创建一个新的 GPT 分区表：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">parted /dev/sdb mklabel gpt</span><br></pre></td></tr></table></figure>
 
-<p>验证创建是否成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pvdisplay</span><br></pre></td></tr></table></figure>
 
-<hr>
-<h4 id="创建卷组-VG"><a href="#创建卷组-VG" class="headerlink" title="创建卷组 (VG)"></a>创建卷组 (VG)</h4><p>创建一个新的卷组 <code>vg_data</code>，并将 <code>vdb</code> 添加到该卷组：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgcreate vg_data /dev/vdb</span><br></pre></td></tr></table></figure>
 
-<p>检查卷组信息：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgdisplay</span><br></pre></td></tr></table></figure>
+<h3 id="创建分区"><a href="#创建分区" class="headerlink" title="创建分区"></a>创建分区</h3><p>创建一个占用整个磁盘的主分区，并格式化为 <code>ext4</code> 文件系统：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">parted /dev/sdb mkpart primary ext4 0% 100%</span><br></pre></td></tr></table></figure>
 
-<hr>
-<h4 id="创建逻辑卷-LV"><a href="#创建逻辑卷-LV" class="headerlink" title="创建逻辑卷 (LV)"></a>创建逻辑卷 (LV)</h4><p>在卷组 <code>vg_data</code> 中创建逻辑卷 <code>lv_data</code>：</p>
-<ul>
-<li>使用所有剩余空间：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvcreate -l +100%FREE -n lv_data vg_data</span><br></pre></td></tr></table></figure></li>
-<li>或者指定大小（如 100GB）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvcreate -L 100G -n lv_data vg_data</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>验证逻辑卷：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvdisplay</span><br></pre></td></tr></table></figure>
+<p>等待分区操作完成。</p>
+<h3 id="格式化分区"><a href="#格式化分区" class="headerlink" title="格式化分区"></a>格式化分区</h3><p>格式化新创建的分区 <code>/dev/sdb1</code>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkfs.ext4 /dev/sdb1</span><br></pre></td></tr></table></figure>
+
+<h3 id="挂载分区"><a href="#挂载分区" class="headerlink" title="挂载分区"></a>挂载分区</h3><p>创建一个挂载点 <code>/data</code> 并挂载新分区：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /data</span><br><span class="line">mount /dev/sdb1 /data</span><br></pre></td></tr></table></figure>
+
+<h3 id="永久挂载设置"><a href="#永久挂载设置" class="headerlink" title="永久挂载设置"></a>永久挂载设置</h3><p>为了使挂载在启动时自动进行，需要编辑 <code>/etc/fstab</code> 文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;/dev/sdb1 /data ext4 defaults 0 2&quot; &gt;&gt; /etc/fstab</span><br></pre></td></tr></table></figure>
+
+<p>运行以下命令以验证配置是否正确：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mount -a</span><br></pre></td></tr></table></figure>
+
+<h3 id="确认磁盘已成功挂载"><a href="#确认磁盘已成功挂载" class="headerlink" title="确认磁盘已成功挂载"></a>确认磁盘已成功挂载</h3><p>使用 <code>df -Th</code> 命令查看所有文件系统及其类型，确认 <code>/dev/sdb1</code> 是否正确挂载在 <code>/data</code> 下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">df -Th</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看块设备信息"><a href="#查看块设备信息" class="headerlink" title="查看块设备信息"></a>查看块设备信息</h3><p>使用 <code>lsblk</code> 命令查看所有块设备的挂载点和大小，确认挂载情况：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取磁盘-UUID"><a href="#获取磁盘-UUID" class="headerlink" title="获取磁盘 UUID"></a>获取磁盘 UUID</h3><p>使用 <code>blkid</code> 命令获取 <code>/dev/sdb1</code> 的 UUID，这有助于 <code>/etc/fstab</code> 中的稳定性配置：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">blkid /dev/sdb1</span><br></pre></td></tr></table></figure>
+
+<p>可以使用这个 UUID 替换 <code>/etc/fstab</code> 中的设备名，以确保即使设备名变化，挂载依然稳定：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;UUID=$(blkid -s UUID -o value /dev/sdb1) /data ext4 defaults 0 2&quot; &gt;&gt; /etc/fstab</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h4 id="创建文件系统"><a href="#创建文件系统" class="headerlink" title="创建文件系统"></a>创建文件系统</h4><p>为逻辑卷 <code>lv_data</code> 创建 EXT4 文件系统：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.ext4 /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="挂载逻辑卷"><a href="#挂载逻辑卷" class="headerlink" title="挂载逻辑卷"></a>挂载逻辑卷</h4><ol>
-<li><p>创建挂载点：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /data</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>挂载逻辑卷到 <code>/data</code>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount /dev/vg_data/lv_data /data</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>确认挂载成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -h | grep /data</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h4 id="设置开机自动挂载"><a href="#设置开机自动挂载" class="headerlink" title="设置开机自动挂载"></a>设置开机自动挂载</h4><p>编辑 <code>/etc/fstab</code> 文件，使逻辑卷在开机时自动挂载：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/fstab</span><br></pre></td></tr></table></figure>
-
-<p>在文件末尾添加以下内容：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/dev/vg_data/lv_data /data ext4 defaults 0 0</span><br></pre></td></tr></table></figure>
-
-<p>测试 <code>fstab</code> 配置是否正确：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> umount /data</span><br><span class="line"><span class="built_in">sudo</span> mount -a</span><br></pre></td></tr></table></figure>
-<p>如果没有错误，挂载设置无误。</p>
-<hr>
-<h3 id="其他-Linux-系统的注意事项"><a href="#其他-Linux-系统的注意事项" class="headerlink" title="其他 Linux 系统的注意事项"></a><strong>其他 Linux 系统的注意事项</strong></h3><ol>
-<li><p><strong>文件系统支持</strong>:<br>不同发行版可能默认支持不同文件系统（如 <code>XFS</code> 或 <code>Btrfs</code>）。可以根据需求替换 <code>mkfs.ext4</code> 为适合的文件系统命令，例如：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.xfs /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>卷组管理</strong>:<br>如果有多个硬盘，可将多个物理卷（如 <code>/dev/vdb</code> 和 <code>/dev/vdc</code>）加入同一卷组：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vgextend vg_data /dev/vdc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>调整逻辑卷大小</strong>:<br>如果需要扩展逻辑卷：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lvextend -L +50G /dev/vg_data/lv_data</span><br><span class="line"><span class="built_in">sudo</span> resize2fs /dev/vg_data/lv_data</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>通过以上步骤，我们成功配置了数据盘并挂载到 <code>/data</code>。这种使用 LVM 的方式不仅提供了灵活的卷管理能力，还能在未来需要时动态扩展存储，避免繁琐的重新分区操作。</p>
-<p>确保在生产环境操作前备份重要数据，执行步骤时严格按照实际需求调整命令。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>此文档提供了从创建 GPT 分区表到挂载和确认分区的完整步骤。在每一步操作后，建议使用校验命令（如 <code>lsblk</code> 和 <code>df -Th</code>）确保配置的正确性。这种分区和挂载方式可以适应多种场景，并确保数据存储的安全与稳定。</p>
 
     </div>
 
@@ -363,19 +320,19 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/GPT/" rel="tag"># GPT</a>
               <a href="/tags/Mount/" rel="tag"># Mount</a>
-              <a href="/tags/LVM/" rel="tag"># LVM</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2024/12/26/postgresql-optimization/" rel="prev" title="如何优化 PostgreSQL 数据库以支持高并发">
+                  <i class="fa fa-angle-left"></i> 如何优化 PostgreSQL 数据库以支持高并发
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2024/12/11/swap/" rel="next" title="在没有 Swap 的服务器上创建 Swap">
-                  在没有 Swap 的服务器上创建 Swap <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
