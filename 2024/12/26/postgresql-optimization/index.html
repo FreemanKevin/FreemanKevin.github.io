@@ -27,7 +27,7 @@
 <meta property="og:description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文将介绍如何优化 PostgreSQL 数据库以支持高并发场景。我们会针对内存缓存、连接数、索引、日志、查询优化等方面进行详细的优化建议，以帮助提升数据库的性能。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-12-26T03:34:15.000Z">
-<meta property="article:modified_time" content="2024-12-26T13:13:55.319Z">
+<meta property="article:modified_time" content="2024-12-27T13:51:09.116Z">
 <meta property="article:author" content="Freeman Kevin">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Memory">
@@ -157,17 +157,17 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -372,7 +372,7 @@
 </ul>
 <hr>
 <h2 id="灵活调整"><a href="#灵活调整" class="headerlink" title="灵活调整"></a>灵活调整</h2><blockquote>
-<p>适用于较低配置或共享资源的服务器</p>
+<p>适用于较低配置或与人共用资源的服务器</p>
 </blockquote>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">shared_buffers = 4GB</span><br><span class="line">work_mem = 4MB</span><br><span class="line">maintenance_work_mem = 128MB </span><br><span class="line">effective_cache_size = 6GB</span><br><span class="line">max_parallel_workers_per_gather = 16</span><br><span class="line">max_parallel_workers = 16</span><br><span class="line">autovacuum = off</span><br><span class="line">log_min_duration_statement = -1 </span><br><span class="line">wal_level = minimal</span><br><span class="line">synchronous_commit = off</span><br><span class="line">checkpoint_timeout = 30min</span><br></pre></td></tr></table></figure>
 
@@ -428,7 +428,7 @@
 
   <div class="copyright">
     &copy; 
-    <span itemprop="copyrightYear">2024</span>
+    <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
